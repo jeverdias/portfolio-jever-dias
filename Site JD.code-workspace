@@ -1,0 +1,21 @@
+{
+  "folders": [
+    {
+      "name": "Portfolio Jever Dias",
+      "path": "."
+    }
+  ],
+  "settings": {
+    "terminal.integrated.cwd": "${workspaceFolder}",
+    "files.exclude": {
+      "**/.pnpm-store": true,
+      "**/dist": true
+    },
+    "editor.formatOnSave": true
+  },
+  "extensions": {
+    "recommendations": [
+      "dbaeumer.vscode-eslint"
+    ]
+  }
+}

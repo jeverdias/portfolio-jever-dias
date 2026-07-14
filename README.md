@@ -55,9 +55,19 @@ Site JD/
 
 ## Abrir no VS Code
 
+O workspace já está configurado em `Site JD.code-workspace`.
+
+Opção mais simples:
+
+1. Dê dois cliques em `abrir-vscode.cmd`.
+2. No VS Code, pressione `Ctrl + Shift + B`.
+3. Escolha **Abrir portfólio local**. O navegador será aberto automaticamente.
+
+Se preferir abrir manualmente:
+
 1. Abra o VS Code.
-2. Escolha **Arquivo > Abrir Pasta**.
-3. Selecione `C:\Users\jever\Documents\Site JD`.
+2. Escolha **Arquivo > Abrir Workspace do Arquivo**.
+3. Selecione `C:\Users\jever\Documents\Site JD\Site JD.code-workspace`.
 
 Ou abra um terminal nesta pasta e execute:
 
@@ -65,14 +75,25 @@ Ou abra um terminal nesta pasta e execute:
 code .
 ```
 
-Depois, no terminal integrado do VS Code:
+## Abrir o site localmente
 
-```powershell
-npm install
-npm run dev
+A forma mais confiável neste computador é dar dois cliques em:
+
+```text
+C:\Users\jever\Documents\Site JD\iniciar-site.cmd
 ```
 
-O Vite mostrará o endereço local do portfólio. Para criar a versão de publicação:
+O arquivo configura o Node.js utilizado pelo projeto, inicia o Vite e abre o navegador automaticamente.
+
+Se `npm` estiver instalado no Windows, também é possível usar o CMD:
+
+```cmd
+cd /d "C:\Users\jever\Documents\Site JD"
+npm install
+npm run dev -- --host 127.0.0.1 --port 4173 --open
+```
+
+Para criar a versão de publicação:
 
 ```powershell
 npm run build
@@ -159,4 +180,3 @@ O arquivo `netlify.toml` já contém essas configurações. Cada `git push` na b
 ## Decisão sobre o modelo
 
 Vite + React é o melhor encaixe para esta etapa: o portfólio é uma página rápida, sem necessidade de renderização no servidor, simples de manter e com publicação direta no Netlify. Next.js seria útil se o projeto passasse a exigir conteúdo dinâmico no servidor, autenticação real ou muitas páginas geradas por dados.
-

@@ -118,6 +118,14 @@ Ao iniciar uma nova versão:
 - Git inicializado na branch `main`.
 - Definido o roadmap das versões 1 a 5.
 
+### 14/07/2026 — Execução local e VS Code
+
+- Identificado que `node`, `npm` e `code` não estavam disponíveis no PATH do Windows.
+- Criado `iniciar-site.cmd` com o caminho do Node.js usado pelo projeto e abertura automática do navegador.
+- Criado `abrir-vscode.cmd` para localizar o VS Code e abrir o workspace correto.
+- Criado `Site JD.code-workspace` e tarefas em `.vscode`.
+- Registrada e ignorada a pasta Git vazia duplicada `Site JD\Site JD`, preservando seus arquivos para revisão do usuário.
+
 ## Informações ainda necessárias de Jever
 
 - URL do repositório GitHub para configurar o remoto `origin`.

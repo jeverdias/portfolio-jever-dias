@@ -1,0 +1,8 @@
+{
+  "terminal.integrated.cwd": "${workspaceFolder}",
+  "editor.formatOnSave": true,
+  "files.exclude": {
+    "**/.pnpm-store": true,
+    "**/dist": true
+  }
+}
