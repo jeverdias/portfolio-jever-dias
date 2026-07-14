@@ -1,0 +1,47 @@
+[
+  {
+    "id": "dashboard-htlv",
+    "title": "Dashboard Epidemiológico HTLV",
+    "category": "Business Intelligence",
+    "type": "powerbi",
+    "description": "Análise de dados epidemiológicos com indicadores claros, recortes estratégicos e navegação intuitiva.",
+    "details": "O painel organiza indicadores epidemiológicos em uma leitura executiva, permitindo acompanhar o cenário, comparar períodos e apoiar decisões com mais segurança.",
+    "tags": ["Power BI", "DAX", "Saúde"],
+    "image": "",
+    "preview": "dashboard",
+    "embedUrl": "",
+    "externalUrl": "",
+    "featured": true,
+    "accent": "#7c5cff"
+  },
+  {
+    "id": "sistema-os",
+    "title": "Sistema de Ordem de Serviço",
+    "category": "Sistemas Web",
+    "type": "website",
+    "description": "Aplicação leve para gestão de ordens de serviço, atendimentos, prioridades e acompanhamento operacional.",
+    "details": "Uma solução responsiva para centralizar solicitações, organizar prioridades e dar visibilidade ao andamento das atividades da equipe.",
+    "tags": ["Vite", "JavaScript", "Supabase"],
+    "image": "",
+    "preview": "system",
+    "embedUrl": "",
+    "externalUrl": "",
+    "featured": true,
+    "accent": "#39a6ff"
+  },
+  {
+    "id": "cartilha-digital",
+    "title": "Cartilha Digital Educativa",
+    "category": "Experiência Digital",
+    "type": "content",
+    "description": "Experiência interativa com foco em educação, linguagem acessível e leitura confortável em qualquer tela.",
+    "details": "Conteúdo educativo apresentado de forma leve e inclusiva, com navegação simples e uma experiência pensada para ampliar o alcance da informação.",
+    "tags": ["HTML", "CSS", "Acessibilidade"],
+    "image": "",
+    "preview": "content",
+    "embedUrl": "",
+    "externalUrl": "",
+    "featured": true,
+    "accent": "#a855f7"
+  }
+]
