@@ -2,6 +2,8 @@
 
 Portfólio profissional em React + Vite, inspirado em uma landing page dark com azul e roxo. O projeto está preparado para publicação no Netlify e possui um modo administrador local para cadastrar projetos, capas e links sem alterar a interface manualmente.
 
+Site publicado: [`jeverdias.netlify.app`](https://jeverdias.netlify.app)
+
 ## Onde está o projeto
 
 Pasta local:
@@ -178,21 +180,18 @@ git push
 
 ## Publicar no Netlify
 
+Site de produção: [`jeverdias.netlify.app`](https://jeverdias.netlify.app)
+
 No VS Code, pressione `Ctrl + Shift + P`, escolha **Tasks: Run Task** e use:
 
 - **Gerar versão para deploy** para validar a versão publicada;
-- **Abrir deploy no Netlify** para abrir a importação do repositório.
+- **Abrir deploy no Netlify** para abrir o painel do projeto `jeverdias`.
 
 Também é possível dar dois cliques em `abrir-deploy-netlify.cmd`.
 
-1. Envie o projeto ao GitHub.
-2. No Netlify, escolha **Add new site > Import an existing project**.
-3. Conecte o GitHub e selecione o repositório.
-4. Confirme o comando de build `npm run build`.
-5. Confirme a pasta de publicação `dist`.
-6. Publique o site.
+O projeto local está vinculado ao site `jeverdias` no Netlify. O comando de build é `npm run build` e a pasta publicada é `dist`.
 
-O arquivo `netlify.toml` já contém essas configurações. Cada `git push` na branch principal gera uma nova publicação.
+O arquivo `netlify.toml` contém essas configurações. A publicação inicial foi realizada pelo cliente oficial do Netlify.
 
 ## Decisão sobre o modelo
 

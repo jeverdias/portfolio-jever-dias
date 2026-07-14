@@ -3,6 +3,8 @@
 Última atualização: **14 de julho de 2026**  
 Local do projeto: `C:\Users\jever\Documents\Site JD`  
 Branch principal: `main`
+Repositório: `https://github.com/jeverdias/portfolio-jever-dias`
+Site publicado: `https://jeverdias.netlify.app`
 
 ## Estado atual
 
@@ -144,9 +146,17 @@ Ao iniciar uma nova versão:
 - Corrigida a rolagem interna das abas e do editor administrativo.
 - Adicionado espaço inferior para permitir acesso confortável aos últimos campos.
 
+### 14/07/2026 — GitHub, VS Code e publicação no Netlify
+
+- Repositório público criado em `jeverdias/portfolio-jever-dias`.
+- Projeto local conectado ao GitHub Desktop e ao workspace do VS Code.
+- Adicionadas tarefas para execução local, build e acesso ao painel de deploy.
+- Site Netlify renomeado para `jeverdias`.
+- Publicação de produção concluída em `https://jeverdias.netlify.app`.
+- Removida pelo usuário a cópia temporária `portfolio-jever-dias-5b807` criada durante o primeiro fluxo do Netlify.
+
 ## Informações ainda necessárias de Jever
 
-- URL do repositório GitHub para configurar o remoto `origin`.
 - Links definitivos dos três projetos iniciais.
 - Email, LinkedIn e GitHub confirmados.
 - Prints e vídeos da Versão 3.

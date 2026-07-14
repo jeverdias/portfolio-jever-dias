@@ -1,6 +1,6 @@
 @echo off
 setlocal
 
-start "" "https://app.netlify.com/start/deploy?repository=https://github.com/jeverdias/portfolio-jever-dias"
+start "" "https://app.netlify.com/projects/jeverdias/overview"
 
 exit /b 0

@@ -7,3 +7,6 @@ dist
 .vite
 .pnpm-store
 /Site JD/
+
+# Local Netlify folder
+.netlify
