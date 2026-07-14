@@ -1,5 +1,4 @@
 import { ArrowRight, BarChart3, Braces, DatabaseZap, LayoutDashboard, Send, Sigma, Sparkles } from 'lucide-react'
-import { siteConfig, stats } from '../data/site'
 
 const techItems = [
   { name: 'Power BI', icon: BarChart3, color: '#f9c74f' },
@@ -8,24 +7,31 @@ const techItems = [
   { name: 'Supabase', icon: DatabaseZap, color: '#45e0a8' },
 ]
 
-export function Hero() {
+export function Hero({ site }) {
+  const [firstName, ...lastNameParts] = site.name.split(' ')
+  const lastName = lastNameParts.join(' ')
+  const stats = [
+    { value: site.dashboardsCount, label: site.dashboardsLabel },
+    { value: site.systemsCount, label: site.systemsLabel },
+  ]
+
   return (
     <section className="hero" id="inicio">
       <div className="hero__glow hero__glow--one" />
       <div className="hero__glow hero__glow--two" />
       <div className="container hero__grid">
         <div className="hero__copy">
-          <div className="eyebrow-pill"><Sparkles size={14} /> {siteConfig.eyebrow}</div>
+          <div className="eyebrow-pill"><Sparkles size={14} /> {site.eyebrow}</div>
           <h1>
-            Jever <span>Dias</span>
+            {firstName} <span>{lastName}</span>
           </h1>
-          <p className="hero__role">{siteConfig.role}</p>
-          <p className="hero__intro">{siteConfig.intro}</p>
+          <p className="hero__role">{site.role}</p>
+          <p className="hero__intro">{site.intro}</p>
           <div className="hero__actions">
             <a className="button button--primary" href="#projetos">
               Ver projetos <ArrowRight size={18} />
             </a>
-            <a className="button button--secondary" href={`mailto:${siteConfig.email}`}>
+            <a className="button button--secondary" href={`mailto:${site.email}`}>
               <Send size={17} /> Falar comigo
             </a>
           </div>

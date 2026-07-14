@@ -9,32 +9,39 @@ import { ProjectModal } from './components/ProjectModal'
 import { Projects } from './components/Projects'
 import { Specialties } from './components/Specialties'
 import { useProjectStore } from './hooks/useProjectStore'
+import { useSiteStore } from './hooks/useSiteStore'
 
 function App() {
-  const store = useProjectStore()
+  const projectStore = useProjectStore()
+  const siteStore = useSiteStore()
   const [selectedProject, setSelectedProject] = useState(null)
   const [adminOpen, setAdminOpen] = useState(false)
 
   const currentProject = selectedProject
-    ? store.projects.find((project) => project.id === selectedProject.id) || selectedProject
+    ? projectStore.projects.find((project) => project.id === selectedProject.id) || selectedProject
     : null
 
   return (
     <>
       <a className="skip-link" href="#conteudo">Pular para o conteúdo</a>
       <div className="site-shell">
-        <Header />
+        <Header onLogin={() => setAdminOpen(true)} />
         <main id="conteudo">
-          <Hero />
+          <Hero site={siteStore.site} />
           <Specialties />
-          <Projects projects={store.projects.filter((project) => project.featured)} onOpen={setSelectedProject} />
+          <Projects projects={projectStore.projects.filter((project) => project.featured)} onOpen={setSelectedProject} />
           <About />
-          <Contact />
+          <Contact site={siteStore.site} />
         </main>
-        <Footer onAdmin={() => setAdminOpen(true)} />
+        <Footer site={siteStore.site} />
       </div>
-      <ProjectModal project={currentProject} onClose={() => setSelectedProject(null)} />
-      <AdminPanel open={adminOpen} onClose={() => setAdminOpen(false)} store={store} />
+      <ProjectModal key={currentProject?.id || 'project-modal'} project={currentProject} onClose={() => setSelectedProject(null)} />
+      <AdminPanel
+        open={adminOpen}
+        onClose={() => setAdminOpen(false)}
+        projectStore={projectStore}
+        siteStore={siteStore}
+      />
     </>
   )
 }

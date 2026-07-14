@@ -1,4 +1,4 @@
-import { Menu, X } from 'lucide-react'
+import { LogIn, Menu, X } from 'lucide-react'
 import { useState } from 'react'
 
 const links = [
@@ -9,7 +9,7 @@ const links = [
   ['Contato', '#contato'],
 ]
 
-export function Header() {
+export function Header({ onLogin }) {
   const [open, setOpen] = useState(false)
 
   return (
@@ -38,9 +38,9 @@ export function Header() {
           ))}
         </nav>
 
-        <a className="header-cta" href="#contato">
-          Vamos conversar
-        </a>
+        <button className="header-login" type="button" onClick={onLogin}>
+          <LogIn size={16} /> Login
+        </button>
       </div>
     </header>
   )

@@ -8,11 +8,10 @@ export const siteConfig = {
   linkedin: 'https://www.linkedin.com/in/jever-dias/',
   github: 'https://github.com/jever-dias',
   location: 'Brasil · Disponível para projetos remotos',
+  dashboardsCount: '+12',
+  dashboardsLabel: 'Dashboards entregues',
+  systemsCount: '+5',
+  systemsLabel: 'Sistemas web',
 }
-
-export const stats = [
-  { value: '+12', label: 'Dashboards entregues' },
-  { value: '+5', label: 'Sistemas web' },
-]
 
 export const technologies = ['Power BI', 'DAX', 'JavaScript', 'Supabase']

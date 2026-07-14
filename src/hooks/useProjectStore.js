@@ -3,14 +3,28 @@ import { defaultProjects } from '../data/projects'
 
 const STORAGE_KEY = 'jd-portfolio-projects-v1'
 
-const cloneDefaults = () => defaultProjects.map((project) => ({ ...project, tags: [...project.tags] }))
+const normalizeProject = (project) => {
+  const normalized = {
+    theme: '',
+    contentFormat: '',
+    audience: '',
+    ...project,
+  }
+  return {
+    ...normalized,
+    tags: Array.isArray(project.tags) ? [...project.tags] : [],
+    gallery: Array.isArray(project.gallery) ? [...project.gallery] : [],
+  }
+}
+
+const cloneDefaults = () => defaultProjects.map(normalizeProject)
 
 const readProjects = () => {
   try {
     const saved = localStorage.getItem(STORAGE_KEY)
     if (!saved) return cloneDefaults()
     const parsed = JSON.parse(saved)
-    return Array.isArray(parsed) && parsed.length ? parsed : cloneDefaults()
+    return Array.isArray(parsed) && parsed.length ? parsed.map(normalizeProject) : cloneDefaults()
   } catch {
     return cloneDefaults()
   }
@@ -29,15 +43,19 @@ export function useProjectStore() {
     const project = {
       id,
       title: 'Novo projeto',
+      theme: 'Tema do projeto',
       category: 'Projetos',
       type: 'website',
       description: 'Escreva uma descrição curta e objetiva para este projeto.',
       details: 'Conte o desafio, a solução criada e o resultado alcançado.',
       tags: ['Nova tecnologia'],
       image: '',
+      gallery: [],
       preview: 'system',
       embedUrl: '',
       externalUrl: '',
+      contentFormat: '',
+      audience: '',
       featured: true,
       accent: '#6f7cff',
     }
@@ -73,7 +91,7 @@ export function useProjectStore() {
       if (!Array.isArray(parsed) || !parsed.every((item) => item.id && item.title && item.type)) {
         throw new Error('O arquivo não contém uma lista válida de projetos.')
       }
-      persist(parsed)
+      persist(parsed.map(normalizeProject))
     },
     [persist],
   )

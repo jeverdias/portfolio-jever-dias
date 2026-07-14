@@ -6,9 +6,9 @@ Branch principal: `main`
 
 ## Estado atual
 
-**Versão ativa: Versão 1 — portfólio visual estático.**
+**Versão ativa: Versão 2 — links e painel administrativo local.**
 
-A base visual está concluída em React + Vite. A estrutura já possui campos e modais preparados para as versões seguintes, mas os links, imagens e vídeos definitivos ainda dependem do conteúdo real fornecido por Jever.
+A base visual está concluída em React + Vite. O Login único, as Configurações e os Repositórios já funcionam localmente. Os links, imagens e vídeos definitivos ainda dependem do conteúdo real fornecido por Jever; a persistência online segura está planejada com Supabase.
 
 ## Plano de versões
 
@@ -28,7 +28,7 @@ Critérios:
 
 ### Versão 2 — Links reais dos projetos
 
-Status: **próxima versão**
+Status: **em desenvolvimento**
 
 Objetivos:
 
@@ -38,6 +38,7 @@ Objetivos:
 - testar quais sites permitem abertura no modal;
 - revisar nomes, descrições, tecnologias e resultados de cada entrega;
 - confirmar email, LinkedIn e GitHub oficiais.
+- conectar Supabase Auth, Database e Storage quando o painel passar a publicar alterações online.
 
 Critério de conclusão: todos os cards abrem uma demonstração real ou um destino válido.
 
@@ -125,6 +126,17 @@ Ao iniciar uma nova versão:
 - Criado `abrir-vscode.cmd` para localizar o VS Code e abrir o workspace correto.
 - Criado `Site JD.code-workspace` e tarefas em `.vscode`.
 - Registrada e ignorada a pasta Git vazia duplicada `Site JD\Site JD`, preservando seus arquivos para revisão do usuário.
+
+### 14/07/2026 — Login e console administrativo
+
+- Substituído o botão do header por um único acesso **Login**.
+- Removido o segundo acesso administrativo do rodapé.
+- Criadas as áreas Visão geral, Configurações e Repositórios.
+- Configurações agora editam apresentação, contatos, redes e números do site.
+- Repositórios diferenciam Power BI, sistemas web e conteúdos digitais.
+- Adicionados tema, formato, público-alvo, capa e galeria com até quatro prints.
+- Projeto público ganhou abas de demonstração e prints.
+- Definido Supabase Auth + Database + Storage como evolução para persistência online segura.
 
 ## Informações ainda necessárias de Jever
 

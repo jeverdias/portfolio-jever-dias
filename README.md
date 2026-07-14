@@ -112,11 +112,10 @@ Abra `src/data/site.js` e ajuste:
 
 ## Usar o modo administrador
 
-1. Vá ao rodapé do portfólio.
-2. Clique em **Administrar portfólio**.
+1. Clique em **Login** no canto superior direito do portfólio.
 3. No primeiro acesso, use o PIN `jd2026`.
-4. Selecione um projeto ou clique em **Novo projeto**.
-5. Preencha texto, tipo, tecnologias, capa e link.
+4. Use **Configurações** para editar apresentação, contatos, redes e números do site.
+5. Use **Repositórios** para cadastrar projetos, links, capa e até quatro prints.
 
 Para mudar o PIN:
 
@@ -125,6 +124,24 @@ Para mudar o PIN:
 3. Reinicie o site local.
 
 > O PIN é apenas uma barreira visual. Como o site é estático e não usa backend, ele não oferece autenticação segura.
+
+### Organização dos repositórios
+
+- **Power BI:** nome, tema, resumo, descrição, tecnologias, público, link incorporado e prints. O portfólio abre o relatório dentro do modal e não mostra botão com o link.
+- **Sistema Web:** nome, tema, resumo, descrição, tecnologias, link do projeto, capa e prints.
+- **Conteúdo Digital:** nome, tema, formato, público, resumo, link de leitura/download e prints. Exemplos: cartilhas, relatórios, infográficos, guias, apresentações e materiais interativos.
+
+### Precisa de banco de dados?
+
+A versão atual funciona sem banco para edição no próprio computador. Os dados ficam no armazenamento do navegador e podem ser exportados como backup JSON.
+
+Para que o Login seja seguro e as alterações apareçam online para todos sem editar o código, a recomendação é usar:
+
+- **Supabase Auth** para o Login;
+- **Supabase Database** para textos, links, ordem e categorias;
+- **Supabase Storage** para capas e prints.
+
+As imagens não devem ser gravadas diretamente no banco. O banco guarda apenas os endereços dos arquivos armazenados no Storage. O plano técnico está em [`docs/PLANO_ADMIN_ONLINE.md`](docs/PLANO_ADMIN_ONLINE.md).
 
 ### Power BI
 
