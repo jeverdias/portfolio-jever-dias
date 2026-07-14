@@ -114,7 +114,7 @@ Abra `src/data/site.js` e ajuste:
 
 1. Clique em **Login** no canto superior direito do portfólio.
 3. No primeiro acesso, use o PIN `jd2026`.
-4. Use **Configurações** para editar apresentação, contatos, redes e números do site.
+4. Use **Configurações** para editar apresentação, contatos, LinkedIn, Instagram, GitHub e números do site.
 5. Use **Repositórios** para cadastrar projetos, links, capa e até quatro prints.
 
 Para mudar o PIN:

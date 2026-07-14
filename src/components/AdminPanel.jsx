@@ -233,6 +233,7 @@ export function AdminPanel({ open, onClose, projectStore, siteStore }) {
         <label className="field">Localização<input value={siteStore.site.location} onChange={(event) => siteStore.updateSite({ location: event.target.value })} /></label>
         <label className="field">LinkedIn<input type="url" value={siteStore.site.linkedin} onChange={(event) => siteStore.updateSite({ linkedin: event.target.value })} /></label>
         <label className="field">GitHub<input type="url" value={siteStore.site.github} onChange={(event) => siteStore.updateSite({ github: event.target.value })} /></label>
+        <label className="field field--wide">Instagram<input type="url" placeholder="https://www.instagram.com/seuusuario/" value={siteStore.site.instagram} onChange={(event) => siteStore.updateSite({ instagram: event.target.value })} /></label>
         <label className="field">Número de dashboards<input value={siteStore.site.dashboardsCount} onChange={(event) => siteStore.updateSite({ dashboardsCount: event.target.value })} /></label>
         <label className="field">Legenda dos dashboards<input value={siteStore.site.dashboardsLabel} onChange={(event) => siteStore.updateSite({ dashboardsLabel: event.target.value })} /></label>
         <label className="field">Número de sistemas<input value={siteStore.site.systemsCount} onChange={(event) => siteStore.updateSite({ systemsCount: event.target.value })} /></label>

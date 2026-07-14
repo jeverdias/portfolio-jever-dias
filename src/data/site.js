@@ -7,6 +7,7 @@ export const siteConfig = {
   email: 'jeverdias.dev@gmail.com',
   linkedin: 'https://www.linkedin.com/in/jever-dias/',
   github: 'https://github.com/jever-dias',
+  instagram: 'https://www.instagram.com/',
   location: 'Brasil · Disponível para projetos remotos',
   dashboardsCount: '+12',
   dashboardsLabel: 'Dashboards entregues',

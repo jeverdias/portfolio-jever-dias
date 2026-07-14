@@ -138,6 +138,12 @@ Ao iniciar uma nova versão:
 - Projeto público ganhou abas de demonstração e prints.
 - Definido Supabase Auth + Database + Storage como evolução para persistência online segura.
 
+### 14/07/2026 — Instagram e rolagem administrativa
+
+- Adicionado Instagram às configurações e ao rodapé do portfólio.
+- Corrigida a rolagem interna das abas e do editor administrativo.
+- Adicionado espaço inferior para permitir acesso confortável aos últimos campos.
+
 ## Informações ainda necessárias de Jever
 
 - URL do repositório GitHub para configurar o remoto `origin`.
