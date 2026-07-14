@@ -1,6 +1,6 @@
 import { ArrowUpRight, Mail } from 'lucide-react'
 
-export function Contact({ site }) {
+export function Contact({ site, onOpen }) {
   return (
     <section className="contact-section" id="contato">
       <div className="container">
@@ -11,9 +11,9 @@ export function Contact({ site }) {
             <h2>Dados e sistemas podem ser mais simples.</h2>
             <p>Conte o que você precisa. Eu retorno para conversarmos sobre o cenário e o melhor caminho.</p>
           </div>
-          <a className="button button--light" href={`mailto:${site.email}`}>
+          <button className="button button--light" type="button" onClick={onOpen}>
             <Mail size={18} /> Falar com {site.name.split(' ')[0]} <ArrowUpRight size={17} />
-          </a>
+          </button>
         </div>
       </div>
     </section>

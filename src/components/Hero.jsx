@@ -63,7 +63,7 @@ export function Hero({ site }) {
           <p className="hero__intro">{site.intro}</p>
           <div className="hero__actions">
             <a className="button button--primary" href="#projetos">
-              Ver projetos <ArrowRight size={18} />
+              Ver portfólio <ArrowRight size={18} />
             </a>
             <a className="button button--secondary" href={`mailto:${site.email}`}>
               <Send size={17} /> Falar comigo

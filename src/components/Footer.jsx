@@ -10,7 +10,7 @@ export function Footer({ site }) {
           <span><MapPin size={15} /> {site.location}</span>
         </div>
         <div className="footer__links">
-          <div><strong>Navegação</strong><a href="#projetos">Projetos</a><a href="#servicos">Serviços</a><a href="#sobre">Sobre</a></div>
+          <div><strong>Navegação</strong><a href="#projetos">Portfólio</a><a href="#servicos">Serviços</a><a href="#sobre">Sobre</a></div>
           <div>
             <strong>Contato</strong>
             <a href={site.linkedin} target="_blank" rel="noreferrer"><BriefcaseBusiness size={15} /> LinkedIn</a>

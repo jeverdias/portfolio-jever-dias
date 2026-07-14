@@ -13,7 +13,7 @@ export function Projects({ projects, onOpen }) {
     <section className="section section--projects" id="projetos">
       <div className="container">
         <SectionTitle
-          eyebrow="Projetos em destaque"
+          eyebrow="Portfólio em destaque"
           title="Soluções feitas para gerar clareza."
           text="Selecione um projeto para conhecer a proposta e explorar a entrega."
           action={<a className="text-link" href="#contato">Tem um projeto? <ArrowRight size={16} /></a>}

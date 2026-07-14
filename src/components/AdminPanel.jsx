@@ -230,10 +230,12 @@ export function AdminPanel({ open, onClose, projectStore, siteStore }) {
         <label className="field field--wide">Selo acima do nome<input value={siteStore.site.eyebrow} onChange={(event) => siteStore.updateSite({ eyebrow: event.target.value })} /></label>
         <label className="field field--wide">Texto de apresentação<textarea rows="4" value={siteStore.site.intro} onChange={(event) => siteStore.updateSite({ intro: event.target.value })} /></label>
         <label className="field">Email<input type="email" value={siteStore.site.email} onChange={(event) => siteStore.updateSite({ email: event.target.value })} /></label>
+        <label className="field">Email alternativo<input type="email" placeholder="Opcional" value={siteStore.site.emailSecondary || ''} onChange={(event) => siteStore.updateSite({ emailSecondary: event.target.value })} /></label>
         <label className="field">Localização<input value={siteStore.site.location} onChange={(event) => siteStore.updateSite({ location: event.target.value })} /></label>
         <label className="field">LinkedIn<input type="url" value={siteStore.site.linkedin} onChange={(event) => siteStore.updateSite({ linkedin: event.target.value })} /></label>
         <label className="field">GitHub<input type="url" value={siteStore.site.github} onChange={(event) => siteStore.updateSite({ github: event.target.value })} /></label>
         <label className="field field--wide">Instagram<input type="url" placeholder="https://www.instagram.com/seuusuario/" value={siteStore.site.instagram} onChange={(event) => siteStore.updateSite({ instagram: event.target.value })} /></label>
+        <label className="field field--wide">Currículo Lattes<input type="url" placeholder="http://lattes.cnpq.br/0000000000000000" value={siteStore.site.lattes || ''} onChange={(event) => siteStore.updateSite({ lattes: event.target.value })} /></label>
         <label className="field">Número de dashboards<input value={siteStore.site.dashboardsCount} onChange={(event) => siteStore.updateSite({ dashboardsCount: event.target.value })} /></label>
         <label className="field">Legenda dos dashboards<input value={siteStore.site.dashboardsLabel} onChange={(event) => siteStore.updateSite({ dashboardsLabel: event.target.value })} /></label>
         <label className="field">Número de sistemas<input value={siteStore.site.systemsCount} onChange={(event) => siteStore.updateSite({ systemsCount: event.target.value })} /></label>

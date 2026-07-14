@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { About } from './components/About'
 import { AdminPanel } from './components/AdminPanel'
 import { Contact } from './components/Contact'
+import { ContactModal } from './components/ContactModal'
 import { Footer } from './components/Footer'
 import { Header } from './components/Header'
 import { Hero } from './components/Hero'
@@ -16,6 +17,7 @@ function App() {
   const siteStore = useSiteStore()
   const [selectedProject, setSelectedProject] = useState(null)
   const [adminOpen, setAdminOpen] = useState(false)
+  const [contactOpen, setContactOpen] = useState(false)
 
   const currentProject = selectedProject
     ? projectStore.projects.find((project) => project.id === selectedProject.id) || selectedProject
@@ -31,11 +33,12 @@ function App() {
           <Specialties />
           <Projects projects={projectStore.projects.filter((project) => project.featured)} onOpen={setSelectedProject} />
           <About />
-          <Contact site={siteStore.site} />
+          <Contact site={siteStore.site} onOpen={() => setContactOpen(true)} />
         </main>
         <Footer site={siteStore.site} />
       </div>
       <ProjectModal key={currentProject?.id || 'project-modal'} project={currentProject} onClose={() => setSelectedProject(null)} />
+      <ContactModal open={contactOpen} site={siteStore.site} onClose={() => setContactOpen(false)} />
       <AdminPanel
         open={adminOpen}
         onClose={() => setAdminOpen(false)}

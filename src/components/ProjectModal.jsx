@@ -89,7 +89,7 @@ export function ProjectModal({ project, onClose }) {
                 Abrir em nova aba <ArrowUpRight size={17} />
               </a>
             )}
-            <button className="button button--secondary" type="button" onClick={onClose}>Voltar aos projetos</button>
+            <button className="button button--secondary" type="button" onClick={onClose}>Voltar ao portfólio</button>
           </div>
         </div>
       </section>

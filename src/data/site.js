@@ -5,9 +5,11 @@ export const siteConfig = {
   intro:
     'Transformo dados em dashboards, insights e sistemas simples para apoiar decisões e melhorar processos.',
   email: 'jeverdias.dev@gmail.com',
+  emailSecondary: '',
   linkedin: 'https://www.linkedin.com/in/jever-dias/',
-  github: 'https://github.com/jever-dias',
+  github: 'https://github.com/jeverdias',
   instagram: 'https://www.instagram.com/',
+  lattes: '',
   location: 'Brasil · Disponível para projetos remotos',
   dashboardsCount: '+12',
   dashboardsLabel: 'Dashboards entregues',
