@@ -154,6 +154,9 @@ Ao iniciar uma nova versão:
 - Site Netlify renomeado para `jeverdias`.
 - Publicação de produção concluída em `https://jeverdias.netlify.app`.
 - Removida pelo usuário a cópia temporária `portfolio-jever-dias-5b807` criada durante o primeiro fluxo do Netlify.
+- Deploy contínuo conectado ao repositório original `jeverdias/portfolio-jever-dias`.
+- Apenas a branch `main` está autorizada a atualizar o site de produção.
+- Deploy manual de produção bloqueado no Netlify; novas versões devem partir de um `push` na `main`.
 
 ## Informações ainda necessárias de Jever
 

@@ -191,7 +191,7 @@ Também é possível dar dois cliques em `abrir-deploy-netlify.cmd`.
 
 O projeto local está vinculado ao site `jeverdias` no Netlify. O comando de build é `npm run build` e a pasta publicada é `dist`.
 
-O arquivo `netlify.toml` contém essas configurações. A publicação inicial foi realizada pelo cliente oficial do Netlify.
+O arquivo `netlify.toml` contém essas configurações. O deploy contínuo está ligado ao repositório `jeverdias/portfolio-jever-dias`: somente atualizações enviadas à branch `main` publicam uma nova versão de produção. Deploys manuais de produção estão bloqueados no Netlify.
 
 ## Decisão sobre o modelo
 
