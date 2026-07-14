@@ -29,7 +29,7 @@ function App() {
       <div className="site-shell">
         <Header onLogin={() => setAdminOpen(true)} />
         <main id="conteudo">
-          <Hero site={siteStore.site} />
+          <Hero site={siteStore.site} onContact={() => setContactOpen(true)} />
           <Specialties />
           <Projects projects={projectStore.projects.filter((project) => project.featured)} onOpen={setSelectedProject} />
           <About />

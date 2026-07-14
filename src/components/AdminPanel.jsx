@@ -42,6 +42,8 @@ export function AdminPanel({ open, onClose, projectStore, siteStore }) {
   const [view, setView] = useState('overview')
   const [selectedId, setSelectedId] = useState(projectStore.projects[0]?.id || '')
   const [galleryUrl, setGalleryUrl] = useState('')
+  const [repositorySearch, setRepositorySearch] = useState('')
+  const [repositoryType, setRepositoryType] = useState('all')
   const importRef = useRef(null)
   const coverRef = useRef(null)
   const galleryRef = useRef(null)
@@ -50,6 +52,28 @@ export function AdminPanel({ open, onClose, projectStore, siteStore }) {
     () => projectStore.projects.find((project) => project.id === selectedId) || projectStore.projects[0],
     [selectedId, projectStore.projects],
   )
+
+  const filteredProjects = useMemo(() => {
+    const query = repositorySearch.trim().toLocaleLowerCase('pt-BR')
+
+    return projectStore.projects
+      .map((project, index) => ({ project, index }))
+      .filter(({ project, index }) => {
+        const matchesType = repositoryType === 'all' || project.type === repositoryType
+        const projectIndex = String(index + 1).padStart(2, '0')
+        const searchable = [
+          projectIndex,
+          String(index + 1),
+          project.title,
+          project.theme,
+          project.category,
+          projectTypes[project.type],
+          ...(project.tags || []),
+        ].filter(Boolean).join(' ').toLocaleLowerCase('pt-BR')
+
+        return matchesType && (!query || searchable.includes(query))
+      })
+  }, [projectStore.projects, repositorySearch, repositoryType])
 
   useEffect(() => {
     if (!open) return undefined
@@ -248,15 +272,29 @@ export function AdminPanel({ open, onClose, projectStore, siteStore }) {
   const renderRepositories = () => (
     <div className="admin-repositories">
       <aside className="admin-repository-list">
-        <div className="admin-repository-list__head"><div><span>Repositórios</span><strong>{projectStore.projects.length} projetos</strong></div><button type="button" onClick={addProject} aria-label="Adicionar projeto"><Plus size={17} /></button></div>
+        <div className="admin-repository-list__head"><div><span>Repositórios</span><strong>{filteredProjects.length} de {projectStore.projects.length} projetos</strong></div><button type="button" onClick={addProject} aria-label="Adicionar projeto"><Plus size={17} /></button></div>
+        <div className="admin-repository-tools">
+          <label>
+            <span>Buscar projeto</span>
+            <input type="search" placeholder="Índice, nome ou tecnologia" value={repositorySearch} onChange={(event) => setRepositorySearch(event.target.value)} />
+          </label>
+          <label>
+            <span>Filtrar por tipo</span>
+            <select value={repositoryType} onChange={(event) => setRepositoryType(event.target.value)}>
+              <option value="all">Todos os tipos</option>
+              {Object.entries(projectTypes).map(([value, label]) => <option key={value} value={value}>{label}</option>)}
+            </select>
+          </label>
+        </div>
         <div className="admin-projects">
-          {projectStore.projects.map((project, index) => (
+          {filteredProjects.map(({ project, index }) => (
             <button className={selected?.id === project.id ? 'is-active' : ''} type="button" key={project.id} onClick={() => setSelectedId(project.id)}>
               <i style={{ background: project.accent }} />
               <span><strong>{project.title}</strong><small>{projectTypes[project.type]}</small></span>
               <em>{String(index + 1).padStart(2, '0')}</em>
             </button>
           ))}
+          {filteredProjects.length === 0 && <p className="admin-projects__empty">Nenhum projeto encontrado.</p>}
         </div>
         <div className="admin-sidebar__actions">
           <button type="button" onClick={exportBackup}><Download size={15} /> Backup</button>
@@ -305,7 +343,7 @@ export function AdminPanel({ open, onClose, projectStore, siteStore }) {
                 <label className="field field--wide">Link do projeto <small>{selected.type === 'content' ? 'Link de leitura, download ou página interativa' : 'Link público do sistema'}</small><input type="url" placeholder="https://..." value={selected.externalUrl || ''} onChange={(event) => updateProject('externalUrl', event.target.value)} /></label>
               )}
 
-              <label className="field field--wide">URL da imagem de capa<input type="url" placeholder="https://.../capa.webp" value={selected.image?.startsWith('data:') ? '' : selected.image || ''} onChange={(event) => updateProject('image', event.target.value)} /></label>
+              <label className="field field--wide">URL da imagem de capa<small>Esta imagem aparece no card. Se não houver capa, o primeiro print será usado.</small><input type="url" placeholder="https://.../capa.webp" value={selected.image?.startsWith('data:') ? '' : selected.image || ''} onChange={(event) => updateProject('image', event.target.value)} /></label>
               <div className="field field--wide image-upload">
                 <span>Ou envie uma capa local</span>
                 <button type="button" onClick={() => coverRef.current?.click()}><ImagePlus size={17} /> Selecionar capa</button>

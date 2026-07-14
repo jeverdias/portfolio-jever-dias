@@ -1,6 +1,11 @@
 export function ProjectVisual({ project, large = false }) {
-  if (project.image) {
-    return <img className="project-visual__image" src={project.image} alt={`Prévia do projeto ${project.title}`} />
+  const isImage = (value) => /^https?:\/\//i.test(value || '') || /^data:image\//i.test(value || '')
+  const coverImage = isImage(project.image)
+    ? project.image
+    : (project.gallery || []).find(isImage)
+
+  if (coverImage) {
+    return <img className="project-visual__image" src={coverImage} alt={`Prévia do projeto ${project.title}`} />
   }
 
   return (

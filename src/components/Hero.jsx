@@ -7,13 +7,7 @@ const techItems = [
   { name: 'Supabase', icon: DatabaseZap, color: '#45e0a8' },
 ]
 
-const roleDescriptions = {
-  'bi developer': 'Business Intelligence: transforma dados em dashboards e indicadores para apoiar decisões.',
-  analytics: 'Análise de dados para encontrar padrões, tendências e oportunidades.',
-  'sistemas web básicos': 'Criação de aplicações web simples para organizar processos e rotinas.',
-}
-
-export function Hero({ site }) {
+export function Hero({ site, onContact }) {
   const [firstName, ...lastNameParts] = site.name.split(' ')
   const lastName = lastNameParts.join(' ')
   const stats = [
@@ -34,27 +28,9 @@ export function Hero({ site }) {
           </h1>
           <p className="hero__role">
             {roles.map((role, index) => {
-              const description = roleDescriptions[role.toLocaleLowerCase('pt-BR')]
-              const tooltipId = `role-tooltip-${index}`
-
               return (
                 <span className="role-item" key={role}>
                   <span>{role}</span>
-                  {description && (
-                    <button
-                      className="role-info"
-                      type="button"
-                      aria-label={`O que significa ${role}?`}
-                      aria-describedby={tooltipId}
-                    >
-                      !
-                    </button>
-                  )}
-                  {description && (
-                    <span className="role-tooltip" id={tooltipId} role="tooltip">
-                      {description}
-                    </span>
-                  )}
                   {index < roles.length - 1 && <span className="role-separator" aria-hidden="true">|</span>}
                 </span>
               )
@@ -65,9 +41,9 @@ export function Hero({ site }) {
             <a className="button button--primary" href="#projetos">
               Ver portfólio <ArrowRight size={18} />
             </a>
-            <a className="button button--secondary" href={`mailto:${site.email}`}>
+            <button className="button button--secondary" type="button" onClick={onContact}>
               <Send size={17} /> Falar comigo
-            </a>
+            </button>
           </div>
           <div className="availability"><span /> Disponível para novos projetos</div>
         </div>
