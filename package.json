@@ -2,6 +2,11 @@
   "name": "portfolio-jever-dias",
   "private": true,
   "version": "1.0.0",
+  "homepage": "https://github.com/jeverdias/portfolio-jever-dias",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jeverdias/portfolio-jever-dias.git"
+  },
   "type": "module",
   "scripts": {
     "dev": "vite",

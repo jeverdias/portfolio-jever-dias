@@ -162,18 +162,11 @@ As alterações do painel são salvas no navegador atual. Para que todos os visi
 
 ## Git e GitHub
 
-O Git local já está iniciado na branch `main`. Para conectar a um repositório do GitHub:
+O Git local está conectado ao repositório público:
 
-1. Crie no GitHub um repositório vazio, por exemplo `portfolio-jever-dias`.
-2. Copie o endereço HTTPS do repositório.
-3. Execute na pasta do projeto:
+[`github.com/jeverdias/portfolio-jever-dias`](https://github.com/jeverdias/portfolio-jever-dias)
 
-```powershell
-git remote add origin https://github.com/SEU-USUARIO/portfolio-jever-dias.git
-git add .
-git commit -m "feat: cria portfolio profissional"
-git push -u origin main
-```
+O GitHub Desktop pode abrir diretamente a pasta `C:\Users\jever\Documents\Site JD`. A branch principal é `main` e já acompanha `origin/main`.
 
 Para as próximas alterações:
 
@@ -184,6 +177,13 @@ git push
 ```
 
 ## Publicar no Netlify
+
+No VS Code, pressione `Ctrl + Shift + P`, escolha **Tasks: Run Task** e use:
+
+- **Gerar versão para deploy** para validar a versão publicada;
+- **Abrir deploy no Netlify** para abrir a importação do repositório.
+
+Também é possível dar dois cliques em `abrir-deploy-netlify.cmd`.
 
 1. Envie o projeto ao GitHub.
 2. No Netlify, escolha **Add new site > Import an existing project**.

@@ -19,6 +19,37 @@
         "kind": "build",
         "isDefault": true
       }
+    },
+    {
+      "label": "Gerar versão para deploy",
+      "type": "process",
+      "command": "C:\\Users\\jever\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin\\node.exe",
+      "args": [
+        "${workspaceFolder}\\node_modules\\vite\\bin\\vite.js",
+        "build"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "clear": true
+      },
+      "group": "build"
+    },
+    {
+      "label": "Abrir deploy no Netlify",
+      "type": "process",
+      "command": "${workspaceFolder}\\abrir-deploy-netlify.cmd",
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "never"
+      }
     }
   ]
 }
