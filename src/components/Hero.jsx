@@ -7,6 +7,12 @@ const techItems = [
   { name: 'Supabase', icon: DatabaseZap, color: '#45e0a8' },
 ]
 
+const roleDescriptions = {
+  'bi developer': 'Business Intelligence: transforma dados em dashboards e indicadores para apoiar decisões.',
+  analytics: 'Análise de dados para encontrar padrões, tendências e oportunidades.',
+  'sistemas web básicos': 'Criação de aplicações web simples para organizar processos e rotinas.',
+}
+
 export function Hero({ site }) {
   const [firstName, ...lastNameParts] = site.name.split(' ')
   const lastName = lastNameParts.join(' ')
@@ -14,6 +20,7 @@ export function Hero({ site }) {
     { value: site.dashboardsCount, label: site.dashboardsLabel },
     { value: site.systemsCount, label: site.systemsLabel },
   ]
+  const roles = site.role.split('|').map((role) => role.trim()).filter(Boolean)
 
   return (
     <section className="hero" id="inicio">
@@ -25,7 +32,34 @@ export function Hero({ site }) {
           <h1>
             {firstName} <span>{lastName}</span>
           </h1>
-          <p className="hero__role">{site.role}</p>
+          <p className="hero__role">
+            {roles.map((role, index) => {
+              const description = roleDescriptions[role.toLocaleLowerCase('pt-BR')]
+              const tooltipId = `role-tooltip-${index}`
+
+              return (
+                <span className="role-item" key={role}>
+                  <span>{role}</span>
+                  {description && (
+                    <button
+                      className="role-info"
+                      type="button"
+                      aria-label={`O que significa ${role}?`}
+                      aria-describedby={tooltipId}
+                    >
+                      !
+                    </button>
+                  )}
+                  {description && (
+                    <span className="role-tooltip" id={tooltipId} role="tooltip">
+                      {description}
+                    </span>
+                  )}
+                  {index < roles.length - 1 && <span className="role-separator" aria-hidden="true">|</span>}
+                </span>
+              )
+            })}
+          </p>
           <p className="hero__intro">{site.intro}</p>
           <div className="hero__actions">
             <a className="button button--primary" href="#projetos">
