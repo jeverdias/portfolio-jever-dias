@@ -38,6 +38,7 @@ import { AdminSpecialties } from './AdminSpecialties'
 import { AdminAppearance } from './AdminAppearance'
 import { AdminProfessionalContent } from './AdminProfessionalContent'
 import { DisplayModelPreview } from './DisplayModelPreview'
+import { AdminProjectPreview } from './AdminProjectPreview'
 
 const ADMIN_PIN = import.meta.env.VITE_ADMIN_PIN || 'jd2026'
 const validHttpUrl = (value) => /^https?:\/\//i.test(value || '')
@@ -69,6 +70,7 @@ export function AdminPanel({ open, onClose, projectStore, siteStore, adminAuth }
   const [newModelBehavior, setNewModelBehavior] = useState('website')
   const [newModelPresentation, setNewModelPresentation] = useState('live')
   const [editingModelId, setEditingModelId] = useState('')
+  const [projectPreview, setProjectPreview] = useState('')
   const importRef = useRef(null)
   const coverRef = useRef(null)
   const galleryRef = useRef(null)
@@ -462,6 +464,7 @@ export function AdminPanel({ open, onClose, projectStore, siteStore, adminAuth }
             </div>
 
             <div className="admin-form">
+              <div className="admin-form-preview-heading field--wide"><div><span>Identificação e apresentação</span><small>Nome, tipo, tema, categoria e status</small></div><button type="button" onClick={() => setProjectPreview('identity')}><Eye size={15} /> Visualizar</button></div>
               <label className="field field--wide">Nome do projeto<input value={selected.title} onChange={(event) => updateProject('title', event.target.value)} /></label>
               <div className="field field--wide project-type-builder">
                 <span>Tipo do portfólio <small>Selecione um existente ou escreva um novo. Ele aparecerá nos filtros e na lista lateral.</small></span>
@@ -486,9 +489,11 @@ export function AdminPanel({ open, onClose, projectStore, siteStore, adminAuth }
                 <p>Um modelo personalizado pode mudar de nome e escolher uma das apresentações prontas. Uma apresentação totalmente nova exige desenvolvimento no código.</p>
               </div>}
               <div className="field field--wide display-model-library"><span>10 apresentações prontas e modelos personalizados <small>Passe o mouse ou use o teclado para ver a prévia.</small></span><div>{displayModels.map((model) => <span className="display-model-library__item" key={model.id}><button type="button" onClick={() => selectDisplayModel(model.id)}>{model.name}<small>{projectTypes[model.behavior]} · {model.presentation}</small><DisplayModelPreview model={model} /></button>{model.builtIn ? <i title="Apresentação pronta protegida">Pronto</i> : <><button className="edit" type="button" onClick={() => editDisplayModel(model)} aria-label={`Editar ${model.name}`}><Pencil size={13} /></button><button className="danger" type="button" onClick={() => removeDisplayModel(model)} aria-label={`Excluir ${model.name}`}><Trash2 size={13} /></button></>}</span>)}</div></div>
+              <div className="admin-form-preview-heading field--wide"><div><span>Modelo de exibição selecionado</span><small>Prévia contextual da apresentação escolhida</small></div><button type="button" onClick={() => setProjectPreview('presentation')}><Eye size={15} /> Visualizar</button></div>
+              <div className="admin-form-preview-heading field--wide"><div><span>Card público</span><small>Resumo, detalhes e tecnologias</small></div><button type="button" onClick={() => setProjectPreview('card')}><Eye size={15} /> Visualizar</button></div>
               <label className="field field--wide">Resumo para o card<textarea rows="3" value={selected.description} onChange={(event) => updateProject('description', event.target.value)} /></label>
               <label className="field field--wide">Detalhes do projeto<textarea rows="4" value={selected.details || ''} onChange={(event) => updateProject('details', event.target.value)} /></label>
-              <div className="admin-settings-section-title field--wide"><span>Conte um pouco sobre o projeto</span><span className="admin-settings-info"><button type="button" aria-label="O que é um estudo de caso">!</button><span role="tooltip">Esta é a parte chamada estudo de caso: a história resumida do trabalho, mostrando o problema, o que você fez e o resultado alcançado.</span></span></div>
+              <div className="admin-settings-section-title admin-form-preview-heading field--wide"><span>Conte um pouco sobre o projeto <span className="admin-settings-info"><button type="button" aria-label="O que é um estudo de caso">!</button><span role="tooltip">Esta é a parte chamada estudo de caso: a história resumida do trabalho, mostrando o problema, o que você fez e o resultado alcançado.</span></span></span><button type="button" onClick={() => setProjectPreview('case')}><Eye size={15} /> Visualizar</button></div>
               <label className="field field--wide">Desafio / problema<textarea rows="3" placeholder="O que precisava ser resolvido?" value={selected.challenge || ''} onChange={(event) => updateProject('challenge', event.target.value)} /></label>
               <label className="field field--wide">Solução criada<textarea rows="3" placeholder="O que foi construído e como ajudou?" value={selected.solution || ''} onChange={(event) => updateProject('solution', event.target.value)} /></label>
               <label className="field field--wide">Resultados / benefícios<textarea rows="3" placeholder="Ex.: reduziu tempo, organizou dados, facilitou decisões..." value={selected.results || ''} onChange={(event) => updateProject('results', event.target.value)} /></label>
@@ -497,6 +502,8 @@ export function AdminPanel({ open, onClose, projectStore, siteStore, adminAuth }
               <label className="field">Formato<input placeholder="Dashboard, site, cartilha..." value={selected.contentFormat || ''} onChange={(event) => updateProject('contentFormat', event.target.value)} /></label>
               <label className="field">Público-alvo<input value={selected.audience || ''} onChange={(event) => updateProject('audience', event.target.value)} /></label>
               <label className="field field--wide">Tecnologias <small>Separe com vírgulas</small><input value={selected.tags.join(', ')} onChange={(event) => updateProject('tags', event.target.value.split(',').map((tag) => tag.trim()).filter(Boolean))} /></label>
+
+              <div className="admin-form-preview-heading field--wide"><div><span>Demonstração e imagens</span><small>Links, capa e prints do projeto</small></div><button type="button" onClick={() => setProjectPreview('media')}><Eye size={15} /> Visualizar</button></div>
 
               {selected.type === 'powerbi' ? (
                 <label className="field field--wide">Link incorporado do Power BI <small>Não haverá botão externo no projeto público</small><input type="url" placeholder="https://app.powerbi.com/view?..." value={selected.embedUrl || ''} onChange={(event) => updateProject('embedUrl', event.target.value)} /></label>
@@ -533,6 +540,7 @@ export function AdminPanel({ open, onClose, projectStore, siteStore, adminAuth }
               <label className="field checkbox-field"><input type="checkbox" checked={selected.featured} onChange={(event) => updateProject('featured', event.target.checked)} /> Exibir no portfólio</label>
             </div>
             <div className="admin-note"><AlertTriangle size={15} /> {projectStore.mode === 'supabase' ? 'Alterações sincronizadas com o projeto Supabase exclusivo do portfólio.' : 'Sem banco, estas alterações ficam apenas neste navegador. Exporte o backup para não perder o trabalho.'}</div>
+            <AdminProjectPreview project={selected} mode={projectPreview} model={displayModels.find((item) => item.id === (selected.displayModelId || selected.type))} onClose={() => setProjectPreview('')} />
           </>
         ) : (
           <div className="admin-empty"><p>Nenhum projeto cadastrado.</p><button className="button button--primary" type="button" onClick={addProject}><Plus size={17} /> Criar projeto</button></div>
@@ -591,7 +599,7 @@ export function AdminPanel({ open, onClose, projectStore, siteStore, adminAuth }
               {view === 'overview' && renderOverview()}
               {view === 'settings' && renderSettings()}
               {view === 'appearance' && <div className="admin-page"><AdminAppearance siteStore={siteStore} /></div>}
-              {view === 'professional' && <div className="admin-page"><AdminProfessionalContent siteStore={siteStore} /></div>}
+              {view === 'professional' && <div className="admin-page"><AdminProfessionalContent siteStore={siteStore} onOpenLibrary={() => setView('library')} /></div>}
               {view === 'repositories' && renderRepositories()}
               {view === 'library' && <div className="admin-page"><AdminTechLibrary siteStore={siteStore} /></div>}
               {view === 'specialties' && <div className="admin-page"><AdminSpecialties siteStore={siteStore} /></div>}

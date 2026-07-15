@@ -8,7 +8,7 @@ Site publicado: `https://jeverdias.netlify.app`
 
 ## Estado atual
 
-**Versão ativa: v1.1.0 — personalização visual e conteúdo profissional editável.**
+**Versão ativa: v1.2.0 — prévias contextuais e biblioteca visual ampliada.**
 
 Regra permanente: toda correção, adição ou modificação deve atualizar a versão conforme `docs/VERSIONAMENTO.md`. Ao finalizar, sempre sugerir uma mensagem de commit, sem executar commit ou push sem autorização.
 
@@ -251,6 +251,15 @@ Ao iniciar uma nova versão:
 - Aparência ampliada para 20 paletas, 14 estilos de design e 10 opções tipográficas.
 - Guia do site detalhado com marcações numeradas nas miniaturas reais.
 - Versão atualizada de v1.0.0 para v1.1.0 por se tratar de novas funcionalidades compatíveis.
+
+### v1.2.0 — Prévias contextuais e biblioteca de ícones
+
+- Prévia em modal para cada setor profissional, paleta, estilo e fonte antes de aplicar.
+- Prévia em modal por conjunto de alterações dos projetos: identificação, card, apresentação, estudo de caso e mídia.
+- Os dez modelos de exibição agora mostram exemplos coerentes com dashboard, sistema, galeria, IA, vídeo, documento, protótipo, comparação, código e estudo de caso.
+- Métricas da Trajetória ganharam seleção visual ampliada de ícones e integração clara com Box/figurinhas.
+- Inclusão de fontes externas sugeridas para obter novos ícones, com alerta para conferir a licença de uso.
+- Versão atualizada de v1.1.0 para v1.2.0 por se tratar de novas funcionalidades compatíveis.
 - Nenhum commit ou push foi realizado sem autorização.
 
 ## Informações ainda necessárias de Jever

@@ -119,7 +119,7 @@ export function AdminGuide() {
 
       <section className="guide-section">
         <div className="guide-section__title"><BarChart3 size={20} /><div><span>Trajetória</span><h4>Onde ficam números, experiências e depoimentos</h4></div></div>
-        <div className="guide-info-list"><p><strong>Métricas:</strong> crie valores como “+12”, escolha legenda, cor, ícone ou figurinha e controle a visibilidade.</p><p><strong>Trajetória:</strong> cada marco possui período, título e descrição.</p><p><strong>Depoimentos:</strong> cadastre nome, cargo/empresa e somente textos autorizados.</p></div>
+        <div className="guide-info-list"><p><strong>Métricas:</strong> crie valores como “+12”, escolha visualmente um dos ícones, use uma figurinha própria e controle a visibilidade. Para adicionar imagens, abra Box/figurinhas.</p><p><strong>Onde obter ícones:</strong> a própria tela indica Lucide, Google Icons, SVG Repo e Flaticon. Confira a licença antes de publicar.</p><p><strong>Trajetória:</strong> cada marco possui período, título e descrição.</p><p><strong>Depoimentos:</strong> cadastre nome, cargo/empresa e somente textos autorizados.</p></div>
       </section>
 
       <section className="guide-section">
