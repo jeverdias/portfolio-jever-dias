@@ -1,12 +1,28 @@
 import { useCallback, useEffect, useState } from 'react'
-import { defaultProjects } from '../data/projects'
+import { defaultProjects, projectTypes } from '../data/projects'
 import { isSupabaseConfigured, supabase, uploadPortfolioAsset } from '../lib/supabase'
 
 const STORAGE_KEY = 'jd-portfolio-projects-v1'
 const AI_MIGRATION_KEY = 'jd-portfolio-ai-category-v1'
 
 const normalizeProject = (project) => {
-  const normalized = { theme: '', contentFormat: '', audience: '', ...project }
+  const categoryLooksLikeStatus = /^(em andamento|conclu[ií]do|em prepara[cç][aã]o|planejado|pausado|rascunho)$/i.test(project.category?.trim() || '')
+  const normalized = {
+    theme: '',
+    contentFormat: '',
+    audience: '',
+    challenge: '',
+    solution: '',
+    results: '',
+    duration: '',
+    contribution: '',
+    typeLabel: projectTypes[project.type] || 'Projeto',
+    displayModelId: project.type || 'website',
+    presentation: project.type === 'powerbi' ? 'embed' : project.type === 'website' ? 'live' : project.type === 'ai' ? 'assistant' : 'gallery',
+    status: categoryLooksLikeStatus ? project.category : 'Concluído',
+    ...project,
+    category: categoryLooksLikeStatus ? 'Projetos' : (project.category || 'Projetos'),
+  }
   return {
     ...normalized,
     tags: Array.isArray(project.tags) ? [...project.tags] : [],
@@ -85,6 +101,10 @@ export function useProjectStore() {
       theme: 'Tema do projeto',
       category: 'Projetos',
       type: 'website',
+      typeLabel: 'Sistema Web',
+      displayModelId: 'website',
+      presentation: 'live',
+      status: 'Em andamento',
       description: 'Escreva uma descrição curta e objetiva para este projeto.',
       details: 'Conte o desafio, a solução criada e o resultado alcançado.',
       tags: ['Nova tecnologia'],
@@ -95,6 +115,11 @@ export function useProjectStore() {
       externalUrl: '',
       contentFormat: '',
       audience: '',
+      challenge: '',
+      solution: '',
+      results: '',
+      duration: '',
+      contribution: '',
       featured: true,
       accent: '#6f7cff',
     }
@@ -121,6 +146,17 @@ export function useProjectStore() {
     persist(next)
   }, [persist, projects])
 
+  const replaceDisplayModel = useCallback((modelId, fallback) => {
+    const previews = { powerbi: 'dashboard', website: 'system', content: 'content', ai: 'ai' }
+    persist(projects.map((project) => project.displayModelId === modelId ? {
+      ...project,
+      displayModelId: fallback.id,
+      type: fallback.behavior,
+      presentation: fallback.presentation,
+      preview: previews[fallback.behavior],
+    } : project))
+  }, [persist, projects])
+
   const importProjects = useCallback((payload) => {
     const parsed = typeof payload === 'string' ? JSON.parse(payload) : payload
     if (!Array.isArray(parsed) || !parsed.every((item) => item.id && item.title && item.type)) {
@@ -144,6 +180,7 @@ export function useProjectStore() {
     updateProject,
     removeProject,
     moveProject,
+    replaceDisplayModel,
     importProjects,
     resetProjects,
     uploadImage,

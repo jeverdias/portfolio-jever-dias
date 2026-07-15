@@ -4,12 +4,33 @@ import { isSupabaseConfigured, supabase, uploadPortfolioAsset } from '../lib/sup
 
 const STORAGE_KEY = 'jd-portfolio-site-v1'
 
+const normalizeDisplayModels = (models) => {
+  const saved = Array.isArray(models) ? models : []
+  const builtInIds = new Set(siteConfig.displayModels.map((model) => model.id))
+  const custom = saved.filter((model) => !builtInIds.has(model.id) && model.builtIn !== true)
+  return [...siteConfig.displayModels, ...custom]
+}
+
+const normalizeSite = (value = {}) => ({
+  ...siteConfig,
+  ...value,
+  techItems: Array.isArray(value.techItems) && value.techItems.length
+    ? value.techItems
+    : siteConfig.techItems,
+  metrics: Array.isArray(value.metrics) && value.metrics.length ? value.metrics : siteConfig.metrics,
+  stickerLibrary: Array.isArray(value.stickerLibrary) ? value.stickerLibrary : siteConfig.stickerLibrary,
+  displayModels: normalizeDisplayModels(value.displayModels),
+  specialties: Array.isArray(value.specialties) && value.specialties.length ? value.specialties : siteConfig.specialties,
+  sectionVisibility: { ...siteConfig.sectionVisibility, ...(value.sectionVisibility || {}) },
+  appearance: { ...siteConfig.appearance, ...(value.appearance || {}) },
+})
+
 const readSite = () => {
   try {
     const saved = localStorage.getItem(STORAGE_KEY)
-    return saved ? { ...siteConfig, ...JSON.parse(saved) } : { ...siteConfig }
+    return saved ? normalizeSite(JSON.parse(saved)) : normalizeSite()
   } catch {
-    return { ...siteConfig }
+    return normalizeSite()
   }
 }
 
@@ -23,7 +44,7 @@ export function useSiteStore() {
     const { data, error: loadError } = await supabase.from('site_settings').select('data').eq('id', 'main').maybeSingle()
     if (loadError) setError('Não foi possível carregar as configurações online.')
     if (data?.data) {
-      const next = { ...siteConfig, ...data.data }
+      const next = normalizeSite(data.data)
       setSite(next)
       localStorage.setItem(STORAGE_KEY, JSON.stringify(next))
     }
@@ -54,14 +75,14 @@ export function useSiteStore() {
   }, [persistOnline])
 
   const importSite = useCallback((next) => {
-    const normalized = { ...siteConfig, ...next }
+    const normalized = normalizeSite(next)
     setSite(normalized)
     localStorage.setItem(STORAGE_KEY, JSON.stringify(normalized))
     void persistOnline(normalized)
   }, [persistOnline])
 
   const resetSite = useCallback(() => {
-    const next = { ...siteConfig }
+    const next = normalizeSite()
     setSite(next)
     localStorage.setItem(STORAGE_KEY, JSON.stringify(next))
     void persistOnline(next)

@@ -1,3 +1,5 @@
+import { defaultAppearance } from './appearance'
+
 export const siteConfig = {
   name: 'Jever Dias',
   role: 'BI Developer | Analytics | Sistemas Web Básicos',
@@ -22,6 +24,50 @@ export const siteConfig = {
   dashboardsLabel: 'Dashboards entregues',
   systemsCount: '+5',
   systemsLabel: 'Sistemas web',
+  metrics: [
+    { id: 'dashboards', value: '+12', label: 'Dashboards entregues', icon: 'chart', color: '#55b8ff', image: '', visible: true },
+    { id: 'systems', value: '+5', label: 'Sistemas web', icon: 'code', color: '#9b5cff', image: '', visible: true },
+  ],
+  techItems: [
+    { id: 'power-bi', name: 'Power BI', icon: 'chart', color: '#f9c74f', category: 'BI', description: 'Ferramenta para criar dashboards e relatórios interativos a partir de dados.', image: '' },
+    { id: 'dax', name: 'DAX', icon: 'sigma', color: '#56d4ff', category: 'BI', description: 'Linguagem de fórmulas usada para criar cálculos e medidas no Power BI.', image: '' },
+    { id: 'javascript', name: 'JavaScript', icon: 'code', color: '#ffd84d', category: 'Web', description: 'Linguagem usada para criar lógica e interações em sites e sistemas web.', image: '' },
+    { id: 'supabase', name: 'Supabase', icon: 'database', color: '#45e0a8', category: 'Dados', description: 'Serviço de banco de dados, autenticação e arquivos para aplicações.', image: '' },
+    { id: 'gpts', name: 'GPTs', icon: 'bot', color: '#a98bff', category: 'IA', description: 'Versões do ChatGPT configuradas com instruções e recursos para uma finalidade específica.', image: '' },
+    { id: 'agentes-ia', name: 'Agentes de IA', icon: 'workflow', color: '#ff7ad9', category: 'IA', description: 'Soluções que combinam IA, instruções e ferramentas para apoiar tarefas em etapas.', image: '' },
+  ],
+  stickerLibrary: [],
+  displayModels: [
+    { id: 'powerbi', name: 'Dashboard incorporado', behavior: 'powerbi', presentation: 'embed', builtIn: true },
+    { id: 'website', name: 'Aplicação web ao vivo', behavior: 'website', presentation: 'live', builtIn: true },
+    { id: 'content', name: 'Galeria de imagens', behavior: 'content', presentation: 'gallery', builtIn: true },
+    { id: 'ai', name: 'Demonstração de IA', behavior: 'ai', presentation: 'assistant', builtIn: true },
+    { id: 'case-study', name: 'Estudo de caso completo', behavior: 'content', presentation: 'case', builtIn: true },
+    { id: 'video-demo', name: 'Vídeo demonstrativo', behavior: 'content', presentation: 'video', builtIn: true },
+    { id: 'document', name: 'Documento ou PDF', behavior: 'content', presentation: 'document', builtIn: true },
+    { id: 'prototype', name: 'Protótipo interativo', behavior: 'website', presentation: 'prototype', builtIn: true },
+    { id: 'before-after', name: 'Antes e depois', behavior: 'content', presentation: 'comparison', builtIn: true },
+    { id: 'repository', name: 'Repositório de código', behavior: 'website', presentation: 'repository', builtIn: true },
+  ],
+  specialties: [
+    { id: 'business-intelligence', icon: 'chart', number: '01', title: 'Business Intelligence', text: 'Dashboards, indicadores e modelagem de dados para acompanhar o que realmente importa.', plain: 'É como transformar uma planilha cheia de números em um painel visual que mostra rapidamente o que está indo bem e o que precisa de atenção.', example: 'Exemplo: um gestor vê vendas, metas, atrasos e evolução do mês sem procurar em várias planilhas.', color: '#69c7ff', visible: true },
+    { id: 'analytics', icon: 'analytics', number: '02', title: 'Analytics', text: 'Análise de dados e geração de insights para decisões mais rápidas e bem fundamentadas.', plain: 'É investigar os números para descobrir por que algo aconteceu e o que pode acontecer depois.', example: 'Exemplo: analisar os meses de maior procura e os fatores que explicam aumentos ou quedas.', color: '#b77cff', visible: true },
+    { id: 'sistemas-web', icon: 'code', number: '03', title: 'Sistemas Web', text: 'Aplicações simples e funcionais para digitalizar rotinas e reduzir trabalho manual.', plain: 'É criar uma ferramenta que funciona no navegador para substituir controles manuais e organizar tarefas.', example: 'Exemplo: registrar pedidos, responsáveis e andamento sem depender de mensagens soltas.', color: '#69c7ff', visible: true },
+    { id: 'dados-processos', icon: 'database', number: '04', title: 'Dados & Processos', text: 'ETL, organização e apoio à melhoria contínua dos processos operacionais.', plain: 'É arrumar a origem dos dados e o caminho do trabalho para que informações e etapas fiquem claras.', example: 'Exemplo: juntar arquivos, remover duplicidades e criar um fluxo padrão de atualização.', color: '#b77cff', visible: true },
+    { id: 'gpts', icon: 'bot', number: '05', title: 'GPTs Personalizados', text: 'Assistentes no ChatGPT configurados para uma finalidade específica.', plain: 'É um ChatGPT preparado para um assunto e uma tarefa específicos, com orientações e materiais escolhidos.', example: 'Exemplo: um assistente que consulta manuais internos e ajuda a elaborar respostas padronizadas.', color: '#69c7ff', visible: true },
+    { id: 'agentes-ia', icon: 'workflow', number: '06', title: 'Agentes de IA Básicos', text: 'Fluxos simples que usam IA e ferramentas para apoiar tarefas em etapas.', plain: 'É uma automação com IA que segue etapas, usa ferramentas permitidas e pede revisão quando necessário.', example: 'Exemplo: classificar um texto, preparar um resumo e deixar a resposta pronta para revisão.', color: '#b77cff', visible: true },
+  ],
+  sectionVisibility: {
+    hero: true,
+    specialties: true,
+    projects: true,
+    about: true,
+    credibility: true,
+    resume: true,
+    contact: true,
+    footer: true,
+  },
+  appearance: defaultAppearance,
 }
 
 export const technologies = ['Power BI', 'DAX', 'JavaScript', 'Supabase', 'GPTs', 'Agentes de IA']

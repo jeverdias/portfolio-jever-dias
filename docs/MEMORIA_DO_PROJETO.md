@@ -1,6 +1,6 @@
 # Memória persistente — Portfólio Jever Dias
 
-Última atualização: **14 de julho de 2026**  
+Última atualização: **15 de julho de 2026**  
 Local do projeto: `C:\Users\jever\Documents\Site JD`  
 Branch principal: `main`
 Repositório: `https://github.com/jeverdias/portfolio-jever-dias`
@@ -8,7 +8,9 @@ Site publicado: `https://jeverdias.netlify.app`
 
 ## Estado atual
 
-**Versão ativa: evolução integrada das Versões 2, 3 e 4.**
+**Versão ativa: v1.1.0 — personalização visual e conteúdo profissional editável.**
+
+Regra permanente: toda correção, adição ou modificação deve atualizar a versão conforme `docs/VERSIONAMENTO.md`. Ao finalizar, sempre sugerir uma mensagem de commit, sem executar commit ou push sem autorização.
 
 A base visual está concluída em React + Vite. O painel possui integração preparada com Supabase Auth, Database e Storage, formulário Netlify, currículo profissional, trajetória, depoimentos e SEO ampliado. A criação do projeto Supabase exclusivo está pendente porque a organização atual atingiu o limite de dois projetos gratuitos.
 
@@ -170,6 +172,86 @@ Ao iniciar uma nova versão:
 - Adicionadas métricas, tecnologias, linha do tempo e depoimentos editáveis pelo painel.
 - Ampliados SEO, dados estruturados, sitemap, robots, manifest e metadados sociais.
 - Projeto Supabase novo não criado porque `JD Org` atingiu o limite de dois projetos gratuitos; os sistemas existentes foram preservados sem alterações.
+
+### 15/07/2026 — Estudos de caso, páginas individuais e biblioteca visual
+
+- Cada projeto passou a ter uma página individual e compartilhável em `/portfolio/id-do-projeto`.
+- Criada estrutura de estudo de caso com desafio, solução, resultados, duração e participação de Jever.
+- Os novos campos são editáveis na área **Repositórios** do painel administrativo.
+- Especialidades ganharam explicações em linguagem simples e exemplos práticos para visitantes leigos.
+- Criada a área administrativa **Figurinhas**, com inclusão, edição, exclusão, busca, categorias, cores e coleção de ícones.
+- Permitido enviar uma figurinha própria com prévia e orientação de fontes e licenças.
+- O box de tecnologias da página inicial e a lista de tecnologias da seção de credibilidade usam a mesma biblioteca editável.
+- Capas, prints e figurinhas enviados passam por redução de dimensões e conversão para WebP quando a conversão produz um arquivo menor.
+- Galerias das páginas individuais usam carregamento tardio para evitar baixar imagens antes de serem necessárias.
+- Sitemap ampliado com os endereços individuais dos projetos iniciais.
+- Mudanças mantidas apenas no projeto local; nenhum commit ou push foi realizado sem autorização.
+
+### 15/07/2026 — Planejamento futuro do pulso do Supabase
+
+- Definido que o workflow de atividade só será criado depois que o banco exclusivo do portfólio estiver pronto e testado.
+- Removido o workflow executável provisório para evitar uma automação incompleta no GitHub.
+- Criado `docs/GITHUB_SUPABASE_KEEP_ALIVE.md` com checklist de banco, tabelas, RLS, Storage, Secrets, publicação, testes e acompanhamento.
+- Registrado que a chave privilegiada `service_role` não deverá ser utilizada.
+- Registrado que o workflow futuro só funcionará na branch padrão e dependerá de autorização explícita para commit e push.
+- Nenhum pulso está ativo neste momento.
+
+### 15/07/2026 — Tipos personalizados e coleção de figurinhas
+
+- O botão **Voltar ao portfólio** das páginas individuais recebeu o mesmo destaque azul/roxo da ação principal.
+- Adicionado o atalho **Conhecer o projeto**, que leva diretamente à história/estudo de caso abaixo do resumo.
+- O título administrativo do estudo de caso passou a ser **Conte um pouco sobre o projeto**, mantendo uma explicação discreta sobre a finalidade desses campos.
+- Projetos agora possuem um **Tipo do portfólio** editável e independente do modelo técnico usado para abrir Power BI, site, conteúdo ou IA.
+- Tipos existentes aparecem como opções selecionáveis; um novo tipo digitado é reutilizado automaticamente nos filtros e na lista lateral.
+- A seção administrativa foi renomeada para **Box/figurinhas**.
+- Figurinhas personalizadas enviadas passam a integrar uma coleção persistente, podem ser aplicadas em vários boxes e possuem exclusão própria.
+- Ao excluir uma figurinha da coleção, ela também é removida dos boxes que a utilizavam.
+- Nenhum commit ou push foi realizado sem autorização.
+
+### 15/07/2026 — Modelos de exibição e Guia do site
+
+- Modelo de exibição passou a usar uma biblioteca editável armazenada nas configurações gerais.
+- Novos modelos recebem nome livre, comportamento-base e uma apresentação pronta.
+- A biblioteca possui 10 apresentações: dashboard incorporado, aplicação web ao vivo, galeria, demonstração de IA, estudo de caso, vídeo, documento/PDF, protótipo, antes/depois e repositório de código.
+- Modelos personalizados podem ser editados ou excluídos. Na exclusão, projetos vinculados são transferidos para um modelo compatível; os 10 modelos-base permanecem protegidos.
+- Área/categoria foi definida como assunto ou setor do projeto, como BI, Saúde ou Educação.
+- Criado campo separado **Status do projeto**, com sugestões de andamento e valor personalizado.
+- Status passou a aparecer nos cards e na página individual do projeto.
+- Criada a seção administrativa **Guia do site**, apresentada como manual interativo.
+- O guia contém mapa das áreas, relação entre campos e efeitos públicos, explicações conceituais, regras de demonstração, armazenamento e publicação.
+- Adicionadas miniaturas limpas e reais da página inicial e da página de projeto em `public/guide`, capturadas diretamente do site local.
+- Nenhum commit ou push foi realizado sem autorização.
+
+### 15/07/2026 — Especialidades e visibilidade das áreas
+
+- Criada a área administrativa **Especialidades**.
+- Cada especialidade permite editar nome, resumo do card, explicação para leigos, exemplo, cor, ícone ou figurinha e visibilidade.
+- É possível criar e excluir especialidades sem alterar o código-fonte.
+- Adicionados controles em **Configurações** para mostrar ou ocultar Hero, Especialidades, Portfólio, Sobre, Credibilidade, Currículo, Contato e Rodapé.
+- Ao ocultar uma área, seu item de navegação também é retirado do menu quando aplicável.
+- O Guia do site foi atualizado para explicar os 10 modelos, o editor de especialidades e a visibilidade das áreas.
+- Nenhum commit ou push foi realizado sem autorização.
+
+### 15/07/2026 — Aparência editável sem alterar a arquitetura
+
+- O visual original JD permanece como tema padrão e pode ser restaurado com um clique.
+- Criada a área administrativa **Aparência** sem modificar a arquitetura, os nomes, os textos ou os projetos.
+- Adicionados 30 perfis profissionais, incluindo tecnologia, advocacia, administração, medicina, nutrição, pesquisa, engenharia, educação e outras áreas.
+- Adicionadas 12 paletas de cores claras e escuras e 8 estilos de design: JD moderno, futurista, executivo, clássico, editorial, clínico, orgânico e acadêmico.
+- Cor e estilo podem ser escolhidos separadamente depois da seleção de um perfil profissional.
+- A preferência é persistida junto às configurações gerais do site.
+- Nenhum commit ou push foi realizado sem autorização.
+
+### v1.1.0 — Aparência ampliada, métricas e conteúdo profissional
+
+- Métricas deixaram de ser quatro campos fixos e passaram a ser uma coleção editável com inclusão, exclusão, ícone, figurinha, cor e visibilidade.
+- Criada a área **Trajetória**, reunindo métricas, experiências profissionais e depoimentos em editores separados.
+- Status de projeto categorizado em Concluído, Em andamento, Parado e Outro, com texto personalizado em Outro.
+- Modelos de exibição ganharam miniaturas explicativas ao passar o mouse ou navegar pelo teclado.
+- Aparência ampliada para 20 paletas, 14 estilos de design e 10 opções tipográficas.
+- Guia do site detalhado com marcações numeradas nas miniaturas reais.
+- Versão atualizada de v1.0.0 para v1.1.0 por se tratar de novas funcionalidades compatíveis.
+- Nenhum commit ou push foi realizado sem autorização.
 
 ## Informações ainda necessárias de Jever
 

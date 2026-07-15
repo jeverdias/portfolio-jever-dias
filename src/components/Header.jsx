@@ -2,15 +2,15 @@ import { LogIn, Menu, X } from 'lucide-react'
 import { useState } from 'react'
 
 const links = [
-  ['Início', '#inicio'],
-  ['Portfólio', '#projetos'],
-  ['Serviços', '#servicos'],
-  ['Sobre', '#sobre'],
-  ['Currículo', '#curriculo'],
-  ['Contato', '#contato'],
+  ['Início', '#inicio', 'hero'],
+  ['Portfólio', '#projetos', 'projects'],
+  ['Serviços', '#servicos', 'specialties'],
+  ['Sobre', '#sobre', 'about'],
+  ['Currículo', '#curriculo', 'resume'],
+  ['Contato', '#contato', 'contact'],
 ]
 
-export function Header({ onLogin }) {
+export function Header({ onLogin, visibility = {} }) {
   const [open, setOpen] = useState(false)
 
   return (
@@ -32,7 +32,7 @@ export function Header({ onLogin }) {
         </button>
 
         <nav id="main-navigation" className={`main-nav ${open ? 'is-open' : ''}`} aria-label="Navegação principal">
-          {links.map(([label, href]) => (
+          {links.filter(([, , section]) => visibility[section] !== false).map(([label, href]) => (
             <a key={href} href={href} onClick={() => setOpen(false)}>
               {label}
             </a>

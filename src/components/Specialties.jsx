@@ -1,56 +1,14 @@
-import { BarChart3, Bot, Braces, Database, LineChart, Workflow, X } from 'lucide-react'
+import { BarChart3, Bot, Braces, Database, LineChart, Sparkles, Workflow, X } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import { SectionTitle } from './ui/SectionTitle'
 
-const specialties = [
-  {
-    icon: BarChart3,
-    number: '01',
-    title: 'Business Intelligence',
-    text: 'Dashboards, indicadores e modelagem de dados para acompanhar o que realmente importa.',
-    detail: 'Transforma dados de diferentes fontes em indicadores, relatórios e dashboards visuais para acompanhar resultados e apoiar decisões.',
-  },
-  {
-    icon: LineChart,
-    number: '02',
-    title: 'Analytics',
-    text: 'Análise de dados e geração de insights para decisões mais rápidas e bem fundamentadas.',
-    detail: 'Investiga os dados para encontrar padrões, tendências, causas e oportunidades, convertendo números em respostas úteis para o negócio.',
-  },
-  {
-    icon: Braces,
-    number: '03',
-    title: 'Sistemas Web',
-    text: 'Aplicações simples e funcionais para digitalizar rotinas e reduzir trabalho manual.',
-    detail: 'Cria ferramentas online leves e funcionais para organizar cadastros, automatizar rotinas e facilitar o trabalho das equipes.',
-  },
-  {
-    icon: Database,
-    number: '04',
-    title: 'Dados & Processos',
-    text: 'ETL, organização e apoio à melhoria contínua dos processos operacionais.',
-    detail: 'Organiza, integra e padroniza dados e fluxos de trabalho para reduzir erros e tornar os processos mais claros e eficientes.',
-  },
-  {
-    icon: Bot,
-    number: '05',
-    title: 'GPTs Personalizados',
-    text: 'Assistentes no ChatGPT configurados para uma finalidade específica, com escopo claro e conteúdo selecionado.',
-    detail: 'GPTs são versões do ChatGPT configuradas para um objetivo definido. Podem combinar instruções, arquivos de conhecimento e recursos selecionados para orientar respostas e tarefas.',
-  },
-  {
-    icon: Workflow,
-    number: '06',
-    title: 'Agentes de IA Básicos',
-    text: 'Fluxos simples que usam IA e ferramentas para apoiar tarefas em etapas, com limites e supervisão.',
-    detail: 'Um agente de IA combina um modelo, instruções e ferramentas para conduzir etapas de uma tarefa. O foco aqui está em soluções básicas, delimitadas e revisáveis.',
-  },
-]
+const iconMap = { chart: BarChart3, analytics: LineChart, code: Braces, database: Database, bot: Bot, workflow: Workflow, sparkles: Sparkles }
 
-export function Specialties() {
+export function Specialties({ items = [] }) {
+  const specialties = items.filter((item) => item.visible !== false)
   const [guideOpen, setGuideOpen] = useState(false)
   const [selectedSpecialty, setSelectedSpecialty] = useState(null)
-  const SelectedIcon = selectedSpecialty?.icon
+  const SelectedIcon = iconMap[selectedSpecialty?.icon] || Sparkles
   const closeRef = useRef(null)
 
   const openGuide = (specialty = null) => {
@@ -75,8 +33,8 @@ export function Specialties() {
       <div className="container">
         <SectionTitle
           eyebrow="Especialidades"
-          title="Do dado bruto à solução que funciona."
-          text="Estratégia, análise e desenvolvimento reunidos em entregas objetivas."
+          title="Veja de forma simples o que cada área faz."
+          text="Explicações diretas, com exemplos práticos, para quem não precisa conhecer os termos técnicos."
         />
         <div className="specialties-guide">
           <button type="button" onClick={() => openGuide()} aria-haspopup="dialog">
@@ -86,11 +44,12 @@ export function Specialties() {
         </div>
         <div className="specialties-grid">
           {specialties.map((specialty) => {
-            const { icon: Icon, number, title, text } = specialty
+            const { number, title, text, image, color } = specialty
+            const Icon = iconMap[specialty.icon] || Sparkles
             return (
               <button className="specialty-card" type="button" key={title} onClick={() => openGuide(specialty)} aria-label={`Entender ${title}`}>
                 <div className="specialty-card__top">
-                  <div className="specialty-card__icon"><Icon size={24} /></div>
+                  <div className="specialty-card__icon" style={{ color }}>{image ? <img src={image} alt="" /> : <Icon size={24} />}</div>
                   <span>{number}</span>
                 </div>
                 <h3>{title}</h3>
@@ -118,18 +77,20 @@ export function Specialties() {
             <p>{selectedSpecialty ? selectedSpecialty.detail : 'Uma explicação simples de como cada área pode ajudar um projeto.'}</p>
             {selectedSpecialty ? (
               <article className="specialties-modal__single">
-                <div className="specialties-modal__single-icon"><SelectedIcon size={27} /></div>
-                <div><span>Na prática</span><p>{selectedSpecialty.text}</p></div>
+                <div className="specialties-modal__single-icon">{selectedSpecialty.image ? <img src={selectedSpecialty.image} alt="" /> : <SelectedIcon size={27} />}</div>
+                <div><span>Em palavras simples</span><p>{selectedSpecialty.plain}</p><strong className="specialty-example">{selectedSpecialty.example}</strong></div>
               </article>
             ) : (
               <div className="specialties-modal__grid">
-                {specialties.map(({ icon: Icon, number, title, detail }, index) => (
+                {specialties.map(({ icon, number, title, plain, example, image }, index) => {
+                  const Icon = iconMap[icon] || Sparkles
+                  return (
                   <article key={title} style={{ '--specialty-index': index }}>
-                    <div><Icon size={21} /><span>{number}</span></div>
+                    <div>{image ? <img src={image} alt="" /> : <Icon size={21} />}<span>{number}</span></div>
                     <h3>{title}</h3>
-                    <p>{detail}</p>
+                    <p>{plain}</p><strong className="specialty-example">{example}</strong>
                   </article>
-                ))}
+                )})}
               </div>
             )}
           </section>

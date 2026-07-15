@@ -5,7 +5,7 @@ export function ProjectVisual({ project, large = false }) {
     : (project.gallery || []).find(isImage)
 
   if (coverImage) {
-    return <img className="project-visual__image" src={coverImage} alt={`Prévia do projeto ${project.title}`} />
+    return <img className="project-visual__image" src={coverImage} alt={`Prévia do projeto ${project.title}`} loading="lazy" decoding="async" />
   }
 
   return (

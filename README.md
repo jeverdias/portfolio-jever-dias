@@ -14,12 +14,23 @@ C:\Users\jever\Documents\Site JD
 
 Versão atual e próximos passos: [`docs/MEMORIA_DO_PROJETO.md`](docs/MEMORIA_DO_PROJETO.md).
 
+Versão do aplicativo: **v1.1.0**. A regra permanente de atualização MAJOR, MINOR e PATCH está em [`docs/VERSIONAMENTO.md`](docs/VERSIONAMENTO.md).
+
 ## O que foi criado
 
 - Header responsivo com navegação por seções.
 - Hero com apresentação, chamadas para ação e resumo de experiência.
 - Cards de especialidades.
 - Projetos filtráveis por Power BI, sistema web, conteúdo digital e GPTs & Agentes de IA.
+- Página individual e compartilhável para cada projeto, estruturada como estudo de caso.
+- Campos de desafio, solução, resultado, duração e participação editáveis no painel.
+- Otimização automática de capas e prints enviados, com conversão para WebP quando o arquivo fica mais leve.
+- Biblioteca editável de tecnologias e figurinhas com busca, ícones prontos e envio de imagem própria.
+- Tipos de projeto personalizados e reutilizáveis, criados diretamente na área Repositórios.
+- Modelos de exibição personalizados, com comportamento-base e exclusão segura.
+- Campo de status separado da área/categoria do projeto.
+- Guia visual interno com mapeamento dos campos, explicações e imagens reais do site.
+- Explicações das especialidades em linguagem simples, com exemplos para visitantes leigos.
 - Modal para incorporar relatórios do Power BI sem mostrar o endereço ao visitante.
 - Modal para visualizar sites e abrir o projeto em uma nova aba.
 - Modo administrador local com PIN, cadastro, edição, ordenação, imagem, importação e exportação JSON.
@@ -117,7 +128,14 @@ Abra `src/data/site.js` e ajuste:
 1. Clique em **Login** no canto superior direito do portfólio.
 3. No primeiro acesso, use o PIN `jd2026`.
 4. Use **Configurações** para editar apresentação, contatos, LinkedIn, Instagram, GitHub e números do site.
-5. Use **Repositórios** para cadastrar projetos, links, capa e até quatro prints.
+5. Use **Repositórios** para cadastrar projetos, estudos de caso, links, capa e até quatro prints.
+6. Use **Box/figurinhas** para editar o box de tecnologias da página inicial, buscar ícones ou enviar uma imagem própria.
+
+Os dados são salvos automaticamente. Em **Repositórios**, o campo **Tipo do portfólio** permite selecionar um dos tipos existentes ou escrever um novo; o novo tipo passa a aparecer na lista lateral e nos filtros públicos. Em **Box/figurinhas**, imagens enviadas ficam guardadas na coleção para reutilização e podem ser excluídas.
+
+O **Modelo de exibição** controla tecnicamente como a demonstração abre. Modelos personalizados podem ser criados a partir de um dos quatro comportamentos-base e podem ser excluídos quando não estiverem sendo usados. **Área/categoria** descreve o assunto ou setor do trabalho; **Status** registra se está Em andamento, Concluído, Em preparação etc.
+
+A seção **Guia do site** funciona como manual interno, explicando cada área administrativa, onde os campos aparecem no site público e como funcionam links, demonstrações, imagens, salvamento e publicação.
 
 Para mudar o PIN:
 
@@ -145,6 +163,14 @@ Para que o Login seja seguro e as alterações apareçam online para todos sem e
 - **Supabase Storage** para capas e prints.
 
 As imagens não devem ser gravadas diretamente no banco. O banco guarda apenas os endereços dos arquivos armazenados no Storage. O plano técnico está em [`docs/PLANO_ADMIN_ONLINE.md`](docs/PLANO_ADMIN_ONLINE.md).
+
+### Otimização de imagens
+
+Ao enviar uma capa ou um print pelo painel, o navegador limita dimensões exageradas e tenta converter a imagem para WebP. A conversão só é usada quando produz um arquivo menor. Isso reduz o tempo de carregamento sem diminuir o tamanho visual do card; a imagem continua ocupando o mesmo espaço na tela.
+
+### Estudos de caso e páginas individuais
+
+Cada card abre um endereço próprio em `/portfolio/id-do-projeto`. A página apresenta contexto, público, duração, desafio, solução, resultado, participação, tecnologias, galeria e demonstração. O arquivo `netlify.toml` já direciona esses endereços para o aplicativo React no Netlify.
 
 ### Power BI
 
@@ -193,6 +219,12 @@ Também é possível dar dois cliques em `abrir-deploy-netlify.cmd`.
 O projeto local está vinculado ao site `jeverdias` no Netlify. O comando de build é `npm run build` e a pasta publicada é `dist`.
 
 O arquivo `netlify.toml` contém essas configurações. O deploy contínuo está ligado ao repositório `jeverdias/portfolio-jever-dias`: somente atualizações enviadas à branch `main` publicam uma nova versão de produção. Deploys manuais de produção estão bloqueados no Netlify.
+
+## Atividade programada do Supabase
+
+O pulso automático ainda não está ativo. Ele só será criado depois que o banco de dados exclusivo do portfólio estiver pronto, com tabelas, políticas, login e Storage testados.
+
+O checklist para essa etapa futura está em [`docs/GITHUB_SUPABASE_KEEP_ALIVE.md`](docs/GITHUB_SUPABASE_KEEP_ALIVE.md).
 
 ## Decisão sobre o modelo
 

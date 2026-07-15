@@ -4,5 +4,9 @@
     <loc>https://jeverdias.netlify.app/</loc>
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>
-  </url>
+</url>
+<url><loc>https://jeverdias.netlify.app/portfolio/dashboard-htlv</loc></url>
+<url><loc>https://jeverdias.netlify.app/portfolio/sistema-os</loc></url>
+<url><loc>https://jeverdias.netlify.app/portfolio/cartilha-digital</loc></url>
+<url><loc>https://jeverdias.netlify.app/portfolio/gpts-agentes-ia</loc></url>
 </urlset>

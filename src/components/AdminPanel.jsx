@@ -4,9 +4,12 @@ import {
   ArrowUp,
   BarChart3,
   Bot,
+  BookOpenCheck,
   CheckCircle2,
   Database,
   Download,
+  Eye,
+  EyeOff,
   FolderKanban,
   GalleryHorizontal,
   Globe2,
@@ -15,19 +18,34 @@ import {
   Link2,
   LogOut,
   Plus,
+  Palette,
+  Pencil,
   RotateCcw,
   Save,
   Settings,
   ShieldCheck,
+  Sparkles,
   Trash2,
   Upload,
   X,
 } from 'lucide-react'
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { projectTypes } from '../data/projects'
+import { getProjectTypeLabel, projectTypes } from '../data/projects'
+import { optimizeImage } from '../utils/optimizeImage'
+import { AdminTechLibrary } from './AdminTechLibrary'
+import { AdminGuide } from './AdminGuide'
+import { AdminSpecialties } from './AdminSpecialties'
+import { AdminAppearance } from './AdminAppearance'
+import { AdminProfessionalContent } from './AdminProfessionalContent'
+import { DisplayModelPreview } from './DisplayModelPreview'
 
 const ADMIN_PIN = import.meta.env.VITE_ADMIN_PIN || 'jd2026'
 const validHttpUrl = (value) => /^https?:\/\//i.test(value || '')
+const publicSections = [
+  ['hero', 'Apresentação inicial'], ['specialties', 'Especialidades'], ['projects', 'Portfólio'], ['about', 'Sobre'],
+  ['credibility', 'Trajetória e credibilidade'], ['resume', 'Currículo'], ['contact', 'Contato'], ['footer', 'Rodapé'],
+]
+const projectStatusOptions = ['Concluído', 'Em andamento', 'Parado']
 
 const readAsDataUrl = (file) => new Promise((resolve, reject) => {
   const reader = new FileReader()
@@ -46,6 +64,11 @@ export function AdminPanel({ open, onClose, projectStore, siteStore, adminAuth }
   const [galleryUrl, setGalleryUrl] = useState('')
   const [repositorySearch, setRepositorySearch] = useState('')
   const [repositoryType, setRepositoryType] = useState('all')
+  const [showModelBuilder, setShowModelBuilder] = useState(false)
+  const [newModelName, setNewModelName] = useState('')
+  const [newModelBehavior, setNewModelBehavior] = useState('website')
+  const [newModelPresentation, setNewModelPresentation] = useState('live')
+  const [editingModelId, setEditingModelId] = useState('')
   const importRef = useRef(null)
   const coverRef = useRef(null)
   const galleryRef = useRef(null)
@@ -64,7 +87,7 @@ export function AdminPanel({ open, onClose, projectStore, siteStore, adminAuth }
     return projectStore.projects
       .map((project, index) => ({ project, index }))
       .filter(({ project, index }) => {
-        const matchesType = repositoryType === 'all' || project.type === repositoryType
+        const matchesType = repositoryType === 'all' || getProjectTypeLabel(project) === repositoryType
         const projectIndex = String(index + 1).padStart(2, '0')
         const searchable = [
           projectIndex,
@@ -72,6 +95,7 @@ export function AdminPanel({ open, onClose, projectStore, siteStore, adminAuth }
           project.title,
           project.theme,
           project.category,
+          getProjectTypeLabel(project),
           projectTypes[project.type],
           ...(project.tags || []),
         ].filter(Boolean).join(' ').toLocaleLowerCase('pt-BR')
@@ -79,6 +103,11 @@ export function AdminPanel({ open, onClose, projectStore, siteStore, adminAuth }
         return matchesType && (!query || searchable.includes(query))
       })
   }, [projectStore.projects, repositorySearch, repositoryType])
+
+  const savedProjectTypes = useMemo(
+    () => [...new Set(projectStore.projects.map(getProjectTypeLabel).filter(Boolean))].sort((a, b) => a.localeCompare(b, 'pt-BR')),
+    [projectStore.projects],
+  )
 
   useEffect(() => {
     if (!open) return undefined
@@ -113,6 +142,56 @@ export function AdminPanel({ open, onClose, projectStore, siteStore, adminAuth }
   }
 
   const updateProject = (field, value) => selected && projectStore.updateProject(selected.id, { [field]: value })
+  const displayModels = siteStore.site.displayModels || []
+
+  const selectDisplayModel = (modelId) => {
+    const model = displayModels.find((item) => item.id === modelId)
+    if (!selected || !model) return
+    const previews = { powerbi: 'dashboard', website: 'system', content: 'content', ai: 'ai' }
+    projectStore.updateProject(selected.id, { displayModelId: model.id, type: model.behavior, presentation: model.presentation, preview: previews[model.behavior] })
+  }
+
+  const addDisplayModel = () => {
+    const name = newModelName.trim()
+    if (!name) {
+      setError('Digite um nome para o novo modelo de exibição.')
+      return
+    }
+    if (editingModelId) {
+      siteStore.updateSite({ displayModels: displayModels.map((model) => model.id === editingModelId ? { ...model, name, behavior: newModelBehavior, presentation: newModelPresentation } : model) })
+      projectStore.replaceDisplayModel(editingModelId, { id: editingModelId, behavior: newModelBehavior, presentation: newModelPresentation })
+      setEditingModelId('')
+      setNewModelName('')
+      setShowModelBuilder(false)
+      setError('')
+      return
+    }
+    const id = `modelo-${name.toLocaleLowerCase('pt-BR').normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')}-${Date.now()}`
+    const model = { id, name, behavior: newModelBehavior, presentation: newModelPresentation, builtIn: false }
+    siteStore.updateSite({ displayModels: [...displayModels, model] })
+    const previews = { powerbi: 'dashboard', website: 'system', content: 'content', ai: 'ai' }
+    projectStore.updateProject(selected.id, { displayModelId: id, type: newModelBehavior, presentation: newModelPresentation, preview: previews[newModelBehavior] })
+    setNewModelName('')
+    setShowModelBuilder(false)
+    setError('')
+  }
+
+  const editDisplayModel = (model) => {
+    setEditingModelId(model.id)
+    setNewModelName(model.name)
+    setNewModelBehavior(model.behavior)
+    setNewModelPresentation(model.presentation || 'case')
+    setShowModelBuilder(true)
+  }
+
+  const removeDisplayModel = (model) => {
+    const usedBy = projectStore.projects.filter((project) => project.displayModelId === model.id)
+    const fallback = displayModels.find((item) => item.builtIn && item.behavior === model.behavior) || displayModels.find((item) => item.builtIn)
+    if (!window.confirm(`Excluir o modelo “${model.name}”? ${usedBy.length ? `${usedBy.length} projeto(s) serão transferidos para “${fallback.name}”.` : ''}`)) return
+    if (usedBy.length) projectStore.replaceDisplayModel(model.id, fallback)
+    siteStore.updateSite({ displayModels: displayModels.filter((item) => item.id !== model.id) })
+    setError('')
+  }
 
   const addProject = () => {
     const id = projectStore.addProject()
@@ -167,15 +246,16 @@ export function AdminPanel({ open, onClose, projectStore, siteStore, adminAuth }
   const uploadCover = async (event) => {
     const file = event.target.files?.[0]
     if (!file) return
-    if (projectStore.mode === 'local' && file.size > 800_000) {
+    const optimizedFile = await optimizeImage(file, { maxWidth: 1600, maxHeight: 1000, quality: 0.82 })
+    if (projectStore.mode === 'local' && optimizedFile.size > 800_000) {
       setError('Para o modo local, use uma capa com até 800 KB.')
       event.target.value = ''
       return
     }
     try {
       const image = projectStore.mode === 'supabase'
-        ? await projectStore.uploadImage(file, selected.id, 'capa')
-        : await readAsDataUrl(file)
+        ? await projectStore.uploadImage(optimizedFile, selected.id, 'capa')
+        : await readAsDataUrl(optimizedFile)
       updateProject('image', image)
       setError('')
     } catch (uploadError) {
@@ -190,13 +270,14 @@ export function AdminPanel({ open, onClose, projectStore, siteStore, adminAuth }
     const remaining = 4 - currentGallery.length
     const files = Array.from(event.target.files || []).slice(0, remaining)
     if (!files.length) return
-    if (projectStore.mode === 'local' && files.some((file) => file.size > 600_000)) {
+    const optimizedFiles = await Promise.all(files.map((file) => optimizeImage(file, { maxWidth: 1600, maxHeight: 1200, quality: 0.82 })))
+    if (projectStore.mode === 'local' && optimizedFiles.some((file) => file.size > 600_000)) {
       setError('No modo local, cada print deve ter até 600 KB. Para arquivos maiores, use URLs ou Supabase Storage.')
       event.target.value = ''
       return
     }
     try {
-      const images = await Promise.all(files.map((file) => (
+      const images = await Promise.all(optimizedFiles.map((file) => (
         projectStore.mode === 'supabase'
           ? projectStore.uploadImage(file, selected.id, 'galeria')
           : readAsDataUrl(file)
@@ -300,6 +381,8 @@ export function AdminPanel({ open, onClose, projectStore, siteStore, adminAuth }
         <label className="field">Email<input type="email" value={siteStore.site.email} onChange={(event) => siteStore.updateSite({ email: event.target.value })} /></label>
         <label className="field">Email alternativo<input type="email" placeholder="Opcional" value={siteStore.site.emailSecondary || ''} onChange={(event) => siteStore.updateSite({ emailSecondary: event.target.value })} /></label>
         <label className="field">Localização<input value={siteStore.site.location} onChange={(event) => siteStore.updateSite({ location: event.target.value })} /></label>
+        <div className="admin-settings-section-title field--wide"><span>Visibilidade das áreas públicas</span><span className="admin-settings-info"><button type="button" aria-label="Como funciona a visibilidade">!</button><span role="tooltip">Ocultar uma área remove a seção da página e também retira seu link do menu quando houver.</span></span></div>
+        <div className="field field--wide section-visibility-grid">{publicSections.map(([key, label]) => { const visible = siteStore.site.sectionVisibility?.[key] !== false; return <button className={visible ? 'is-visible' : 'is-hidden'} type="button" key={key} onClick={() => siteStore.updateSite({ sectionVisibility: { ...siteStore.site.sectionVisibility, [key]: !visible } })}>{visible ? <Eye size={15} /> : <EyeOff size={15} />}<span><strong>{label}</strong><small>{visible ? 'Visível no site' : 'Oculta no site'}</small></span></button> })}</div>
         <div className="admin-settings-section-title field--wide">
           <span>Redes sociais</span>
           <span className="admin-settings-info">
@@ -318,13 +401,7 @@ export function AdminPanel({ open, onClose, projectStore, siteStore, adminAuth }
         <label className="field field--wide">Resumo do currículo<textarea rows="3" value={siteStore.site.resumeSummary || ''} onChange={(event) => siteStore.updateSite({ resumeSummary: event.target.value })} /></label>
         <label className="field field--wide">URL pública do currículo em PDF<input type="url" placeholder="https://.../curriculo-jever-dias.pdf" value={siteStore.site.resumeUrl || ''} onChange={(event) => siteStore.updateSite({ resumeUrl: event.target.value })} /></label>
         <div className="field field--wide image-upload"><span>Ou envie o PDF pelo Supabase Storage</span><button type="button" onClick={() => resumeRef.current?.click()} disabled={siteStore.mode !== 'supabase'}><Upload size={17} /> Selecionar currículo</button><input ref={resumeRef} type="file" accept="application/pdf" onChange={uploadResume} hidden /></div>
-        <div className="admin-settings-section-title field--wide"><span>Trajetória e depoimentos</span></div>
-        <label className="field field--wide">Linha do tempo<small>Uma experiência por linha: período | título | descrição</small><textarea rows="5" placeholder="2024–Atual | BI Developer | Descrição da atuação" value={siteStore.site.timelineText || ''} onChange={(event) => siteStore.updateSite({ timelineText: event.target.value })} /></label>
-        <label className="field field--wide">Depoimentos<small>Um depoimento por linha: nome | cargo ou empresa | depoimento</small><textarea rows="5" placeholder="Nome | Cargo ou empresa | Texto autorizado do depoimento" value={siteStore.site.testimonialsText || ''} onChange={(event) => siteStore.updateSite({ testimonialsText: event.target.value })} /></label>
-        <label className="field">Número de dashboards<input value={siteStore.site.dashboardsCount} onChange={(event) => siteStore.updateSite({ dashboardsCount: event.target.value })} /></label>
-        <label className="field">Legenda dos dashboards<input value={siteStore.site.dashboardsLabel} onChange={(event) => siteStore.updateSite({ dashboardsLabel: event.target.value })} /></label>
-        <label className="field">Número de sistemas<input value={siteStore.site.systemsCount} onChange={(event) => siteStore.updateSite({ systemsCount: event.target.value })} /></label>
-        <label className="field">Legenda dos sistemas<input value={siteStore.site.systemsLabel} onChange={(event) => siteStore.updateSite({ systemsLabel: event.target.value })} /></label>
+        <div className="admin-note field--wide"><Sparkles size={15} /> Métricas, trajetória e depoimentos agora possuem uma área própria e editável no menu lateral.</div>
       </div>
       <button className="admin-inline-action" type="button" onClick={() => window.confirm('Restaurar os textos originais do site?') && siteStore.resetSite()}><RotateCcw size={14} /> Restaurar configurações</button>
     </div>
@@ -343,7 +420,7 @@ export function AdminPanel({ open, onClose, projectStore, siteStore, adminAuth }
             <span>Filtrar por tipo</span>
             <select value={repositoryType} onChange={(event) => setRepositoryType(event.target.value)}>
               <option value="all">Todos os tipos</option>
-              {Object.entries(projectTypes).map(([value, label]) => <option key={value} value={value}>{label}</option>)}
+              {savedProjectTypes.map((label) => <option key={label} value={label}>{label}</option>)}
             </select>
           </label>
         </div>
@@ -351,7 +428,7 @@ export function AdminPanel({ open, onClose, projectStore, siteStore, adminAuth }
           {filteredProjects.map(({ project, index }) => (
             <button className={selected?.id === project.id ? 'is-active' : ''} type="button" key={project.id} onClick={() => setSelectedId(project.id)}>
               <i style={{ background: project.accent }} />
-              <span><strong>{project.title}</strong><small>{projectTypes[project.type]}</small></span>
+              <span><strong>{project.title}</strong><small>{getProjectTypeLabel(project)}</small></span>
               <em>{String(index + 1).padStart(2, '0')}</em>
             </button>
           ))}
@@ -386,19 +463,37 @@ export function AdminPanel({ open, onClose, projectStore, siteStore, adminAuth }
 
             <div className="admin-form">
               <label className="field field--wide">Nome do projeto<input value={selected.title} onChange={(event) => updateProject('title', event.target.value)} /></label>
+              <div className="field field--wide project-type-builder">
+                <span>Tipo do portfólio <small>Selecione um existente ou escreva um novo. Ele aparecerá nos filtros e na lista lateral.</small></span>
+                <input list="portfolio-type-suggestions" placeholder="Ex.: Dashboard Financeiro, Sistema Web, Cartilha..." value={selected.typeLabel || ''} onChange={(event) => updateProject('typeLabel', event.target.value)} />
+                <datalist id="portfolio-type-suggestions">{savedProjectTypes.map((label) => <option value={label} key={label} />)}</datalist>
+                <div className="project-type-builder__choices" role="group" aria-label="Tipos já cadastrados">
+                  {savedProjectTypes.map((label) => <button className={getProjectTypeLabel(selected) === label ? 'is-active' : ''} type="button" key={label} onClick={() => updateProject('typeLabel', label)}>{label}</button>)}
+                </div>
+              </div>
               <label className="field field--wide">Tema / contexto<input value={selected.theme || ''} onChange={(event) => updateProject('theme', event.target.value)} /></label>
-              <label className="field">Tipo
-                <select value={selected.type} onChange={(event) => {
-                  const type = event.target.value
-                  const previews = { powerbi: 'dashboard', website: 'system', content: 'content', ai: 'ai' }
-                  projectStore.updateProject(selected.id, { type, preview: previews[type] })
-                }}>
-                  {Object.entries(projectTypes).map(([value, label]) => <option value={value} key={value}>{label}</option>)}
+              <div className="field display-model-manager">
+                <span>Modelo de exibição <small>Define tecnicamente como o link e a demonstração abrem</small></span>
+                <select value={selected.displayModelId || selected.type} onChange={(event) => selectDisplayModel(event.target.value)}>
+                  {displayModels.map((model) => <option value={model.id} key={model.id}>{model.name}</option>)}
                 </select>
-              </label>
-              <label className="field">Categoria<input value={selected.category} onChange={(event) => updateProject('category', event.target.value)} /></label>
+                <button type="button" onClick={() => { setEditingModelId(''); setNewModelName(''); setNewModelBehavior('website'); setNewModelPresentation('live'); setShowModelBuilder((current) => !current) }}><Plus size={14} /> Criar modelo</button>
+              </div>
+              <label className="field">Área / categoria <small>Assunto ou setor: BI, Saúde, Educação...</small><input value={selected.category || ''} onChange={(event) => updateProject('category', event.target.value)} /></label>
+              <div className="field project-status-editor"><span>Status do projeto <small>Como está o andamento da entrega</small></span><select value={projectStatusOptions.includes(selected.status) ? selected.status : 'Outro'} onChange={(event) => updateProject('status', event.target.value === 'Outro' ? '' : event.target.value)}>{projectStatusOptions.map((status) => <option value={status} key={status}>{status}</option>)}<option value="Outro">Outro</option></select>{!projectStatusOptions.includes(selected.status) && <input autoFocus placeholder="Digite o motivo ou outro status" value={selected.status || ''} onChange={(event) => updateProject('status', event.target.value)} />}</div>
+              {showModelBuilder && <div className="field field--wide display-model-builder">
+                <div><label>{editingModelId ? 'Editar nome' : 'Nome do novo modelo'}<input placeholder="Ex.: Aplicativo com login" value={newModelName} onChange={(event) => setNewModelName(event.target.value)} /></label><label>Comportamento<select value={newModelBehavior} onChange={(event) => setNewModelBehavior(event.target.value)}>{Object.entries(projectTypes).map(([value, label]) => <option value={value} key={value}>{label}</option>)}</select></label><label>Apresentação<select value={newModelPresentation} onChange={(event) => setNewModelPresentation(event.target.value)}>{[...new Map(displayModels.filter((model) => model.builtIn).map((model) => [model.presentation, model])).values()].map((model) => <option value={model.presentation} key={model.presentation}>{model.name}</option>)}</select></label><button type="button" onClick={addDisplayModel}>{editingModelId ? 'Salvar alterações' : 'Adicionar modelo'}</button></div>
+                <p>Um modelo personalizado pode mudar de nome e escolher uma das apresentações prontas. Uma apresentação totalmente nova exige desenvolvimento no código.</p>
+              </div>}
+              <div className="field field--wide display-model-library"><span>10 apresentações prontas e modelos personalizados <small>Passe o mouse ou use o teclado para ver a prévia.</small></span><div>{displayModels.map((model) => <span className="display-model-library__item" key={model.id}><button type="button" onClick={() => selectDisplayModel(model.id)}>{model.name}<small>{projectTypes[model.behavior]} · {model.presentation}</small><DisplayModelPreview model={model} /></button>{model.builtIn ? <i title="Apresentação pronta protegida">Pronto</i> : <><button className="edit" type="button" onClick={() => editDisplayModel(model)} aria-label={`Editar ${model.name}`}><Pencil size={13} /></button><button className="danger" type="button" onClick={() => removeDisplayModel(model)} aria-label={`Excluir ${model.name}`}><Trash2 size={13} /></button></>}</span>)}</div></div>
               <label className="field field--wide">Resumo para o card<textarea rows="3" value={selected.description} onChange={(event) => updateProject('description', event.target.value)} /></label>
               <label className="field field--wide">Detalhes do projeto<textarea rows="4" value={selected.details || ''} onChange={(event) => updateProject('details', event.target.value)} /></label>
+              <div className="admin-settings-section-title field--wide"><span>Conte um pouco sobre o projeto</span><span className="admin-settings-info"><button type="button" aria-label="O que é um estudo de caso">!</button><span role="tooltip">Esta é a parte chamada estudo de caso: a história resumida do trabalho, mostrando o problema, o que você fez e o resultado alcançado.</span></span></div>
+              <label className="field field--wide">Desafio / problema<textarea rows="3" placeholder="O que precisava ser resolvido?" value={selected.challenge || ''} onChange={(event) => updateProject('challenge', event.target.value)} /></label>
+              <label className="field field--wide">Solução criada<textarea rows="3" placeholder="O que foi construído e como ajudou?" value={selected.solution || ''} onChange={(event) => updateProject('solution', event.target.value)} /></label>
+              <label className="field field--wide">Resultados / benefícios<textarea rows="3" placeholder="Ex.: reduziu tempo, organizou dados, facilitou decisões..." value={selected.results || ''} onChange={(event) => updateProject('results', event.target.value)} /></label>
+              <label className="field">Duração do projeto<input placeholder="Ex.: 3 semanas" value={selected.duration || ''} onChange={(event) => updateProject('duration', event.target.value)} /></label>
+              <label className="field">Minha participação<input placeholder="Ex.: análise, design e desenvolvimento" value={selected.contribution || ''} onChange={(event) => updateProject('contribution', event.target.value)} /></label>
               <label className="field">Formato<input placeholder="Dashboard, site, cartilha..." value={selected.contentFormat || ''} onChange={(event) => updateProject('contentFormat', event.target.value)} /></label>
               <label className="field">Público-alvo<input value={selected.audience || ''} onChange={(event) => updateProject('audience', event.target.value)} /></label>
               <label className="field field--wide">Tecnologias <small>Separe com vírgulas</small><input value={selected.tags.join(', ')} onChange={(event) => updateProject('tags', event.target.value.split(',').map((tag) => tag.trim()).filter(Boolean))} /></label>
@@ -408,10 +503,11 @@ export function AdminPanel({ open, onClose, projectStore, siteStore, adminAuth }
               ) : (
                 <label className="field field--wide">Link do projeto <small>{selected.type === 'content' ? 'Link de leitura, download ou página interativa' : selected.type === 'ai' ? 'Link público e seguro da demonstração, se existir' : 'Link público do sistema'}</small><input type="url" placeholder="https://..." value={selected.externalUrl || ''} onChange={(event) => updateProject('externalUrl', event.target.value)} /></label>
               )}
+              {selected.presentation === 'video' && <label className="field field--wide">Link do vídeo <small>YouTube, Vimeo ou arquivo público de vídeo</small><input type="url" placeholder="https://www.youtube.com/watch?v=..." value={selected.videoUrl || ''} onChange={(event) => updateProject('videoUrl', event.target.value)} /></label>}
 
               <label className="field field--wide">URL da imagem de capa<small>Esta imagem aparece no card. Se não houver capa, o primeiro print será usado.</small><input type="url" placeholder="https://.../capa.webp" value={selected.image?.startsWith('data:') ? '' : selected.image || ''} onChange={(event) => updateProject('image', event.target.value)} /></label>
               <div className="field field--wide image-upload">
-                <span>Ou envie uma capa local</span>
+                <span>Ou envie uma capa local <small>PNG/JPG são reduzidos e convertidos para WebP automaticamente, quando isso deixar o arquivo mais leve.</small></span>
                 <button type="button" onClick={() => coverRef.current?.click()}><ImagePlus size={17} /> Selecionar capa</button>
                 {selected.image && <button type="button" onClick={() => updateProject('image', '')}>Remover capa</button>}
                 <input ref={coverRef} type="file" accept="image/png,image/jpeg,image/webp" onChange={uploadCover} hidden />
@@ -478,18 +574,28 @@ export function AdminPanel({ open, onClose, projectStore, siteStore, adminAuth }
               <nav aria-label="Navegação administrativa">
                 <button className={view === 'overview' ? 'is-active' : ''} type="button" onClick={() => setView('overview')}><LayoutDashboard size={17} /> Visão geral</button>
                 <button className={view === 'settings' ? 'is-active' : ''} type="button" onClick={() => setView('settings')}><Settings size={17} /> Configurações</button>
+                <button className={view === 'appearance' ? 'is-active' : ''} type="button" onClick={() => setView('appearance')}><Palette size={17} /> Aparência</button>
+                <button className={view === 'professional' ? 'is-active' : ''} type="button" onClick={() => setView('professional')}><CheckCircle2 size={17} /> Trajetória</button>
                 <button className={view === 'repositories' ? 'is-active' : ''} type="button" onClick={() => setView('repositories')}><FolderKanban size={17} /> Repositórios</button>
+                <button className={view === 'library' ? 'is-active' : ''} type="button" onClick={() => setView('library')}><ImagePlus size={17} /> Box/figurinhas</button>
+                <button className={view === 'specialties' ? 'is-active' : ''} type="button" onClick={() => setView('specialties')}><Sparkles size={17} /> Especialidades</button>
+                <button className={view === 'guide' ? 'is-active' : ''} type="button" onClick={() => setView('guide')}><BookOpenCheck size={17} /> Guia do site</button>
               </nav>
               <div className="admin-console__security"><ShieldCheck size={16} /><span><strong>{adminAuth.configured ? 'Sessão protegida' : 'Sessão local'}</strong><small>{adminAuth.configured ? adminAuth.user?.email : 'Dados neste dispositivo'}</small></span></div>
               <button className="admin-console__logout" type="button" onClick={() => adminAuth.configured ? adminAuth.logout() : setLocalAuthenticated(false)}><LogOut size={16} /> Sair</button>
             </aside>
 
             <main className="admin-console__main">
-              <header className="admin-console__topbar"><div><span>Painel administrativo</span><strong id="admin-title">{view === 'overview' ? 'Visão geral' : view === 'settings' ? 'Configurações' : 'Repositórios'}</strong></div><div><span className="admin-status-dot" /> {siteStore.mode === 'supabase' ? 'Sincronização online' : 'Alterações locais'}</div></header>
+              <header className="admin-console__topbar"><div><span>Painel administrativo</span><strong id="admin-title">{view === 'overview' ? 'Visão geral' : view === 'settings' ? 'Configurações' : view === 'appearance' ? 'Aparência' : view === 'professional' ? 'Trajetória e métricas' : view === 'library' ? 'Box/figurinhas' : view === 'specialties' ? 'Especialidades' : view === 'guide' ? 'Guia do site' : 'Repositórios'}</strong></div><div><span className="admin-status-dot" /> {siteStore.mode === 'supabase' ? 'Sincronização online' : 'Alterações locais'}</div></header>
               {error && view !== 'repositories' && <div className="form-error form-error--block admin-global-error">{error}</div>}
               {view === 'overview' && renderOverview()}
               {view === 'settings' && renderSettings()}
+              {view === 'appearance' && <div className="admin-page"><AdminAppearance siteStore={siteStore} /></div>}
+              {view === 'professional' && <div className="admin-page"><AdminProfessionalContent siteStore={siteStore} /></div>}
               {view === 'repositories' && renderRepositories()}
+              {view === 'library' && <div className="admin-page"><AdminTechLibrary siteStore={siteStore} /></div>}
+              {view === 'specialties' && <div className="admin-page"><AdminSpecialties siteStore={siteStore} /></div>}
+              {view === 'guide' && <div className="admin-page"><AdminGuide /></div>}
             </main>
           </div>
         )}

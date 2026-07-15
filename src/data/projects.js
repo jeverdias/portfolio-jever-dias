@@ -7,4 +7,6 @@ export const projectTypes = {
   ai: 'GPTs & Agentes de IA',
 }
 
+export const getProjectTypeLabel = (project) => project?.typeLabel?.trim() || projectTypes[project?.type] || project?.category || 'Projeto'
+
 export const defaultProjects = projects

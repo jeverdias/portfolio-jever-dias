@@ -8,12 +8,14 @@ import { Footer } from './components/Footer'
 import { Header } from './components/Header'
 import { Hero } from './components/Hero'
 import { ProjectModal } from './components/ProjectModal'
+import { ProjectDetail } from './components/ProjectDetail'
 import { Projects } from './components/Projects'
 import { Resume } from './components/Resume'
 import { Specialties } from './components/Specialties'
 import { useProjectStore } from './hooks/useProjectStore'
 import { useSiteStore } from './hooks/useSiteStore'
 import { useAdminAuth } from './hooks/useAdminAuth'
+import { applyAppearance } from './data/appearance'
 
 function App() {
   const projectStore = useProjectStore()
@@ -21,6 +23,8 @@ function App() {
   const adminAuth = useAdminAuth()
   const refreshProjects = projectStore.refresh
   const refreshSite = siteStore.refresh
+  const projectIdFromPath = () => decodeURIComponent(window.location.pathname.match(/^\/portfolio\/([^/]+)\/?$/)?.[1] || '')
+  const [routeProjectId, setRouteProjectId] = useState(projectIdFromPath)
   const [selectedProject, setSelectedProject] = useState(null)
   const [adminOpen, setAdminOpen] = useState(false)
   const [contactOpen, setContactOpen] = useState(false)
@@ -31,25 +35,58 @@ function App() {
     void refreshSite()
   }, [adminAuth.user, refreshProjects, refreshSite])
 
+  useEffect(() => {
+    applyAppearance(siteStore.site.appearance)
+  }, [siteStore.site.appearance])
+
+  useEffect(() => {
+    const syncRoute = () => setRouteProjectId(projectIdFromPath())
+    window.addEventListener('popstate', syncRoute)
+    return () => window.removeEventListener('popstate', syncRoute)
+  }, [])
+
+  const openProjectPage = (project) => {
+    window.history.pushState({}, '', `/portfolio/${encodeURIComponent(project.id)}`)
+    setRouteProjectId(project.id)
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+
+  const closeProjectPage = () => {
+    window.history.replaceState({}, '', '/#projetos')
+    setRouteProjectId('')
+    window.setTimeout(() => document.querySelector('#projetos')?.scrollIntoView(), 0)
+  }
+
   const currentProject = selectedProject
     ? projectStore.projects.find((project) => project.id === selectedProject.id) || selectedProject
     : null
+
+  const routeProject = projectStore.projects.find((project) => project.id === routeProjectId)
+  const visibility = siteStore.site.sectionVisibility || {}
+
+  if (routeProject) {
+    return <>
+      <a className="skip-link" href="#conteudo">Pular para o conteúdo</a>
+      <ProjectDetail project={routeProject} onBack={closeProjectPage} onDemo={() => setSelectedProject(routeProject)} />
+      <ProjectModal key={currentProject?.id || 'project-modal'} project={currentProject} onClose={() => setSelectedProject(null)} />
+    </>
+  }
 
   return (
     <>
       <a className="skip-link" href="#conteudo">Pular para o conteúdo</a>
       <div className="site-shell">
-        <Header onLogin={() => setAdminOpen(true)} />
+        <Header visibility={visibility} onLogin={() => setAdminOpen(true)} />
         <main id="conteudo">
-          <Hero site={siteStore.site} onContact={() => setContactOpen(true)} />
-          <Specialties />
-          <Projects projects={projectStore.projects.filter((project) => project.featured)} onOpen={setSelectedProject} />
-          <About />
-          <Credibility site={siteStore.site} />
-          <Resume site={siteStore.site} />
-          <Contact site={siteStore.site} onOpen={() => setContactOpen(true)} />
+          {visibility.hero !== false && <Hero site={siteStore.site} onContact={() => setContactOpen(true)} />}
+          {visibility.specialties !== false && <Specialties items={siteStore.site.specialties} />}
+          {visibility.projects !== false && <Projects projects={projectStore.projects.filter((project) => project.featured)} onOpen={openProjectPage} />}
+          {visibility.about !== false && <About />}
+          {visibility.credibility !== false && <Credibility site={siteStore.site} />}
+          {visibility.resume !== false && <Resume site={siteStore.site} />}
+          {visibility.contact !== false && <Contact site={siteStore.site} onOpen={() => setContactOpen(true)} />}
         </main>
-        <Footer site={siteStore.site} />
+        {visibility.footer !== false && <Footer site={siteStore.site} />}
       </div>
       <ProjectModal key={currentProject?.id || 'project-modal'} project={currentProject} onClose={() => setSelectedProject(null)} />
       <ContactModal open={contactOpen} site={siteStore.site} onClose={() => setContactOpen(false)} />

@@ -1,6 +1,6 @@
 import { ArrowRight, X } from 'lucide-react'
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { projectTypes } from '../data/projects'
+import { getProjectTypeLabel } from '../data/projects'
 import { ProjectCard } from './ProjectCard'
 import { SectionTitle } from './ui/SectionTitle'
 
@@ -8,8 +8,8 @@ export function Projects({ projects, onOpen }) {
   const [filter, setFilter] = useState('all')
   const [guideOpen, setGuideOpen] = useState(false)
   const closeRef = useRef(null)
-  const filters = useMemo(() => ['all', ...new Set(projects.map((project) => project.type))], [projects])
-  const visibleProjects = filter === 'all' ? projects : projects.filter((project) => project.type === filter)
+  const filters = useMemo(() => ['all', ...new Set(projects.map(getProjectTypeLabel))], [projects])
+  const visibleProjects = filter === 'all' ? projects : projects.filter((project) => getProjectTypeLabel(project) === filter)
 
   useEffect(() => {
     if (!guideOpen) return undefined
@@ -43,7 +43,7 @@ export function Projects({ projects, onOpen }) {
         <div className="project-filters" role="group" aria-label="Filtrar projetos por tipo">
           {filters.map((item) => (
             <button key={item} className={filter === item ? 'is-active' : ''} type="button" onClick={() => setFilter(item)}>
-              {item === 'all' ? 'Todos' : projectTypes[item]}
+              {item === 'all' ? 'Todos' : item}
             </button>
           ))}
         </div>
@@ -59,7 +59,7 @@ export function Projects({ projects, onOpen }) {
             <h2 id="portfolio-guide-title">Conheça as entregas do portfólio</h2>
             <p>O portfólio foi organizado para você encontrar rapidamente o tipo de solução e entender cada projeto.</p>
             <div className="portfolio-guide-modal__steps">
-              <article><span>01</span><div><h3>Escolha uma categoria</h3><p>Use os filtros para visualizar projetos de Power BI, Sistemas Web, Conteúdo Digital ou GPTs & Agentes de IA.</p></div></article>
+              <article><span>01</span><div><h3>Escolha um tipo</h3><p>Os filtros são criados automaticamente a partir dos tipos cadastrados no painel, como Power BI, Sistemas Web, Conteúdo Digital ou novos grupos.</p></div></article>
               <article><span>02</span><div><h3>Abra um projeto</h3><p>Clique na imagem ou no card para conhecer contexto, objetivo, tecnologias e detalhes da entrega.</p></div></article>
               <article><span>03</span><div><h3>Explore o resultado</h3><p>Veja prints e demonstrações. Power BI abre incorporado; projetos de IA explicam objetivo, instruções, recursos usados e limites da solução.</p></div></article>
               <article><span>04</span><div><h3>Vamos conversar</h3><p>Se uma solução combinar com sua necessidade, use “Tem um projeto?” para acessar os canais de contato.</p></div></article>

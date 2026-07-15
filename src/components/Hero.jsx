@@ -1,24 +1,16 @@
-import { ArrowRight, BarChart3, Bot, Braces, DatabaseZap, LayoutDashboard, Send, Sigma, Sparkles, Workflow } from 'lucide-react'
+import { ArrowRight, Award, BarChart3, Bot, Braces, BriefcaseBusiness, Code2, Database, DatabaseZap, LayoutDashboard, Send, Sigma, Sparkles, Users, Workflow } from 'lucide-react'
 import { useState } from 'react'
 
-const techItems = [
-  { name: 'Power BI', icon: BarChart3, color: '#f9c74f', description: 'Ferramenta para criar dashboards e relatórios interativos a partir de dados.' },
-  { name: 'DAX', icon: Sigma, color: '#56d4ff', description: 'Linguagem de fórmulas usada para criar cálculos e medidas no Power BI.' },
-  { name: 'JavaScript', icon: Braces, color: '#ffd84d', description: 'Linguagem usada para criar lógica e interações em sites e sistemas web.' },
-  { name: 'Supabase', icon: DatabaseZap, color: '#45e0a8', description: 'Serviço de banco de dados, autenticação e arquivos para aplicações.' },
-  { name: 'GPTs', icon: Bot, color: '#a98bff', description: 'Versões do ChatGPT configuradas com instruções e recursos para uma finalidade específica.' },
-  { name: 'Agentes de IA', icon: Workflow, color: '#ff7ad9', description: 'Soluções que combinam IA, instruções e ferramentas para apoiar tarefas em etapas.' },
-]
+const iconMap = { chart: BarChart3, sigma: Sigma, code: Braces, database: DatabaseZap, bot: Bot, workflow: Workflow }
+const metricIconMap = { chart: BarChart3, code: Code2, database: Database, award: Award, users: Users, briefcase: BriefcaseBusiness, bot: Bot, sparkles: Sparkles }
 
 export function Hero({ site, onContact }) {
   const [selectedTech, setSelectedTech] = useState(null)
   const [firstName, ...lastNameParts] = site.name.split(' ')
   const lastName = lastNameParts.join(' ')
-  const stats = [
-    { value: site.dashboardsCount, label: site.dashboardsLabel },
-    { value: site.systemsCount, label: site.systemsLabel },
-  ]
+  const stats = (site.metrics || []).filter((item) => item.visible !== false).slice(0, 2)
   const roles = site.role.split('|').map((role) => role.trim()).filter(Boolean)
+  const techItems = site.techItems || []
 
   return (
     <section className="hero" id="inicio">
@@ -55,23 +47,26 @@ export function Hero({ site, onContact }) {
         <aside className="expertise-card" aria-label="Resumo de experiência e tecnologias">
           <div className="expertise-card__shine" />
           <div className="expertise-card__stats">
-            {stats.map((stat, index) => (
+            {stats.map((stat) => {
+              const Icon = metricIconMap[stat.icon] || LayoutDashboard
+              return (
               <div className="mini-stat" key={stat.label}>
-                <div className="mini-stat__icon">
-                  {index === 0 ? <LayoutDashboard size={21} /> : <Braces size={21} />}
+                <div className="mini-stat__icon" style={{ color: stat.color }}>
+                  {stat.image ? <img src={stat.image} alt="" /> : <Icon size={21} />}
                 </div>
                 <div><strong>{stat.value}</strong><span>{stat.label}</span></div>
               </div>
-            ))}
+            )})}
           </div>
           <div className="expertise-card__divider" />
           <div className="tech-grid">
-            {techItems.map(({ name, icon: Icon, color, description }) => (
-              <button className={`tech-item ${selectedTech?.name === name ? 'is-active' : ''}`} type="button" key={name} onClick={() => setSelectedTech({ name, description })} aria-label={`${name}: ${description}`}>
-                <Icon size={25} style={{ color }} aria-hidden="true" />
+            {techItems.map(({ id, name, icon, color, description, image }) => {
+              const Icon = iconMap[icon] || Sparkles
+              return <button className={`tech-item ${selectedTech?.name === name ? 'is-active' : ''}`} type="button" key={id || name} onClick={() => setSelectedTech({ name, description })} aria-label={`${name}: ${description}`}>
+                {image ? <img className="tech-item__image" src={image} alt="" /> : <Icon size={25} style={{ color }} aria-hidden="true" />}
                 <span>{name}</span>
               </button>
-            ))}
+            })}
           </div>
           <div className={`expertise-card__footer ${selectedTech ? 'has-explanation' : ''}`} aria-live="polite">
             <span className="pulse" />
