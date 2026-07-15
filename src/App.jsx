@@ -37,7 +37,8 @@ function App() {
 
   useEffect(() => {
     applyAppearance(siteStore.site.appearance)
-  }, [siteStore.site.appearance])
+    document.documentElement.dataset.siteClassification = siteStore.site.siteClassificationId || 'portfolio-app'
+  }, [siteStore.site.appearance, siteStore.site.siteClassificationId])
 
   useEffect(() => {
     const description = siteStore.site.siteClassificationDescription || 'Portfólio profissional de Jever Dias.'
@@ -75,7 +76,7 @@ function App() {
   if (routeProject) {
     return <>
       <a className="skip-link" href="#conteudo">Pular para o conteúdo</a>
-      <ProjectDetail project={routeProject} onBack={closeProjectPage} onDemo={() => setSelectedProject(routeProject)} />
+      <ProjectDetail project={routeProject} siteName={siteStore.site.name} onBack={closeProjectPage} onDemo={() => setSelectedProject(routeProject)} />
       <ProjectModal key={currentProject?.id || 'project-modal'} project={currentProject} onClose={() => setSelectedProject(null)} />
     </>
   }
@@ -84,7 +85,7 @@ function App() {
     <>
       <a className="skip-link" href="#conteudo">Pular para o conteúdo</a>
       <div className="site-shell">
-        <Header visibility={visibility} onLogin={() => setAdminOpen(true)} />
+        <Header site={siteStore.site} visibility={visibility} onLogin={() => setAdminOpen(true)} />
         <main id="conteudo">
           {visibility.hero !== false && <Hero site={siteStore.site} onContact={() => setContactOpen(true)} />}
           {visibility.specialties !== false && <Specialties items={siteStore.site.specialties} />}

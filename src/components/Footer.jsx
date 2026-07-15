@@ -1,4 +1,5 @@
 import { AtSign, BriefcaseBusiness, Camera, Code2, Mail, MapPin, MessageCircle, Users } from 'lucide-react'
+import { getInitials } from '../utils/getInitials'
 
 const validHttpUrl = (value) => /^https?:\/\//i.test(value || '')
 const getWhatsAppHref = (value) => {
@@ -12,7 +13,7 @@ export function Footer({ site }) {
     <footer className="footer">
       <div className="container footer__top">
         <div className="footer__brand">
-          <a className="brand" href="#inicio">JD<span className="brand__dot" /></a>
+          <a className="brand" href="#inicio">{getInitials(site.name)}<span className="brand__dot" /></a>
           <p>BI, Analytics e sistemas web com clareza, função e impacto.</p>
           <span><MapPin size={15} /> {site.location}</span>
         </div>

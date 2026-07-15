@@ -2,12 +2,13 @@ import { ArrowLeft, ArrowUpRight, BarChart3, BookOpen, Bot, CheckCircle2, Clock3
 import { useEffect, useState } from 'react'
 import { getProjectTypeLabel, projectTypes } from '../data/projects'
 import { ProjectVisual } from './ProjectVisual'
+import { getInitials } from '../utils/getInitials'
 
 const typeIcons = { powerbi: BarChart3, website: Globe2, content: BookOpen, ai: Bot }
 const validLink = (value) => /^https?:\/\//i.test(value || '')
 const validImage = (value) => validLink(value) || /^data:image\//i.test(value || '')
 
-export function ProjectDetail({ project, onBack, onDemo }) {
+export function ProjectDetail({ project, onBack, onDemo, siteName }) {
   const [shared, setShared] = useState(false)
   const Icon = typeIcons[project.type] || Globe2
   const gallery = (project.gallery || []).filter(validImage)
@@ -40,7 +41,7 @@ export function ProjectDetail({ project, onBack, onDemo }) {
     <main className="case-page" id="conteudo">
       <header className="case-page__nav">
         <button type="button" onClick={onBack}><ArrowLeft size={17} /> Voltar ao portfólio</button>
-        <a className="brand" href="/" onClick={(event) => { event.preventDefault(); onBack() }}>JD<span className="brand__dot" /></a>
+        <a className="brand" href="/" onClick={(event) => { event.preventDefault(); onBack() }}>{getInitials(siteName)}<span className="brand__dot" /></a>
         <button type="button" onClick={share}><Share2 size={16} /> {shared ? 'Link copiado' : 'Compartilhar'}</button>
       </header>
 

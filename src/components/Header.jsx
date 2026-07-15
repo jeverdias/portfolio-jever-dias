@@ -1,5 +1,6 @@
 import { LogIn, Menu, X } from 'lucide-react'
 import { useState } from 'react'
+import { getInitials } from '../utils/getInitials'
 
 const links = [
   ['Início', '#inicio', 'hero'],
@@ -10,14 +11,14 @@ const links = [
   ['Contato', '#contato', 'contact'],
 ]
 
-export function Header({ onLogin, visibility = {} }) {
+export function Header({ onLogin, visibility = {}, site }) {
   const [open, setOpen] = useState(false)
 
   return (
     <header className="site-header">
       <div className="container site-header__inner">
-        <a className="brand" href="#inicio" aria-label="Jever Dias — início" onClick={() => setOpen(false)}>
-          JD<span className="brand__dot" />
+        <a className="brand" href="#inicio" aria-label={`${site?.name || 'Início'} — início`} onClick={() => setOpen(false)}>
+          {getInitials(site?.name)}<span className="brand__dot" />
         </a>
 
         <button

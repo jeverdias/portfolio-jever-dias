@@ -11,9 +11,15 @@ const normalizeDisplayModels = (models) => {
   return [...siteConfig.displayModels, ...custom]
 }
 
-const normalizeSite = (value = {}) => ({
+const normalizeSite = (value = {}) => {
+  const restoreOriginalLayout = value.classificationLayoutVersion !== siteConfig.classificationLayoutVersion
+  return {
   ...siteConfig,
   ...value,
+  classificationLayoutVersion: siteConfig.classificationLayoutVersion,
+  siteClassificationId: restoreOriginalLayout ? siteConfig.siteClassificationId : (value.siteClassificationId || siteConfig.siteClassificationId),
+  siteClassification: restoreOriginalLayout ? siteConfig.siteClassification : (value.siteClassification || siteConfig.siteClassification),
+  siteClassificationDescription: restoreOriginalLayout ? siteConfig.siteClassificationDescription : (value.siteClassificationDescription || siteConfig.siteClassificationDescription),
   techItems: Array.isArray(value.techItems) && value.techItems.length
     ? value.techItems
     : siteConfig.techItems,
@@ -22,8 +28,8 @@ const normalizeSite = (value = {}) => ({
   displayModels: normalizeDisplayModels(value.displayModels),
   specialties: Array.isArray(value.specialties) && value.specialties.length ? value.specialties : siteConfig.specialties,
   sectionVisibility: { ...siteConfig.sectionVisibility, ...(value.sectionVisibility || {}) },
-  appearance: { ...siteConfig.appearance, ...(value.appearance || {}) },
-})
+  appearance: restoreOriginalLayout ? siteConfig.appearance : { ...siteConfig.appearance, ...(value.appearance || {}) },
+}}
 
 const readSite = () => {
   try {

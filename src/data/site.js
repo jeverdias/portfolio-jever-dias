@@ -2,6 +2,7 @@ import { defaultAppearance } from './appearance'
 import { defaultSiteClassification, siteClassifications } from './siteClassifications'
 
 export const siteConfig = {
+  classificationLayoutVersion: 2,
   siteClassificationId: defaultSiteClassification,
   siteClassification: siteClassifications.find((item) => item.id === defaultSiteClassification)?.classification,
   siteClassificationDescription: siteClassifications.find((item) => item.id === defaultSiteClassification)?.goal,

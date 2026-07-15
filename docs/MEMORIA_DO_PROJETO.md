@@ -8,7 +8,7 @@ Site publicado: `https://jeverdias.netlify.app`
 
 ## Estado atual
 
-**Versão ativa: v1.4.0 — classificação comercial editável.**
+**Versão ativa: v1.4.1 — arquiteturas por classificação e identidade dinâmica.**
 
 Regra permanente: toda correção, adição ou modificação deve atualizar a versão conforme `docs/VERSIONAMENTO.md`. Ao finalizar, sempre sugerir uma mensagem de commit, sem executar commit ou push sem autorização.
 
@@ -287,6 +287,16 @@ Ao iniciar uma nova versão:
 - Incluídos filtros, indicação do modelo atual, prévia em modal e referências de mercado.
 - Metadados de descrição e categoria passam a acompanhar a classificação selecionada durante a navegação.
 - Versão atualizada de v1.3.1 para v1.4.0 por se tratar de nova funcionalidade compatível.
+
+### v1.4.1 — Arquiteturas por classificação e identidade dinâmica
+
+- Restauração única da classificação Portfólio profissional e do tema JD para corrigir a seleção acidental anterior.
+- Botão permanente para restaurar o portfólio e o tema JD na aba Classificação do site.
+- A classificação passou a modificar composição, cabeçalho, hero, grades, cards, espaçamentos e hierarquia, além de cor, fonte e acabamento.
+- Cada modelo explica claramente o que muda no layout.
+- Classificação do site reposicionada logo após a identificação no painel e exibida abaixo do nome profissional.
+- Iniciais do cabeçalho, rodapé, login, painel e estudo de caso agora são geradas automaticamente a partir do nome cadastrado, com no máximo três letras.
+- Versão atualizada de v1.4.0 para v1.4.1 como correção funcional e visual compatível.
 - Nenhum commit ou push foi realizado sem autorização.
 
 ## Informações ainda necessárias de Jever

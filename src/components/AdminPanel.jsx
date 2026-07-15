@@ -41,6 +41,7 @@ import { AdminProfessionalContent } from './AdminProfessionalContent'
 import { DisplayModelPreview } from './DisplayModelPreview'
 import { AdminProjectPreview } from './AdminProjectPreview'
 import { AdminSiteClassification } from './AdminSiteClassification'
+import { getInitials } from '../utils/getInitials'
 
 const ADMIN_PIN = import.meta.env.VITE_ADMIN_PIN || 'jd2026'
 const validHttpUrl = (value) => /^https?:\/\//i.test(value || '')
@@ -558,7 +559,7 @@ export function AdminPanel({ open, onClose, projectStore, siteStore, adminAuth }
 
         {!authenticated ? (
           <div className="admin-login">
-            <div className="admin-login__mark">JD</div>
+            <div className="admin-login__mark">{getInitials(siteStore.site.name)}</div>
             <span>Área administrativa</span>
             <h2 id="admin-title">Login</h2>
             <p>Entre para configurar o site e gerenciar seus repositórios.</p>
@@ -580,12 +581,12 @@ export function AdminPanel({ open, onClose, projectStore, siteStore, adminAuth }
         ) : (
           <div className="admin-console">
             <aside className="admin-console__nav">
-              <div className="admin-console__brand"><div>JD</div><span><strong>Jever Dias</strong><small>Console do portfólio</small></span></div>
+              <div className="admin-console__brand"><div>{getInitials(siteStore.site.name)}</div><span><strong>{siteStore.site.name}</strong><small>{siteStore.site.siteClassification}</small></span></div>
               <nav aria-label="Navegação administrativa">
+                <button className={view === 'classification' ? 'is-active' : ''} type="button" onClick={() => setView('classification')}><Tags size={17} /> Classificação do site</button>
                 <button className={view === 'overview' ? 'is-active' : ''} type="button" onClick={() => setView('overview')}><LayoutDashboard size={17} /> Visão geral</button>
                 <button className={view === 'settings' ? 'is-active' : ''} type="button" onClick={() => setView('settings')}><Settings size={17} /> Configurações</button>
                 <button className={view === 'appearance' ? 'is-active' : ''} type="button" onClick={() => setView('appearance')}><Palette size={17} /> Aparência</button>
-                <button className={view === 'classification' ? 'is-active' : ''} type="button" onClick={() => setView('classification')}><Tags size={17} /> Classificação do site</button>
                 <button className={view === 'professional' ? 'is-active' : ''} type="button" onClick={() => setView('professional')}><CheckCircle2 size={17} /> Trajetória</button>
                 <button className={view === 'repositories' ? 'is-active' : ''} type="button" onClick={() => setView('repositories')}><FolderKanban size={17} /> Repositórios</button>
                 <button className={view === 'library' ? 'is-active' : ''} type="button" onClick={() => setView('library')}><ImagePlus size={17} /> Box/figurinhas</button>
