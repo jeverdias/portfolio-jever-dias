@@ -1,14 +1,14 @@
-import { ArrowRight, Award, BarChart3, Bot, Braces, BriefcaseBusiness, Code2, Database, DatabaseZap, LayoutDashboard, Send, Sigma, Sparkles, Users, Workflow } from 'lucide-react'
+import { ArrowRight, Award, BarChart3, Bot, Braces, BriefcaseBusiness, Code2, Database, DatabaseZap, Gauge, Globe2, GraduationCap, HeartPulse, LayoutDashboard, Microscope, Rocket, Scale, Send, ShieldCheck, Sigma, Sparkles, Target, TrendingUp, Users, Workflow } from 'lucide-react'
 import { useState } from 'react'
 
 const iconMap = { chart: BarChart3, sigma: Sigma, code: Braces, database: DatabaseZap, bot: Bot, workflow: Workflow }
-const metricIconMap = { chart: BarChart3, code: Code2, database: Database, award: Award, users: Users, briefcase: BriefcaseBusiness, bot: Bot, sparkles: Sparkles }
+const metricIconMap = { chart: BarChart3, code: Code2, database: Database, award: Award, users: Users, briefcase: BriefcaseBusiness, bot: Bot, sparkles: Sparkles, trend: TrendingUp, target: Target, gauge: Gauge, health: HeartPulse, research: Microscope, education: GraduationCap, law: Scale, global: Globe2, rocket: Rocket, security: ShieldCheck }
 
 export function Hero({ site, onContact }) {
   const [selectedTech, setSelectedTech] = useState(null)
   const [firstName, ...lastNameParts] = site.name.split(' ')
   const lastName = lastNameParts.join(' ')
-  const stats = (site.metrics || []).filter((item) => item.visible !== false).slice(0, 2)
+  const stats = (site.metrics || []).filter((item) => item.visible !== false).slice(0, 3)
   const roles = site.role.split('|').map((role) => role.trim()).filter(Boolean)
   const techItems = site.techItems || []
 

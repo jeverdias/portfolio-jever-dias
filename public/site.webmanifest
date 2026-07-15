@@ -1,7 +1,8 @@
 {
   "name": "Jever Dias — Portfólio",
   "short_name": "Jever Dias",
-  "description": "Portfólio profissional de Business Intelligence, Analytics e Sistemas Web.",
+  "description": "Aplicação web de portfólio profissional com landing page pública e painel administrativo.",
+  "categories": ["portfolio", "business", "productivity"],
   "start_url": "/",
   "display": "standalone",
   "background_color": "#060914",

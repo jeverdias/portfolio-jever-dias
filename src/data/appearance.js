@@ -24,6 +24,18 @@ export const colorPalettes = [
   extraPalette('coffee-cream', 'Café e creme', 'dark', '#1c1511', '#100c09', '#fff7ee', '#b9a99d', '#b7815d', '#d0a77b', '#799b78'),
   extraPalette('rose-professional', 'Rosa profissional', 'light', '#f3e9eb', '#e8dade', '#422e34', '#7d6870', '#9b586c', '#bd8191', '#668879'),
   extraPalette('deep-red', 'Vermelho institucional', 'dark', '#19090c', '#0d0406', '#fff4f5', '#bca1a6', '#bd4053', '#d8796d', '#62a486'),
+  extraPalette('sunset-coral', 'Pôr do sol coral', 'light', '#fff1eb', '#f5ddd4', '#432b28', '#806a65', '#d75e4a', '#f29b72', '#4c8b76'),
+  extraPalette('midnight-lime', 'Meia-noite e lima', 'dark', '#0c120d', '#050805', '#f4ffe9', '#a8b89d', '#9dcc42', '#d5ef78', '#55bd8b'),
+  extraPalette('royal-purple', 'Roxo imperial', 'dark', '#130b22', '#08040f', '#fbf5ff', '#b9a7c9', '#884dcc', '#d46de2', '#58c7a5'),
+  extraPalette('sky-peach', 'Céu e pêssego', 'light', '#eef7fb', '#ddebf2', '#243640', '#677985', '#3d9bc1', '#ef9b7c', '#4d947b'),
+  extraPalette('petrol-orange', 'Petróleo e laranja', 'dark', '#07181b', '#030c0e', '#f3ffff', '#9eb7b9', '#1e9aa5', '#ef873d', '#54c697'),
+  extraPalette('plum-champagne', 'Ameixa e champanhe', 'light', '#faf2f5', '#ecdfe5', '#402731', '#7c6870', '#7d3d5c', '#d2a36f', '#598576'),
+  extraPalette('arctic-mint', 'Ártico e menta', 'light', '#edf8f7', '#dcecea', '#203c3b', '#617b79', '#238b86', '#70c9b5', '#3d9073'),
+  extraPalette('cobalt-silver', 'Cobalto e prata', 'dark', '#081226', '#030815', '#f5f8ff', '#a3aec5', '#426de0', '#aebbd5', '#55c7a2'),
+  extraPalette('mustard-ink', 'Mostarda e tinta', 'light', '#f8f2df', '#ebe2c9', '#282c35', '#6d7077', '#bd8516', '#44526d', '#517b67'),
+  extraPalette('berry-blue', 'Frutas vermelhas e azul', 'dark', '#160b19', '#09040b', '#fff5ff', '#bea8c0', '#c34277', '#527ed8', '#55b98f'),
+  extraPalette('porcelain-teal', 'Porcelana e teal', 'light', '#f4f5f2', '#e5e9e5', '#263938', '#687a78', '#217b78', '#7c9c9a', '#4b836c'),
+  extraPalette('graphite-yellow', 'Grafite e amarelo', 'dark', '#131416', '#08090a', '#fffdf2', '#b3b1a7', '#e2b72f', '#7786a0', '#62b58d'),
 ]
 
 export const designStyles = [
@@ -41,6 +53,22 @@ export const designStyles = [
   { id: 'retro-terminal', name: 'Terminal retrô', description: 'Referência a interfaces antigas, linhas monoespaçadas e estética técnica.' },
   { id: 'luxury', name: 'Luxo discreto', description: 'Ritmo clássico, detalhes finos e apresentação premium.' },
   { id: 'magazine', name: 'Revista contemporânea', description: 'Composição assimétrica e títulos grandes de alto impacto.' },
+  { id: 'aurora', name: 'Aurora digital', description: 'Gradientes fluidos, brilho colorido e profundidade tecnológica.' },
+  { id: 'bento', name: 'Bento grid', description: 'Blocos modulares inspirados em painéis atuais e produtos digitais.' },
+  { id: 'soft-ui', name: 'Soft UI', description: 'Superfícies suaves, volumes discretos e sensação acolhedora.' },
+  { id: 'industrial', name: 'Industrial', description: 'Linhas firmes, alto contraste e linguagem de engenharia.' },
+  { id: 'newspaper', name: 'Jornal clássico', description: 'Hierarquia editorial, divisórias e leitura informativa.' },
+  { id: 'art-deco', name: 'Art Déco', description: 'Geometria elegante, detalhes finos e presença sofisticada.' },
+  { id: 'y2k', name: 'Y2K tecnológico', description: 'Referências digitais dos anos 2000 reinterpretadas.' },
+  { id: 'swiss', name: 'Suíço internacional', description: 'Grade rigorosa, tipografia limpa e informação objetiva.' },
+  { id: 'material', name: 'Material atual', description: 'Camadas claras, elevação funcional e componentes familiares.' },
+  { id: 'cyberpunk', name: 'Cyberpunk', description: 'Neon, recortes angulares e atmosfera de alta tecnologia.' },
+  { id: 'paper', name: 'Papel e tinta', description: 'Textura editorial suave e sensação de material impresso.' },
+  { id: 'monochrome', name: 'Monocromático moderno', description: 'Uma cor dominante, contraste preciso e foco no conteúdo.' },
+  { id: 'rounded-playful', name: 'Arredondado criativo', description: 'Formas amigáveis, cartões leves e personalidade acessível.' },
+  { id: 'data-grid', name: 'Grade de dados', description: 'Visual analítico, linhas técnicas e organização de dashboard.' },
+  { id: 'museum', name: 'Museu e cultura', description: 'Espaços amplos, títulos curatoriais e apresentação contemplativa.' },
+  { id: 'compact-pro', name: 'Profissional compacto', description: 'Alta densidade com leitura rápida e acabamento corporativo.' },
 ]
 
 export const fontOptions = [
@@ -54,6 +82,26 @@ export const fontOptions = [
   { id: 'playfair', name: 'Playfair + DM Sans', body: "'DM Sans', sans-serif", heading: "'Playfair Display', serif", description: 'Clássica e editorial.' },
   { id: 'roboto-slab', name: 'Roboto Slab', body: "'Inter', sans-serif", heading: "'Roboto Slab', serif", description: 'Sólida e acadêmica.' },
   { id: 'source-serif', name: 'Source Serif 4', body: "'Source Serif 4', serif", heading: "'Source Serif 4', serif", description: 'Leitura tradicional e confortável.' },
+  { id: 'archivo', name: 'Archivo', body: "'Archivo', sans-serif", heading: "'Archivo', sans-serif", description: 'Técnica, estável e muito profissional.' },
+  { id: 'barlow', name: 'Barlow', body: "'Barlow', sans-serif", heading: "'Barlow', sans-serif", description: 'Moderna com inspiração industrial.' },
+  { id: 'bebas-inter', name: 'Bebas Neue + Inter', body: "'Inter', sans-serif", heading: "'Bebas Neue', sans-serif", description: 'Títulos fortes e conteúdo limpo.' },
+  { id: 'cormorant', name: 'Cormorant + DM Sans', body: "'DM Sans', sans-serif", heading: "'Cormorant Garamond', serif", description: 'Elegante, artística e editorial.' },
+  { id: 'fira-sans', name: 'Fira Sans', body: "'Fira Sans', sans-serif", heading: "'Fira Sans', sans-serif", description: 'Clara para interfaces e informação.' },
+  { id: 'merriweather', name: 'Merriweather + Inter', body: "'Inter', sans-serif", heading: "'Merriweather', serif", description: 'Autoridade com leitura confortável.' },
+  { id: 'nunito', name: 'Nunito Sans', body: "'Nunito Sans', sans-serif", heading: "'Nunito Sans', sans-serif", description: 'Suave, acessível e contemporânea.' },
+  { id: 'oswald', name: 'Oswald + Inter', body: "'Inter', sans-serif", heading: "'Oswald', sans-serif", description: 'Compacta e marcante nos títulos.' },
+  { id: 'raleway', name: 'Raleway', body: "'Raleway', sans-serif", heading: "'Raleway', sans-serif", description: 'Refinada para marcas e serviços.' },
+  { id: 'rubik', name: 'Rubik', body: "'Rubik', sans-serif", heading: "'Rubik', sans-serif", description: 'Geométrica, clara e amigável.' },
+  { id: 'sora', name: 'Sora', body: "'Sora', sans-serif", heading: "'Sora', sans-serif", description: 'Digital e precisa para tecnologia.' },
+  { id: 'urbanist', name: 'Urbanist', body: "'Urbanist', sans-serif", heading: "'Urbanist', sans-serif", description: 'Atual, leve e versátil.' },
+  { id: 'work-sans', name: 'Work Sans', body: "'Work Sans', sans-serif", heading: "'Work Sans', sans-serif", description: 'Funcional para produtos e negócios.' },
+  { id: 'noto-serif', name: 'Noto Serif', body: "'Noto Serif', serif", heading: "'Noto Serif', serif", description: 'Clássica e preparada para textos longos.' },
+  { id: 'libre-baskerville', name: 'Libre Baskerville', body: "'Libre Baskerville', serif", heading: "'Libre Baskerville', serif", description: 'Tradicional e institucional.' },
+  { id: 'georgia-system', name: 'Georgia + Arial', body: "Arial, sans-serif", heading: "Georgia, serif", description: 'Combinação clássica sem fonte externa.' },
+  { id: 'verdana', name: 'Verdana', body: "Verdana, sans-serif", heading: "Verdana, sans-serif", description: 'Excelente leitura em qualquer tela.' },
+  { id: 'trebuchet', name: 'Trebuchet MS', body: "'Trebuchet MS', sans-serif", heading: "'Trebuchet MS', sans-serif", description: 'Web clássica com personalidade.' },
+  { id: 'courier', name: 'Courier New + Inter', body: "'Inter', sans-serif", heading: "'Courier New', monospace", description: 'Técnica e retrô para projetos digitais.' },
+  { id: 'tahoma', name: 'Tahoma', body: "Tahoma, sans-serif", heading: "Tahoma, sans-serif", description: 'Compacta, sóbria e bastante legível.' },
 ]
 
 export const professionalPresets = [
@@ -72,6 +120,14 @@ export const professionalPresets = [
   ['agribusiness', 'Agronegócio', 'forest-sage', 'executive'], ['sustainability', 'Sustentabilidade', 'emerald-finance', 'organic'],
   ['real-estate', 'Mercado imobiliário', 'charcoal-copper', 'classic'], ['fashion', 'Moda', 'burgundy-ivory', 'editorial'],
   ['music', 'Música', 'violet-neon', 'futuristic'], ['public-sector', 'Setor público', 'academic-indigo', 'classic'],
+  ['journalism', 'Jornalismo', 'mustard-ink', 'newspaper'], ['culture', 'Cultura e museus', 'plum-champagne', 'museum'],
+  ['cybersecurity', 'Cibersegurança', 'midnight-lime', 'cyberpunk'], ['industry', 'Indústria', 'graphite-yellow', 'industrial'],
+  ['startups', 'Startups', 'sunset-coral', 'bento'], ['software-product', 'Produto digital', 'cobalt-silver', 'material'],
+  ['events', 'Eventos', 'berry-blue', 'aurora'], ['beauty', 'Beleza e estética', 'plum-champagne', 'soft-ui'],
+  ['sports', 'Esportes', 'petrol-orange', 'data-grid'], ['nonprofit', 'Terceiro setor', 'arctic-mint', 'rounded-playful'],
+  ['legal-tech', 'Legal Tech', 'royal-purple', 'compact-pro'], ['publishing', 'Editoração', 'porcelain-teal', 'paper'],
+  ['communications', 'Comunicação', 'sky-peach', 'swiss'], ['premium-services', 'Serviços premium', 'navy-gold', 'art-deco'],
+  ['creator', 'Criadores digitais', 'violet-neon', 'y2k'],
 ].map(([id, name, paletteId, designId]) => ({ id, name, paletteId, designId }))
 
 export const defaultAppearance = { presetId: 'technology', paletteId: 'jd-original', designId: 'jd-modern', fontId: 'dm-manrope' }

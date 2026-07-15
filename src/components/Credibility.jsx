@@ -1,11 +1,11 @@
-import { Award, BarChart3, Bot, BriefcaseBusiness, CalendarDays, Code2, Database, Quote, Sparkles, Users } from 'lucide-react'
+import { Award, BarChart3, Bot, BriefcaseBusiness, CalendarDays, Code2, Database, Gauge, Globe2, GraduationCap, HeartPulse, Microscope, Quote, Rocket, Scale, ShieldCheck, Sparkles, Target, TrendingUp, Users } from 'lucide-react'
 import { SectionTitle } from './ui/SectionTitle'
 
 const parseLines = (value, fields) => (value || '').split('\n').map((line) => {
   const parts = line.split('|').map((part) => part.trim())
   return Object.fromEntries(fields.map((field, index) => [field, parts[index] || '']))
 }).filter((item) => item[fields[0]])
-const metricIconMap = { chart: BarChart3, code: Code2, database: Database, award: Award, users: Users, briefcase: BriefcaseBusiness, bot: Bot, sparkles: Sparkles }
+const metricIconMap = { chart: BarChart3, code: Code2, database: Database, award: Award, users: Users, briefcase: BriefcaseBusiness, bot: Bot, sparkles: Sparkles, trend: TrendingUp, target: Target, gauge: Gauge, health: HeartPulse, research: Microscope, education: GraduationCap, law: Scale, global: Globe2, rocket: Rocket, security: ShieldCheck }
 
 export function Credibility({ site }) {
   const timeline = parseLines(site.timelineText, ['period', 'title', 'text'])

@@ -8,7 +8,7 @@ Site publicado: `https://jeverdias.netlify.app`
 
 ## Estado atual
 
-**Versão ativa: v1.2.0 — prévias contextuais e biblioteca visual ampliada.**
+**Versão ativa: v1.4.0 — classificação comercial editável.**
 
 Regra permanente: toda correção, adição ou modificação deve atualizar a versão conforme `docs/VERSIONAMENTO.md`. Ao finalizar, sempre sugerir uma mensagem de commit, sem executar commit ou push sem autorização.
 
@@ -260,6 +260,33 @@ Ao iniciar uma nova versão:
 - Métricas da Trajetória ganharam seleção visual ampliada de ícones e integração clara com Box/figurinhas.
 - Inclusão de fontes externas sugeridas para obter novos ícones, com alerta para conferir a licença de uso.
 - Versão atualizada de v1.1.0 para v1.2.0 por se tratar de novas funcionalidades compatíveis.
+
+### v1.3.0 — Catálogo visual expandido e métricas responsivas
+
+- Corrigida a grade de métricas da seção Experiência e confiança, mantendo todos os cards com dimensões consistentes.
+- O card de tecnologias agora ocupa uma linha completa e não quebra o padrão ao adicionar novas métricas.
+- O resumo inicial passou a mostrar as três primeiras métricas visíveis, incluindo métricas personalizadas como UNEB.
+- Acrescentadas 12 paletas, totalizando 32 combinações de cores.
+- Acrescentados 15 temas profissionais, totalizando 45 sugestões por setor.
+- Catálogo ampliado para 30 estilos de design e 30 combinações de fontes, organizados em três colunas no desktop.
+- Versão atualizada de v1.2.0 para v1.3.0 por se tratar de novas funcionalidades compatíveis.
+
+### v1.3.1 — Classificação e metadados do portfólio
+
+- Projeto classificado como aplicação web de portfólio profissional com landing page pública e painel administrativo.
+- Categorias recomendadas registradas como Portfolio Website e Web Application.
+- Descrição, palavras-chave, manifesto, metadados sociais e documentação alinhados com essa classificação.
+- Versão atualizada de v1.3.0 para v1.3.1 como ajuste de metadados e documentação.
+
+### v1.4.0 — Classificação comercial editável
+
+- Criada a aba administrativa Classificação do site.
+- Incluídos 15 modelos vendáveis para profissionais, empresas, conversão, vendas, conteúdo, produtos digitais e organizações.
+- Cada modelo informa público, objetivo, recursos esperados e classificação técnica.
+- Aplicar um modelo atualiza classificação, paleta, estilo e fonte sem apagar textos, projetos ou contatos.
+- Incluídos filtros, indicação do modelo atual, prévia em modal e referências de mercado.
+- Metadados de descrição e categoria passam a acompanhar a classificação selecionada durante a navegação.
+- Versão atualizada de v1.3.1 para v1.4.0 por se tratar de nova funcionalidade compatível.
 - Nenhum commit ou push foi realizado sem autorização.
 
 ## Informações ainda necessárias de Jever

@@ -1,6 +1,10 @@
 # Portfólio Jever Dias
 
-Portfólio profissional em React + Vite, inspirado em uma landing page dark com azul e roxo. O projeto está preparado para publicação no Netlify e possui um modo administrador local para cadastrar projetos, capas e links sem alterar a interface manualmente.
+**Classificação:** aplicação web de portfólio profissional com landing page pública e painel administrativo.
+
+O projeto foi desenvolvido em React + Vite, inspirado em uma landing page dark com azul e roxo. Está preparado para publicação no Netlify e possui um painel administrativo para cadastrar projetos, capas e links sem alterar a interface manualmente.
+
+Categorias recomendadas no GitHub e em serviços de hospedagem: **Portfolio Website** e **Web Application**.
 
 Site publicado: [`jeverdias.netlify.app`](https://jeverdias.netlify.app)
 
@@ -14,7 +18,7 @@ C:\Users\jever\Documents\Site JD
 
 Versão atual e próximos passos: [`docs/MEMORIA_DO_PROJETO.md`](docs/MEMORIA_DO_PROJETO.md).
 
-Versão do aplicativo: **v1.2.0**. A regra permanente de atualização MAJOR, MINOR e PATCH está em [`docs/VERSIONAMENTO.md`](docs/VERSIONAMENTO.md).
+Versão do aplicativo: **v1.4.0**. A regra permanente de atualização MAJOR, MINOR e PATCH está em [`docs/VERSIONAMENTO.md`](docs/VERSIONAMENTO.md).
 
 ## O que foi criado
 
@@ -36,6 +40,7 @@ Versão do aplicativo: **v1.2.0**. A regra permanente de atualização MAJOR, MI
 - Modo administrador local com PIN, cadastro, edição, ordenação, imagem, importação e exportação JSON.
 - Layout responsivo para computador, tablet e celular.
 - Configuração pronta para build e publicação no Netlify.
+- Aba Classificação do site com 15 modelos comerciais, filtros por público, prévia e aplicação automática de design, paleta e fonte.
 
 ## Estrutura de pastas
 

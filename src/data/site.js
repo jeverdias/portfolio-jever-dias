@@ -1,6 +1,10 @@
 import { defaultAppearance } from './appearance'
+import { defaultSiteClassification, siteClassifications } from './siteClassifications'
 
 export const siteConfig = {
+  siteClassificationId: defaultSiteClassification,
+  siteClassification: siteClassifications.find((item) => item.id === defaultSiteClassification)?.classification,
+  siteClassificationDescription: siteClassifications.find((item) => item.id === defaultSiteClassification)?.goal,
   name: 'Jever Dias',
   role: 'BI Developer | Analytics | Sistemas Web Básicos',
   eyebrow: 'BI · Dados · Sistemas · Impacto',

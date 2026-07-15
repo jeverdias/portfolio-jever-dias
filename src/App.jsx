@@ -40,6 +40,14 @@ function App() {
   }, [siteStore.site.appearance])
 
   useEffect(() => {
+    const description = siteStore.site.siteClassificationDescription || 'Portfólio profissional de Jever Dias.'
+    document.querySelector('meta[name="description"]')?.setAttribute('content', description)
+    document.querySelector('meta[name="category"]')?.setAttribute('content', siteStore.site.siteClassification || 'Portfolio Website')
+    document.querySelector('meta[property="og:description"]')?.setAttribute('content', description)
+    document.querySelector('meta[name="twitter:description"]')?.setAttribute('content', description)
+  }, [siteStore.site.siteClassification, siteStore.site.siteClassificationDescription])
+
+  useEffect(() => {
     const syncRoute = () => setRouteProjectId(projectIdFromPath())
     window.addEventListener('popstate', syncRoute)
     return () => window.removeEventListener('popstate', syncRoute)

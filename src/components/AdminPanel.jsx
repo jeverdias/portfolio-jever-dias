@@ -25,6 +25,7 @@ import {
   Settings,
   ShieldCheck,
   Sparkles,
+  Tags,
   Trash2,
   Upload,
   X,
@@ -39,6 +40,7 @@ import { AdminAppearance } from './AdminAppearance'
 import { AdminProfessionalContent } from './AdminProfessionalContent'
 import { DisplayModelPreview } from './DisplayModelPreview'
 import { AdminProjectPreview } from './AdminProjectPreview'
+import { AdminSiteClassification } from './AdminSiteClassification'
 
 const ADMIN_PIN = import.meta.env.VITE_ADMIN_PIN || 'jd2026'
 const validHttpUrl = (value) => /^https?:\/\//i.test(value || '')
@@ -583,6 +585,7 @@ export function AdminPanel({ open, onClose, projectStore, siteStore, adminAuth }
                 <button className={view === 'overview' ? 'is-active' : ''} type="button" onClick={() => setView('overview')}><LayoutDashboard size={17} /> Visão geral</button>
                 <button className={view === 'settings' ? 'is-active' : ''} type="button" onClick={() => setView('settings')}><Settings size={17} /> Configurações</button>
                 <button className={view === 'appearance' ? 'is-active' : ''} type="button" onClick={() => setView('appearance')}><Palette size={17} /> Aparência</button>
+                <button className={view === 'classification' ? 'is-active' : ''} type="button" onClick={() => setView('classification')}><Tags size={17} /> Classificação do site</button>
                 <button className={view === 'professional' ? 'is-active' : ''} type="button" onClick={() => setView('professional')}><CheckCircle2 size={17} /> Trajetória</button>
                 <button className={view === 'repositories' ? 'is-active' : ''} type="button" onClick={() => setView('repositories')}><FolderKanban size={17} /> Repositórios</button>
                 <button className={view === 'library' ? 'is-active' : ''} type="button" onClick={() => setView('library')}><ImagePlus size={17} /> Box/figurinhas</button>
@@ -594,11 +597,12 @@ export function AdminPanel({ open, onClose, projectStore, siteStore, adminAuth }
             </aside>
 
             <main className="admin-console__main">
-              <header className="admin-console__topbar"><div><span>Painel administrativo</span><strong id="admin-title">{view === 'overview' ? 'Visão geral' : view === 'settings' ? 'Configurações' : view === 'appearance' ? 'Aparência' : view === 'professional' ? 'Trajetória e métricas' : view === 'library' ? 'Box/figurinhas' : view === 'specialties' ? 'Especialidades' : view === 'guide' ? 'Guia do site' : 'Repositórios'}</strong></div><div><span className="admin-status-dot" /> {siteStore.mode === 'supabase' ? 'Sincronização online' : 'Alterações locais'}</div></header>
+              <header className="admin-console__topbar"><div><span>Painel administrativo</span><strong id="admin-title">{view === 'overview' ? 'Visão geral' : view === 'settings' ? 'Configurações' : view === 'appearance' ? 'Aparência' : view === 'classification' ? 'Classificação do site' : view === 'professional' ? 'Trajetória e métricas' : view === 'library' ? 'Box/figurinhas' : view === 'specialties' ? 'Especialidades' : view === 'guide' ? 'Guia do site' : 'Repositórios'}</strong></div><div><span className="admin-status-dot" /> {siteStore.mode === 'supabase' ? 'Sincronização online' : 'Alterações locais'}</div></header>
               {error && view !== 'repositories' && <div className="form-error form-error--block admin-global-error">{error}</div>}
               {view === 'overview' && renderOverview()}
               {view === 'settings' && renderSettings()}
               {view === 'appearance' && <div className="admin-page"><AdminAppearance siteStore={siteStore} /></div>}
+              {view === 'classification' && <div className="admin-page"><AdminSiteClassification siteStore={siteStore} /></div>}
               {view === 'professional' && <div className="admin-page"><AdminProfessionalContent siteStore={siteStore} onOpenLibrary={() => setView('library')} /></div>}
               {view === 'repositories' && renderRepositories()}
               {view === 'library' && <div className="admin-page"><AdminTechLibrary siteStore={siteStore} /></div>}

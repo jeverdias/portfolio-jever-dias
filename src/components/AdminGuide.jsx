@@ -44,7 +44,7 @@ export function AdminGuide() {
       <div className="guide-quick-map">
         <article><LayoutDashboard size={20} /><strong>Visão geral</strong><p>Resumo do conteúdo, projetos e armazenamento.</p></article>
         <article><Settings size={20} /><strong>Configurações</strong><p>Apresentação, contatos, redes, números e visibilidade das áreas.</p></article>
-        <article><Palette size={20} /><strong>Aparência</strong><p>30 perfis profissionais, 20 paletas, 14 estilos e 10 fontes.</p></article>
+        <article><Palette size={20} /><strong>Aparência</strong><p>45 perfis profissionais, 32 paletas, 30 estilos e 30 combinações de fontes.</p></article><article><FolderKanban size={20} /><strong>Classificação</strong><p>15 modelos comerciais com público, objetivo, prévia e visual recomendado.</p></article>
         <article><BarChart3 size={20} /><strong>Trajetória</strong><p>Métricas com figuras, experiências profissionais e depoimentos.</p></article>
         <article><FolderKanban size={20} /><strong>Repositórios</strong><p>Projetos, modelos, status, estudos de caso, links e galerias.</p></article>
         <article><Boxes size={20} /><strong>Box/figurinhas</strong><p>Tecnologias do box principal e coleção reutilizável.</p></article>
