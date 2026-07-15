@@ -8,9 +8,9 @@ Site publicado: `https://jeverdias.netlify.app`
 
 ## Estado atual
 
-**Versão ativa: Versão 2 — links e painel administrativo local.**
+**Versão ativa: evolução integrada das Versões 2, 3 e 4.**
 
-A base visual está concluída em React + Vite. O Login único, as Configurações e os Repositórios já funcionam localmente. Os links, imagens e vídeos definitivos ainda dependem do conteúdo real fornecido por Jever; a persistência online segura está planejada com Supabase.
+A base visual está concluída em React + Vite. O painel possui integração preparada com Supabase Auth, Database e Storage, formulário Netlify, currículo profissional, trajetória, depoimentos e SEO ampliado. A criação do projeto Supabase exclusivo está pendente porque a organização atual atingiu o limite de dois projetos gratuitos.
 
 ## Plano de versões
 
@@ -135,7 +135,9 @@ Ao iniciar uma nova versão:
 - Removido o segundo acesso administrativo do rodapé.
 - Criadas as áreas Visão geral, Configurações e Repositórios.
 - Configurações agora editam apresentação, contatos, redes e números do site.
-- Repositórios diferenciam Power BI, sistemas web e conteúdos digitais.
+- Repositórios diferenciam Power BI, sistemas web, conteúdos digitais e GPTs & Agentes de IA.
+- A categoria de IA possui um modelo inicial marcado como “Em preparação”, para não apresentar um trabalho ainda não publicado como projeto real.
+- No login administrativo, a tecla Enter envia o mesmo formulário do botão “Entrar no painel”.
 - Adicionados tema, formato, público-alvo, capa e galeria com até quatro prints.
 - Projeto público ganhou abas de demonstração e prints.
 - Definido Supabase Auth + Database + Storage como evolução para persistência online segura.
@@ -157,6 +159,17 @@ Ao iniciar uma nova versão:
 - Deploy contínuo conectado ao repositório original `jeverdias/portfolio-jever-dias`.
 - Apenas a branch `main` está autorizada a atualizar o site de produção.
 - Deploy manual de produção bloqueado no Netlify; novas versões devem partir de um `push` na `main`.
+
+### 14/07/2026 — Segurança, contato, currículo e credibilidade
+
+- Preparada integração com um projeto Supabase exclusivo do portfólio.
+- Adicionados Supabase Auth, validação de administrador, tabelas com RLS e Storage separado.
+- PIN local restrito ao ambiente de desenvolvimento; produção exige autenticação segura.
+- Adicionado formulário de contato compatível com Netlify Forms e proteção honeypot.
+- Adicionada seção de currículo com visualização, download, Lattes e upload pelo Storage.
+- Adicionadas métricas, tecnologias, linha do tempo e depoimentos editáveis pelo painel.
+- Ampliados SEO, dados estruturados, sitemap, robots, manifest e metadados sociais.
+- Projeto Supabase novo não criado porque `JD Org` atingiu o limite de dois projetos gratuitos; os sistemas existentes foram preservados sem alterações.
 
 ## Informações ainda necessárias de Jever
 

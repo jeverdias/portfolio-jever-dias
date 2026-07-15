@@ -1,9 +1,9 @@
-import { ArrowUpRight, BarChart3, BookOpen, GalleryHorizontal, Globe2, MonitorPlay, Play, X } from 'lucide-react'
+import { ArrowUpRight, BarChart3, BookOpen, Bot, GalleryHorizontal, Globe2, MonitorPlay, Play, X } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { projectTypes } from '../data/projects'
 import { ProjectVisual } from './ProjectVisual'
 
-const typeIcons = { powerbi: BarChart3, website: Globe2, content: BookOpen }
+const typeIcons = { powerbi: BarChart3, website: Globe2, content: BookOpen, ai: Bot }
 const validLink = (value) => /^https?:\/\//i.test(value || '')
 const validImage = (value) => validLink(value) || /^data:image\//i.test(value || '')
 

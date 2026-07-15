@@ -1,0 +1,10 @@
+{
+  "name": "Jever Dias — Portfólio",
+  "short_name": "Jever Dias",
+  "description": "Portfólio profissional de Business Intelligence, Analytics e Sistemas Web.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#060914",
+  "theme_color": "#060914",
+  "icons": []
+}

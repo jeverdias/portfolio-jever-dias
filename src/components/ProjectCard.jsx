@@ -1,8 +1,8 @@
-import { ArrowUpRight, BarChart3, BookOpen, Globe2 } from 'lucide-react'
+import { ArrowUpRight, BarChart3, BookOpen, Bot, Globe2 } from 'lucide-react'
 import { projectTypes } from '../data/projects'
 import { ProjectVisual } from './ProjectVisual'
 
-const typeIcons = { powerbi: BarChart3, website: Globe2, content: BookOpen }
+const typeIcons = { powerbi: BarChart3, website: Globe2, content: BookOpen, ai: Bot }
 
 export function ProjectCard({ project, onOpen }) {
   const Icon = typeIcons[project.type] || Globe2

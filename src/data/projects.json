@@ -55,5 +55,24 @@
     "audience": "Público geral e comunidades educativas",
     "featured": true,
     "accent": "#a855f7"
+  },
+  {
+    "id": "gpts-agentes-ia",
+    "title": "GPTs & Agentes de IA Básicos",
+    "theme": "Assistentes personalizados e fluxos de IA com escopo definido",
+    "category": "Em preparação",
+    "type": "ai",
+    "description": "Área preparada para apresentar GPTs personalizados e agentes básicos de IA aplicados a rotinas específicas.",
+    "details": "Este espaço será atualizado com projetos reais. A proposta é demonstrar soluções simples, delimitadas e revisáveis, configuradas com instruções, conhecimento selecionado e ferramentas adequadas a cada tarefa.",
+    "tags": ["GPTs", "Agentes de IA", "Automação"],
+    "image": "",
+    "gallery": [],
+    "preview": "ai",
+    "embedUrl": "",
+    "externalUrl": "",
+    "contentFormat": "Demonstração em preparação",
+    "audience": "Equipes e profissionais com rotinas bem definidas",
+    "featured": true,
+    "accent": "#ec6bd9"
   }
 ]

@@ -1,6 +1,29 @@
-import { ArrowUpRight, Mail } from 'lucide-react'
+import { ArrowUpRight, CheckCircle2, Mail, Send } from 'lucide-react'
+import { useState } from 'react'
 
 export function Contact({ site, onOpen }) {
+  const [status, setStatus] = useState('idle')
+
+  const submitContact = async (event) => {
+    event.preventDefault()
+    setStatus('sending')
+    const form = event.currentTarget
+    const formData = new FormData(form)
+
+    try {
+      const response = await fetch('/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams(formData).toString(),
+      })
+      if (!response.ok) throw new Error('Falha no envio')
+      form.reset()
+      setStatus('success')
+    } catch {
+      setStatus('error')
+    }
+  }
+
   return (
     <section className="contact-section" id="contato">
       <div className="container">
@@ -14,6 +37,28 @@ export function Contact({ site, onOpen }) {
           <button className="button button--light" type="button" onClick={onOpen}>
             <Mail size={18} /> Falar com {site.name.split(' ')[0]} <ArrowUpRight size={17} />
           </button>
+        </div>
+
+        <div className="contact-form-card" id="formulario-contato">
+          <div className="contact-form-card__intro">
+            <span className="section-heading__eyebrow">Contato direto</span>
+            <h2>Conte um pouco sobre o seu projeto.</h2>
+            <p>Preencha os dados abaixo. A mensagem será recebida com segurança pelo formulário do site.</p>
+            <button type="button" onClick={onOpen}>Prefere outro canal? Ver redes e emails <ArrowUpRight size={15} /></button>
+          </div>
+          <form name="contato-portfolio" method="POST" data-netlify="true" data-netlify-honeypot="empresa-site" onSubmit={submitContact}>
+            <input type="hidden" name="form-name" value="contato-portfolio" />
+            <p className="honeypot"><label>Não preencha este campo<input name="empresa-site" tabIndex="-1" autoComplete="off" /></label></p>
+            <label>Nome<input name="nome" required autoComplete="name" /></label>
+            <label>Email<input name="email" type="email" required autoComplete="email" /></label>
+            <label className="field--wide">Assunto<input name="assunto" required /></label>
+            <label className="field--wide">Mensagem<textarea name="mensagem" rows="5" required /></label>
+            <button className="button button--primary" type="submit" disabled={status === 'sending'}>
+              <Send size={17} /> {status === 'sending' ? 'Enviando...' : 'Enviar mensagem'}
+            </button>
+            {status === 'success' && <p className="contact-form-status is-success"><CheckCircle2 size={16} /> Mensagem enviada. Obrigado pelo contato!</p>}
+            {status === 'error' && <p className="contact-form-status is-error">Não foi possível enviar agora. Use um dos contatos acima.</p>}
+          </form>
         </div>
       </div>
     </section>

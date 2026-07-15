@@ -13,6 +13,10 @@ export const siteConfig = {
   facebook: '',
   whatsapp: '',
   lattes: '',
+  resumeUrl: '',
+  resumeSummary: 'Currículo profissional com experiência em Business Intelligence, Analytics e desenvolvimento de sistemas web.',
+  timelineText: 'Atual|BI Developer, Analytics e Sistemas Web|Desenvolvimento de dashboards, análises e aplicações simples orientadas a processos e decisões.',
+  testimonialsText: '',
   location: 'Brasil · Disponível para projetos remotos',
   dashboardsCount: '+12',
   dashboardsLabel: 'Dashboards entregues',
@@ -20,4 +24,4 @@ export const siteConfig = {
   systemsLabel: 'Sistemas web',
 }
 
-export const technologies = ['Power BI', 'DAX', 'JavaScript', 'Supabase']
+export const technologies = ['Power BI', 'DAX', 'JavaScript', 'Supabase', 'GPTs', 'Agentes de IA']

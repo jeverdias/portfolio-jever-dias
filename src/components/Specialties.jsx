@@ -1,4 +1,4 @@
-import { BarChart3, Braces, Database, LineChart, X } from 'lucide-react'
+import { BarChart3, Bot, Braces, Database, LineChart, Workflow, X } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import { SectionTitle } from './ui/SectionTitle'
 
@@ -30,6 +30,20 @@ const specialties = [
     title: 'Dados & Processos',
     text: 'ETL, organização e apoio à melhoria contínua dos processos operacionais.',
     detail: 'Organiza, integra e padroniza dados e fluxos de trabalho para reduzir erros e tornar os processos mais claros e eficientes.',
+  },
+  {
+    icon: Bot,
+    number: '05',
+    title: 'GPTs Personalizados',
+    text: 'Assistentes no ChatGPT configurados para uma finalidade específica, com escopo claro e conteúdo selecionado.',
+    detail: 'GPTs são versões do ChatGPT configuradas para um objetivo definido. Podem combinar instruções, arquivos de conhecimento e recursos selecionados para orientar respostas e tarefas.',
+  },
+  {
+    icon: Workflow,
+    number: '06',
+    title: 'Agentes de IA Básicos',
+    text: 'Fluxos simples que usam IA e ferramentas para apoiar tarefas em etapas, com limites e supervisão.',
+    detail: 'Um agente de IA combina um modelo, instruções e ferramentas para conduzir etapas de uma tarefa. O foco aqui está em soluções básicas, delimitadas e revisáveis.',
   },
 ]
 

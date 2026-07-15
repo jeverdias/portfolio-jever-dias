@@ -63,12 +63,15 @@ Manter o portfólio público no Netlify e conectar o painel ao Supabase. Isso ev
 - Guardar fotos no Storage; o banco recebe apenas as URLs.
 - O link incorporado do Power BI pode ser escondido visualmente, mas um link público ainda pode ser encontrado por um usuário técnico no navegador. Para proteção real, usar Power BI com autenticação ou incorporação segura por token.
 
-## Etapas futuras
+## Implementação preparada
 
-1. Criar o projeto Supabase.
-2. Criar tabelas e bucket de imagens.
-3. Configurar o usuário administrador.
-4. Ativar políticas de segurança.
-5. Trocar o armazenamento local pelas consultas do Supabase.
-6. Migrar os projetos atuais.
-7. Testar Login, edição, upload e publicação no Netlify.
+O código de Auth, Database, Storage, sincronização e políticas RLS está pronto. O arquivo `supabase/schema.sql` cria a estrutura isolada. A criação efetiva está bloqueada apenas pelo limite de dois projetos gratuitos da conta atual.
+
+Próximas ações externas:
+
+1. liberar uma vaga por plano Pro ou usar outra conta Supabase disponível, sem alterar os sistemas atuais;
+2. criar o projeto exclusivo `portfolio-jever-dias`;
+3. executar `supabase/schema.sql`;
+4. criar e autorizar o usuário administrador;
+5. cadastrar as variáveis no Netlify;
+6. importar o backup atual e testar a sincronização.

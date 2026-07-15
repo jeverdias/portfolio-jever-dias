@@ -3,6 +3,7 @@ import {
   ArrowDown,
   ArrowUp,
   BarChart3,
+  Bot,
   CheckCircle2,
   Database,
   Download,
@@ -35,8 +36,9 @@ const readAsDataUrl = (file) => new Promise((resolve, reject) => {
   reader.readAsDataURL(file)
 })
 
-export function AdminPanel({ open, onClose, projectStore, siteStore }) {
-  const [authenticated, setAuthenticated] = useState(false)
+export function AdminPanel({ open, onClose, projectStore, siteStore, adminAuth }) {
+  const [localAuthenticated, setLocalAuthenticated] = useState(false)
+  const [email, setEmail] = useState('')
   const [pin, setPin] = useState('')
   const [error, setError] = useState('')
   const [view, setView] = useState('overview')
@@ -47,6 +49,9 @@ export function AdminPanel({ open, onClose, projectStore, siteStore }) {
   const importRef = useRef(null)
   const coverRef = useRef(null)
   const galleryRef = useRef(null)
+  const resumeRef = useRef(null)
+  const authenticated = adminAuth.configured ? Boolean(adminAuth.user) : localAuthenticated
+  const localLoginAllowed = !adminAuth.configured && import.meta.env.DEV
 
   const selected = useMemo(
     () => projectStore.projects.find((project) => project.id === selectedId) || projectStore.projects[0],
@@ -88,10 +93,18 @@ export function AdminPanel({ open, onClose, projectStore, siteStore }) {
 
   if (!open) return null
 
-  const login = (event) => {
+  const login = async (event) => {
     event.preventDefault()
+    if (adminAuth.configured) {
+      const success = await adminAuth.login(email, pin)
+      if (success) {
+        setPin('')
+        setError('')
+      }
+      return
+    }
     if (pin === ADMIN_PIN) {
-      setAuthenticated(true)
+      setLocalAuthenticated(true)
       setPin('')
       setError('')
     } else {
@@ -154,13 +167,16 @@ export function AdminPanel({ open, onClose, projectStore, siteStore }) {
   const uploadCover = async (event) => {
     const file = event.target.files?.[0]
     if (!file) return
-    if (file.size > 800_000) {
+    if (projectStore.mode === 'local' && file.size > 800_000) {
       setError('Para o modo local, use uma capa com até 800 KB.')
       event.target.value = ''
       return
     }
     try {
-      updateProject('image', await readAsDataUrl(file))
+      const image = projectStore.mode === 'supabase'
+        ? await projectStore.uploadImage(file, selected.id, 'capa')
+        : await readAsDataUrl(file)
+      updateProject('image', image)
       setError('')
     } catch (uploadError) {
       setError(uploadError.message)
@@ -174,13 +190,17 @@ export function AdminPanel({ open, onClose, projectStore, siteStore }) {
     const remaining = 4 - currentGallery.length
     const files = Array.from(event.target.files || []).slice(0, remaining)
     if (!files.length) return
-    if (files.some((file) => file.size > 600_000)) {
+    if (projectStore.mode === 'local' && files.some((file) => file.size > 600_000)) {
       setError('No modo local, cada print deve ter até 600 KB. Para arquivos maiores, use URLs ou Supabase Storage.')
       event.target.value = ''
       return
     }
     try {
-      const images = await Promise.all(files.map(readAsDataUrl))
+      const images = await Promise.all(files.map((file) => (
+        projectStore.mode === 'supabase'
+          ? projectStore.uploadImage(file, selected.id, 'galeria')
+          : readAsDataUrl(file)
+      )))
       updateProject('gallery', [...currentGallery, ...images].slice(0, 4))
       setError('')
     } catch (uploadError) {
@@ -205,6 +225,29 @@ export function AdminPanel({ open, onClose, projectStore, siteStore }) {
     setError('')
   }
 
+  const uploadResume = async (event) => {
+    const file = event.target.files?.[0]
+    if (!file) return
+    if (siteStore.mode !== 'supabase') {
+      setError('O envio do PDF será liberado quando o Supabase Storage estiver conectado. Por enquanto, informe uma URL pública.')
+      event.target.value = ''
+      return
+    }
+    if (file.type !== 'application/pdf' || file.size > 10_000_000) {
+      setError('Envie um arquivo PDF com até 10 MB.')
+      event.target.value = ''
+      return
+    }
+    try {
+      await siteStore.uploadResume(file)
+      setError('')
+    } catch (uploadError) {
+      setError(uploadError.message)
+    } finally {
+      event.target.value = ''
+    }
+  }
+
   const removeGalleryImage = (index) => {
     updateProject('gallery', (selected.gallery || []).filter((_, imageIndex) => imageIndex !== index))
   }
@@ -222,6 +265,7 @@ export function AdminPanel({ open, onClose, projectStore, siteStore }) {
           <article><BarChart3 size={20} /><strong>{counts.powerbi || 0}</strong><span>Projetos Power BI</span></article>
           <article><Globe2 size={20} /><strong>{counts.website || 0}</strong><span>Sistemas web</span></article>
           <article><GalleryHorizontal size={20} /><strong>{counts.content || 0}</strong><span>Conteúdos digitais</span></article>
+          <article><Bot size={20} /><strong>{counts.ai || 0}</strong><span>GPTs & Agentes de IA</span></article>
           <article><CheckCircle2 size={20} /><strong>{projectStore.projects.filter((project) => project.featured).length}</strong><span>Projetos publicados</span></article>
         </div>
         <div className="admin-overview-grid">
@@ -238,8 +282,8 @@ export function AdminPanel({ open, onClose, projectStore, siteStore }) {
         </div>
         <div className="admin-storage-card">
           <Database size={22} />
-          <div><strong>Modo local ativo</strong><p>Os dados estão neste navegador. Para edição online segura e fotos maiores, a próxima etapa é conectar Supabase Auth, Database e Storage.</p></div>
-          <span>Preparado para evolução</span>
+          <div><strong>{siteStore.mode === 'supabase' ? 'Supabase conectado' : 'Modo local ativo'}</strong><p>{siteStore.mode === 'supabase' ? 'Configurações, projetos e arquivos são protegidos por autenticação e políticas RLS.' : 'Os dados estão neste navegador. Configure o projeto Supabase exclusivo para ativar sincronização online segura.'}</p></div>
+          <span>{siteStore.mode === 'supabase' ? 'Sincronização online' : 'Aguardando Supabase'}</span>
         </div>
       </div>
     )
@@ -256,6 +300,13 @@ export function AdminPanel({ open, onClose, projectStore, siteStore }) {
         <label className="field">Email<input type="email" value={siteStore.site.email} onChange={(event) => siteStore.updateSite({ email: event.target.value })} /></label>
         <label className="field">Email alternativo<input type="email" placeholder="Opcional" value={siteStore.site.emailSecondary || ''} onChange={(event) => siteStore.updateSite({ emailSecondary: event.target.value })} /></label>
         <label className="field">Localização<input value={siteStore.site.location} onChange={(event) => siteStore.updateSite({ location: event.target.value })} /></label>
+        <div className="admin-settings-section-title field--wide">
+          <span>Redes sociais</span>
+          <span className="admin-settings-info">
+            <button type="button" aria-label="Como as redes sociais aparecem no site" aria-describedby="social-fields-help">!</button>
+            <span id="social-fields-help" role="tooltip">As redes só aparecem no modal de contato e no rodapé quando o campo estiver preenchido corretamente.</span>
+          </span>
+        </div>
         <label className="field">LinkedIn<input type="url" value={siteStore.site.linkedin} onChange={(event) => siteStore.updateSite({ linkedin: event.target.value })} /></label>
         <label className="field">GitHub<input type="url" value={siteStore.site.github} onChange={(event) => siteStore.updateSite({ github: event.target.value })} /></label>
         <label className="field">Instagram<input type="url" placeholder="https://www.instagram.com/seuusuario/" value={siteStore.site.instagram} onChange={(event) => siteStore.updateSite({ instagram: event.target.value })} /></label>
@@ -263,6 +314,13 @@ export function AdminPanel({ open, onClose, projectStore, siteStore }) {
         <label className="field">Facebook<input type="url" placeholder="https://www.facebook.com/seuusuario" value={siteStore.site.facebook || ''} onChange={(event) => siteStore.updateSite({ facebook: event.target.value })} /></label>
         <label className="field">WhatsApp<small>Informe o número com DDI e DDD ou cole o link do WhatsApp</small><input placeholder="55 99 99999-9999" value={siteStore.site.whatsapp || ''} onChange={(event) => siteStore.updateSite({ whatsapp: event.target.value })} /></label>
         <label className="field field--wide">Currículo Lattes<input type="url" placeholder="http://lattes.cnpq.br/0000000000000000" value={siteStore.site.lattes || ''} onChange={(event) => siteStore.updateSite({ lattes: event.target.value })} /></label>
+        <div className="admin-settings-section-title field--wide"><span>Currículo profissional</span></div>
+        <label className="field field--wide">Resumo do currículo<textarea rows="3" value={siteStore.site.resumeSummary || ''} onChange={(event) => siteStore.updateSite({ resumeSummary: event.target.value })} /></label>
+        <label className="field field--wide">URL pública do currículo em PDF<input type="url" placeholder="https://.../curriculo-jever-dias.pdf" value={siteStore.site.resumeUrl || ''} onChange={(event) => siteStore.updateSite({ resumeUrl: event.target.value })} /></label>
+        <div className="field field--wide image-upload"><span>Ou envie o PDF pelo Supabase Storage</span><button type="button" onClick={() => resumeRef.current?.click()} disabled={siteStore.mode !== 'supabase'}><Upload size={17} /> Selecionar currículo</button><input ref={resumeRef} type="file" accept="application/pdf" onChange={uploadResume} hidden /></div>
+        <div className="admin-settings-section-title field--wide"><span>Trajetória e depoimentos</span></div>
+        <label className="field field--wide">Linha do tempo<small>Uma experiência por linha: período | título | descrição</small><textarea rows="5" placeholder="2024–Atual | BI Developer | Descrição da atuação" value={siteStore.site.timelineText || ''} onChange={(event) => siteStore.updateSite({ timelineText: event.target.value })} /></label>
+        <label className="field field--wide">Depoimentos<small>Um depoimento por linha: nome | cargo ou empresa | depoimento</small><textarea rows="5" placeholder="Nome | Cargo ou empresa | Texto autorizado do depoimento" value={siteStore.site.testimonialsText || ''} onChange={(event) => siteStore.updateSite({ testimonialsText: event.target.value })} /></label>
         <label className="field">Número de dashboards<input value={siteStore.site.dashboardsCount} onChange={(event) => siteStore.updateSite({ dashboardsCount: event.target.value })} /></label>
         <label className="field">Legenda dos dashboards<input value={siteStore.site.dashboardsLabel} onChange={(event) => siteStore.updateSite({ dashboardsLabel: event.target.value })} /></label>
         <label className="field">Número de sistemas<input value={siteStore.site.systemsCount} onChange={(event) => siteStore.updateSite({ systemsCount: event.target.value })} /></label>
@@ -323,13 +381,18 @@ export function AdminPanel({ open, onClose, projectStore, siteStore }) {
               {selected.type === 'powerbi' && <><BarChart3 size={18} /><span><strong>Power BI</strong> Use o link incorporado. O visitante vê o dashboard, sem botão que exponha o endereço.</span></>}
               {selected.type === 'website' && <><Globe2 size={18} /><span><strong>Sistema web</strong> Cadastre o link para prévia no modal e acesso em nova aba.</span></>}
               {selected.type === 'content' && <><GalleryHorizontal size={18} /><span><strong>Conteúdo digital</strong> Informe formato, público, link de leitura/download e prints das páginas.</span></>}
+              {selected.type === 'ai' && <><Bot size={18} /><span><strong>GPTs & Agentes de IA</strong> Explique o objetivo, as instruções, os recursos usados, a supervisão necessária e os limites da solução. Inclua um link público somente se houver uma demonstração segura.</span></>}
             </div>
 
             <div className="admin-form">
               <label className="field field--wide">Nome do projeto<input value={selected.title} onChange={(event) => updateProject('title', event.target.value)} /></label>
               <label className="field field--wide">Tema / contexto<input value={selected.theme || ''} onChange={(event) => updateProject('theme', event.target.value)} /></label>
               <label className="field">Tipo
-                <select value={selected.type} onChange={(event) => updateProject('type', event.target.value)}>
+                <select value={selected.type} onChange={(event) => {
+                  const type = event.target.value
+                  const previews = { powerbi: 'dashboard', website: 'system', content: 'content', ai: 'ai' }
+                  projectStore.updateProject(selected.id, { type, preview: previews[type] })
+                }}>
                   {Object.entries(projectTypes).map(([value, label]) => <option value={value} key={value}>{label}</option>)}
                 </select>
               </label>
@@ -343,7 +406,7 @@ export function AdminPanel({ open, onClose, projectStore, siteStore }) {
               {selected.type === 'powerbi' ? (
                 <label className="field field--wide">Link incorporado do Power BI <small>Não haverá botão externo no projeto público</small><input type="url" placeholder="https://app.powerbi.com/view?..." value={selected.embedUrl || ''} onChange={(event) => updateProject('embedUrl', event.target.value)} /></label>
               ) : (
-                <label className="field field--wide">Link do projeto <small>{selected.type === 'content' ? 'Link de leitura, download ou página interativa' : 'Link público do sistema'}</small><input type="url" placeholder="https://..." value={selected.externalUrl || ''} onChange={(event) => updateProject('externalUrl', event.target.value)} /></label>
+                <label className="field field--wide">Link do projeto <small>{selected.type === 'content' ? 'Link de leitura, download ou página interativa' : selected.type === 'ai' ? 'Link público e seguro da demonstração, se existir' : 'Link público do sistema'}</small><input type="url" placeholder="https://..." value={selected.externalUrl || ''} onChange={(event) => updateProject('externalUrl', event.target.value)} /></label>
               )}
 
               <label className="field field--wide">URL da imagem de capa<small>Esta imagem aparece no card. Se não houver capa, o primeiro print será usado.</small><input type="url" placeholder="https://.../capa.webp" value={selected.image?.startsWith('data:') ? '' : selected.image || ''} onChange={(event) => updateProject('image', event.target.value)} /></label>
@@ -373,7 +436,7 @@ export function AdminPanel({ open, onClose, projectStore, siteStore }) {
               <label className="field">Cor de destaque<input type="color" value={selected.accent || '#6f7cff'} onChange={(event) => updateProject('accent', event.target.value)} /></label>
               <label className="field checkbox-field"><input type="checkbox" checked={selected.featured} onChange={(event) => updateProject('featured', event.target.checked)} /> Exibir no portfólio</label>
             </div>
-            <div className="admin-note"><AlertTriangle size={15} /> Sem banco, estas alterações ficam apenas neste navegador. Exporte o backup para não perder o trabalho.</div>
+            <div className="admin-note"><AlertTriangle size={15} /> {projectStore.mode === 'supabase' ? 'Alterações sincronizadas com o projeto Supabase exclusivo do portfólio.' : 'Sem banco, estas alterações ficam apenas neste navegador. Exporte o backup para não perder o trabalho.'}</div>
           </>
         ) : (
           <div className="admin-empty"><p>Nenhum projeto cadastrado.</p><button className="button button--primary" type="button" onClick={addProject}><Plus size={17} /> Criar projeto</button></div>
@@ -393,13 +456,20 @@ export function AdminPanel({ open, onClose, projectStore, siteStore }) {
             <span>Área administrativa</span>
             <h2 id="admin-title">Login</h2>
             <p>Entre para configurar o site e gerenciar seus repositórios.</p>
-            <form onSubmit={login}>
-              <label htmlFor="admin-pin">PIN de acesso</label>
-              <input id="admin-pin" type="password" value={pin} onChange={(event) => setPin(event.target.value)} autoFocus />
-              {error && <div className="form-error">{error}</div>}
-              <button className="button button--primary" type="submit">Entrar no painel</button>
-            </form>
-            <small>Primeiro acesso: <strong>jd2026</strong>. Este login é local e será substituído por autenticação segura ao conectar o Supabase.</small>
+            {(adminAuth.configured || localLoginAllowed) ? <form onSubmit={login}>
+              {adminAuth.configured && <><label htmlFor="admin-email">Email</label><input id="admin-email" type="email" value={email} onChange={(event) => setEmail(event.target.value)} autoComplete="username" autoFocus required /></>}
+              <label htmlFor="admin-pin">{adminAuth.configured ? 'Senha' : 'PIN local de desenvolvimento'}</label>
+              <input id="admin-pin" type="password" value={pin} onChange={(event) => setPin(event.target.value)} onKeyDown={(event) => {
+                if (event.key === 'Enter') {
+                  event.preventDefault()
+                  event.currentTarget.form?.requestSubmit()
+                }
+              }} autoComplete={adminAuth.configured ? 'current-password' : 'off'} autoFocus={!adminAuth.configured} required />
+              {(error || adminAuth.error) && <div className="form-error">{error || adminAuth.error}</div>}
+              <button className="button button--primary" type="submit" disabled={adminAuth.loading}>{adminAuth.loading ? 'Entrando...' : 'Entrar no painel'}</button>
+              <span className="admin-login__enter-hint">Pressione Enter ou clique no botão para entrar.</span>
+            </form> : <div className="admin-login__setup"><ShieldCheck size={20} /><strong>Painel protegido</strong><p>Configure as variáveis do projeto Supabase exclusivo no Netlify para habilitar o acesso administrativo seguro.</p></div>}
+            <small>{adminAuth.configured ? 'Acesso protegido pelo Supabase Auth. Somente usuários autorizados pelas políticas do portfólio podem editar.' : localLoginAllowed ? 'Modo local temporário: use o PIN de desenvolvimento. No site publicado, o painel permanece bloqueado sem Supabase.' : 'O PIN local nunca é aceito no site publicado.'}</small>
           </div>
         ) : (
           <div className="admin-console">
@@ -410,12 +480,12 @@ export function AdminPanel({ open, onClose, projectStore, siteStore }) {
                 <button className={view === 'settings' ? 'is-active' : ''} type="button" onClick={() => setView('settings')}><Settings size={17} /> Configurações</button>
                 <button className={view === 'repositories' ? 'is-active' : ''} type="button" onClick={() => setView('repositories')}><FolderKanban size={17} /> Repositórios</button>
               </nav>
-              <div className="admin-console__security"><ShieldCheck size={16} /><span><strong>Sessão local</strong><small>Dados neste dispositivo</small></span></div>
-              <button className="admin-console__logout" type="button" onClick={() => setAuthenticated(false)}><LogOut size={16} /> Sair</button>
+              <div className="admin-console__security"><ShieldCheck size={16} /><span><strong>{adminAuth.configured ? 'Sessão protegida' : 'Sessão local'}</strong><small>{adminAuth.configured ? adminAuth.user?.email : 'Dados neste dispositivo'}</small></span></div>
+              <button className="admin-console__logout" type="button" onClick={() => adminAuth.configured ? adminAuth.logout() : setLocalAuthenticated(false)}><LogOut size={16} /> Sair</button>
             </aside>
 
             <main className="admin-console__main">
-              <header className="admin-console__topbar"><div><span>Painel administrativo</span><strong id="admin-title">{view === 'overview' ? 'Visão geral' : view === 'settings' ? 'Configurações' : 'Repositórios'}</strong></div><div><span className="admin-status-dot" /> Alterações locais</div></header>
+              <header className="admin-console__topbar"><div><span>Painel administrativo</span><strong id="admin-title">{view === 'overview' ? 'Visão geral' : view === 'settings' ? 'Configurações' : 'Repositórios'}</strong></div><div><span className="admin-status-dot" /> {siteStore.mode === 'supabase' ? 'Sincronização online' : 'Alterações locais'}</div></header>
               {error && view !== 'repositories' && <div className="form-error form-error--block admin-global-error">{error}</div>}
               {view === 'overview' && renderOverview()}
               {view === 'settings' && renderSettings()}

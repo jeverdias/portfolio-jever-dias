@@ -17,7 +17,7 @@ export function Footer({ site }) {
           <span><MapPin size={15} /> {site.location}</span>
         </div>
         <div className="footer__links">
-          <div><strong>Navegação</strong><a href="#projetos">Portfólio</a><a href="#servicos">Serviços</a><a href="#sobre">Sobre</a></div>
+          <div><strong>Navegação</strong><a href="#projetos">Portfólio</a><a href="#servicos">Serviços</a><a href="#sobre">Sobre</a><a href="#trajetoria">Trajetória</a>{(validHttpUrl(site.resumeUrl) || validHttpUrl(site.lattes)) && <a href="#curriculo">Currículo</a>}</div>
           <div>
             <strong>Contato</strong>
             {validHttpUrl(site.linkedin) && <a href={site.linkedin} target="_blank" rel="noreferrer"><BriefcaseBusiness size={15} /> LinkedIn</a>}

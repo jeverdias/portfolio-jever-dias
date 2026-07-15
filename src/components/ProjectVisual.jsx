@@ -36,6 +36,13 @@ export function ProjectVisual({ project, large = false }) {
             <div className="mock-content__art"><span /><b /><i /></div>
           </div>
         )}
+        {project.preview === 'ai' && (
+          <div className="mock-ai">
+            <div className="mock-ai__bot">AI</div>
+            <div className="mock-ai__flow"><span /><i /><span /><i /><span /></div>
+            <div className="mock-ai__chat"><b /><span /><span /><em /></div>
+          </div>
+        )}
       </div>
     </div>
   )

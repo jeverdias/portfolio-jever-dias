@@ -19,7 +19,7 @@ Versão atual e próximos passos: [`docs/MEMORIA_DO_PROJETO.md`](docs/MEMORIA_DO
 - Header responsivo com navegação por seções.
 - Hero com apresentação, chamadas para ação e resumo de experiência.
 - Cards de especialidades.
-- Projetos filtráveis por Power BI, sistema web e conteúdo digital.
+- Projetos filtráveis por Power BI, sistema web, conteúdo digital e GPTs & Agentes de IA.
 - Modal para incorporar relatórios do Power BI sem mostrar o endereço ao visitante.
 - Modal para visualizar sites e abrir o projeto em uma nova aba.
 - Modo administrador local com PIN, cadastro, edição, ordenação, imagem, importação e exportação JSON.
@@ -132,6 +132,7 @@ Para mudar o PIN:
 - **Power BI:** nome, tema, resumo, descrição, tecnologias, público, link incorporado e prints. O portfólio abre o relatório dentro do modal e não mostra botão com o link.
 - **Sistema Web:** nome, tema, resumo, descrição, tecnologias, link do projeto, capa e prints.
 - **Conteúdo Digital:** nome, tema, formato, público, resumo, link de leitura/download e prints. Exemplos: cartilhas, relatórios, infográficos, guias, apresentações e materiais interativos.
+- **GPTs & Agentes de IA:** objetivo, contexto, instruções, recursos utilizados, supervisão necessária, limites, demonstração segura e prints.
 
 ### Precisa de banco de dados?
 
