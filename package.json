@@ -1,7 +1,7 @@
 {
   "name": "portfolio-jever-dias",
   "private": true,
-  "version": "1.5.0",
+  "version": "1.5.1",
   "description": "Aplicação web de portfólio profissional com landing page pública e painel administrativo.",
   "keywords": ["portfolio-website", "web-application", "react", "vite", "business-intelligence", "analytics"],
   "homepage": "https://jeverdias.netlify.app",

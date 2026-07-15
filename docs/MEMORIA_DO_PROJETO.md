@@ -8,7 +8,7 @@ Site publicado: `https://jeverdias.netlify.app`
 
 ## Estado atual
 
-**Versão ativa: v1.5.0 — estruturas básicas separadas da aparência.**
+**Versão ativa: v1.5.1 — classificações com ajuda e prévias fiéis.**
 
 Regra permanente: toda correção, adição ou modificação deve atualizar a versão conforme `docs/VERSIONAMENTO.md`. Ao finalizar, sempre sugerir uma mensagem de commit, sem executar commit ou push sem autorização.
 
@@ -317,6 +317,19 @@ Ao iniciar uma nova versão:
 - Criada uma seção pública exclusiva de benefícios para a Landing Page.
 - A migração preserva a aparência existente e restaura somente a estrutura Portfólio quando necessário.
 - Versão atualizada de v1.4.2 para v1.5.0 por se tratar de nova funcionalidade compatível.
+- Nenhum commit ou push foi realizado sem autorização.
+
+### v1.5.1 — Classificações com ajuda e prévias fiéis
+
+- Adicionado um botão `!` em cada card para explicar, em linguagem simples, para que serve aquele segmento de site e para quem ele é indicado.
+- Quando uma classificação está aplicada, o indicador de confirmação aparece à esquerda do botão explicativo.
+- O modal Visualizar deixou de usar uma composição genérica e agora mostra uma miniatura específica para cada uma das oito estruturas.
+- Site institucional ganhou apresentação empresarial, serviços em linhas e faixa de resultados.
+- Serviços profissionais passou a destacar especialidades, confiança, contato e projetos em formato de caso.
+- Negócio local passou a priorizar serviços, contato, localização e métricas compactas.
+- Catálogo simples passou a priorizar uma vitrine de itens com capas quadradas e faixa resumida de informações.
+- As mudanças estruturais continuam preservando paleta, fonte e estilo configurados em Aparência.
+- Versão atualizada de v1.5.0 para v1.5.1 como correção visual e funcional compatível.
 - Nenhum commit ou push foi realizado sem autorização.
 
 ## Informações ainda necessárias de Jever
