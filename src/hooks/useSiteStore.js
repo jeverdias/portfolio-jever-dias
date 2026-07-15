@@ -28,7 +28,7 @@ const normalizeSite = (value = {}) => {
   displayModels: normalizeDisplayModels(value.displayModels),
   specialties: Array.isArray(value.specialties) && value.specialties.length ? value.specialties : siteConfig.specialties,
   sectionVisibility: { ...siteConfig.sectionVisibility, ...(value.sectionVisibility || {}) },
-  appearance: restoreOriginalLayout ? siteConfig.appearance : { ...siteConfig.appearance, ...(value.appearance || {}) },
+  appearance: { ...siteConfig.appearance, ...(value.appearance || {}) },
 }}
 
 const readSite = () => {

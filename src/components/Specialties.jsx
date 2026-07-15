@@ -1,15 +1,17 @@
 import { BarChart3, Bot, Braces, Database, LineChart, Sparkles, Workflow, X } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import { SectionTitle } from './ui/SectionTitle'
+import { getClassificationPresentation } from '../data/classificationPresentation'
 
 const iconMap = { chart: BarChart3, analytics: LineChart, code: Braces, database: Database, bot: Bot, workflow: Workflow, sparkles: Sparkles }
 
-export function Specialties({ items = [] }) {
+export function Specialties({ items = [], classificationId }) {
   const specialties = items.filter((item) => item.visible !== false)
   const [guideOpen, setGuideOpen] = useState(false)
   const [selectedSpecialty, setSelectedSpecialty] = useState(null)
   const SelectedIcon = iconMap[selectedSpecialty?.icon] || Sparkles
   const closeRef = useRef(null)
+  const copy = getClassificationPresentation(classificationId)
 
   const openGuide = (specialty = null) => {
     setSelectedSpecialty(specialty)
@@ -32,9 +34,9 @@ export function Specialties({ items = [] }) {
     <section className="section" id="servicos">
       <div className="container">
         <SectionTitle
-          eyebrow="Especialidades"
-          title="Veja de forma simples o que cada área faz."
-          text="Explicações diretas, com exemplos práticos, para quem não precisa conhecer os termos técnicos."
+          eyebrow={copy.servicesEyebrow}
+          title={copy.servicesTitle}
+          text={copy.servicesText}
         />
         <div className="specialties-guide">
           <button type="button" onClick={() => openGuide()} aria-haspopup="dialog">

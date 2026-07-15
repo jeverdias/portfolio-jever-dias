@@ -7,6 +7,7 @@ import { Credibility } from './components/Credibility'
 import { Footer } from './components/Footer'
 import { Header } from './components/Header'
 import { Hero } from './components/Hero'
+import { LandingHighlights } from './components/LandingHighlights'
 import { ProjectModal } from './components/ProjectModal'
 import { ProjectDetail } from './components/ProjectDetail'
 import { Projects } from './components/Projects'
@@ -88,8 +89,9 @@ function App() {
         <Header site={siteStore.site} visibility={visibility} onLogin={() => setAdminOpen(true)} />
         <main id="conteudo">
           {visibility.hero !== false && <Hero site={siteStore.site} onContact={() => setContactOpen(true)} />}
-          {visibility.specialties !== false && <Specialties items={siteStore.site.specialties} />}
-          {visibility.projects !== false && <Projects projects={projectStore.projects.filter((project) => project.featured)} onOpen={openProjectPage} />}
+          {siteStore.site.siteClassificationId === 'landing-conversion' && <LandingHighlights site={siteStore.site} />}
+          {visibility.specialties !== false && <Specialties items={siteStore.site.specialties} classificationId={siteStore.site.siteClassificationId} />}
+          {visibility.projects !== false && <Projects projects={projectStore.projects.filter((project) => project.featured)} classificationId={siteStore.site.siteClassificationId} onOpen={openProjectPage} />}
           {visibility.about !== false && <About />}
           {visibility.credibility !== false && <Credibility site={siteStore.site} />}
           {visibility.resume !== false && <Resume site={siteStore.site} />}

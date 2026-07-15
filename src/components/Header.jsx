@@ -1,18 +1,12 @@
 import { LogIn, Menu, X } from 'lucide-react'
 import { useState } from 'react'
 import { getInitials } from '../utils/getInitials'
-
-const links = [
-  ['Início', '#inicio', 'hero'],
-  ['Portfólio', '#projetos', 'projects'],
-  ['Serviços', '#servicos', 'specialties'],
-  ['Sobre', '#sobre', 'about'],
-  ['Currículo', '#curriculo', 'resume'],
-  ['Contato', '#contato', 'contact'],
-]
+import { getClassificationPresentation } from '../data/classificationPresentation'
 
 export function Header({ onLogin, visibility = {}, site }) {
   const [open, setOpen] = useState(false)
+  const copy = getClassificationPresentation(site?.siteClassificationId)
+  const links = [['Início', '#inicio', 'hero'], [copy.navProjects, '#projetos', 'projects'], [copy.navServices, '#servicos', 'specialties'], ['Sobre', '#sobre', 'about'], ['Currículo', '#curriculo', 'resume'], ['Contato', '#contato', 'contact']]
 
   return (
     <header className="site-header">

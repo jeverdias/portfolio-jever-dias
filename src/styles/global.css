@@ -61,6 +61,27 @@ html[data-site-classification='blog-editorial'] .project-card { display:grid; gr
 html[data-site-classification='blog-editorial'] .project-card h3 { font-size:30px; }
 html[data-site-classification='event'] .hero h1 { font-size:clamp(68px,10vw,130px); }
 html[data-site-classification='nonprofit'] .credibility-metrics { grid-template-columns:repeat(2,minmax(0,1fr)); }
+html:not([data-site-classification='portfolio-app']) .site-shell > main { display:flex; flex-direction:column; }
+html:not([data-site-classification='portfolio-app']) .site-shell > main > #inicio { order:1; }
+html:not([data-site-classification='portfolio-app']) .site-shell > main > #servicos { order:2; }
+html:not([data-site-classification='portfolio-app']) .site-shell > main > #projetos { order:3; }
+html:not([data-site-classification='portfolio-app']) .site-shell > main > #sobre { order:4; }
+html:not([data-site-classification='portfolio-app']) .site-shell > main > #trajetoria { order:5; }
+html:not([data-site-classification='portfolio-app']) .site-shell > main > #curriculo { order:6; }
+html:not([data-site-classification='portfolio-app']) .site-shell > main > #contato { order:7; }
+html[data-site-classification='landing-conversion'] .site-shell > main > #trajetoria { order:3; }
+html[data-site-classification='landing-conversion'] .site-shell > main > #projetos { order:4; }
+html[data-site-classification='landing-conversion'] .site-shell > main > #contato { order:5; }
+html[data-site-classification='landing-conversion'] .site-shell > main > #sobre { order:6; }
+html[data-site-classification='catalog-whatsapp'] .site-shell > main > #projetos,html[data-site-classification='ecommerce'] .site-shell > main > #projetos,html[data-site-classification='blog-editorial'] .site-shell > main > #projetos,html[data-site-classification='course-membership'] .site-shell > main > #projetos { order:2; }
+html[data-site-classification='catalog-whatsapp'] .site-shell > main > #servicos,html[data-site-classification='ecommerce'] .site-shell > main > #servicos,html[data-site-classification='blog-editorial'] .site-shell > main > #servicos,html[data-site-classification='course-membership'] .site-shell > main > #servicos { order:3; }
+html[data-site-classification='landing-conversion'] .expertise-card,html[data-site-classification='ecommerce'] .expertise-card,html[data-site-classification='catalog-whatsapp'] .expertise-card,html[data-site-classification='blog-editorial'] .expertise-card { display:none; }
+html[data-site-classification='ecommerce'] .hero__grid,html[data-site-classification='catalog-whatsapp'] .hero__grid,html[data-site-classification='blog-editorial'] .hero__grid { grid-template-columns:1fr; }
+html[data-site-classification='ecommerce'] .hero,html[data-site-classification='catalog-whatsapp'] .hero,html[data-site-classification='blog-editorial'] .hero { min-height:72vh; }
+html[data-site-classification='ecommerce'] .hero__copy,html[data-site-classification='catalog-whatsapp'] .hero__copy { max-width:880px; text-align:center; margin-inline:auto; }
+html[data-site-classification='ecommerce'] :where(.hero__actions,.availability),html[data-site-classification='catalog-whatsapp'] :where(.hero__actions,.availability) { justify-content:center; }
+html[data-site-classification='blog-editorial'] .hero__copy { max-width:980px; }
+html[data-site-classification='blog-editorial'] .hero h1 { font-size:clamp(72px,11vw,150px); }
 @media (max-width:1100px) { html[data-site-classification='catalog-whatsapp'] .projects-grid,html[data-site-classification='ecommerce'] .projects-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } }
 @media (max-width:760px) { .classification-current { align-items:flex-start; flex-wrap:wrap; }.classification-current > button { width:100%; justify-content:center; margin-left:0; } html[data-site-classification] .hero__grid,html[data-site-classification] .specialties-grid,html[data-site-classification] .projects-grid,html[data-site-classification] .credibility-metrics { grid-template-columns:1fr; } html[data-site-classification='course-membership'] .project-card,html[data-site-classification='blog-editorial'] .project-card { display:block; } }
 
@@ -1307,3 +1328,53 @@ html[data-color-scheme='light'] .section--projects { background: color-mix(in sr
   .admin-form-preview-heading > button { justify-content: center; }
   .project-preview-media > div { grid-template-columns: repeat(2, 1fr); }
 }
+
+/* A prévia também reproduz a arquitetura da classificação */
+.classification-preview[data-classification-preview='landing-conversion'] main,.classification-preview[data-classification-preview='event'] main,.classification-preview[data-classification-preview='ecommerce'] main,.classification-preview[data-classification-preview='catalog-whatsapp'] main { text-align:center; }
+.classification-preview[data-classification-preview='landing-conversion'] .classification-preview__actions,.classification-preview[data-classification-preview='event'] .classification-preview__actions,.classification-preview[data-classification-preview='ecommerce'] .classification-preview__actions,.classification-preview[data-classification-preview='catalog-whatsapp'] .classification-preview__actions { justify-content:center; }
+.classification-preview[data-classification-preview='ecommerce'] main article,.classification-preview[data-classification-preview='catalog-whatsapp'] main article { min-height:150px; align-content:end; border-radius:8px; background:linear-gradient(160deg,var(--surface),color-mix(in srgb,var(--blue) 18%,var(--surface))); }
+.classification-preview[data-classification-preview='blog-editorial'] main section { grid-template-columns:1fr; }
+.classification-preview[data-classification-preview='blog-editorial'] main article { grid-template-columns:50px 1fr; border-inline:0; border-radius:0; background:transparent; }
+.classification-preview[data-classification-preview='saas-product'] main,.classification-preview[data-classification-preview='web-portal'] main { background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px); background-size:30px 30px; }
+.classification-preview[data-classification-preview='course-membership'] main section { grid-template-columns:1fr 1fr; }
+.classification-preview[data-classification-preview='personal-brand'] h2,.classification-preview[data-classification-preview='agency-studio'] h2 { font-size:52px; }
+
+/* Estruturas básicas v1.5: a classificação não altera as variáveis de aparência */
+.landing-highlights { position:relative; padding:0 0 62px; background:var(--bg); }
+.landing-highlights__grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; }
+.landing-highlights article { display:flex; align-items:flex-start; gap:12px; padding:20px; border:1px solid var(--line); border-radius:var(--card-radius); background:var(--surface); box-shadow:var(--card-shadow); }
+.landing-highlights article svg { flex:0 0 auto; color:var(--green); }.landing-highlights h2 { margin:0 0 5px; font-size:17px; }.landing-highlights p { margin:0; color:var(--muted); font-size:12px; line-height:1.55; }
+.landing-admin-fields { display:grid; gap:15px; padding:20px; border:1px solid var(--line-strong); border-radius:14px; background:color-mix(in srgb,var(--surface) 78%,transparent); }
+html[data-site-classification='landing-conversion'] .site-shell > main > .landing-highlights { order:2; }
+html[data-site-classification='landing-conversion'] .site-shell > main > #servicos { order:3; }
+html[data-site-classification='landing-conversion'] .site-shell > main > #trajetoria { order:4; }
+html[data-site-classification='landing-conversion'] .site-shell > main > #projetos { order:5; }
+html[data-site-classification='landing-conversion'] .site-shell > main > #contato { order:6; }
+html[data-site-classification='landing-conversion'] .site-shell > main > #sobre { order:7; }
+html[data-site-classification='landing-conversion'] .hero h1 { max-width:980px; margin-inline:auto; font-size:clamp(48px,7vw,92px); }
+html[data-site-classification='landing-conversion'] .credibility-section .section-heading { display:none; }
+html[data-site-classification='landing-conversion'] .credibility-section { padding-block:34px; }
+html[data-site-classification='landing-conversion'] .credibility-metrics { display:flex; align-items:stretch; gap:0; border-block:1px solid var(--line); }
+html[data-site-classification='landing-conversion'] .credibility-metrics article:not(.credibility-tech) { flex:1; min-height:105px; border:0; border-right:1px solid var(--line); border-radius:0; background:transparent; }
+html[data-site-classification='landing-conversion'] .credibility-tech { display:none; }
+html[data-site-classification='institutional'] .credibility-metrics { grid-template-columns:repeat(3,minmax(0,1fr)); }
+html[data-site-classification='institutional'] .credibility-metrics article:not(.credibility-tech) { min-height:112px; border-radius:6px; }
+html[data-site-classification='professional-services'] .hero__grid { grid-template-columns:1.1fr .9fr; }
+html[data-site-classification='professional-services'] .specialties-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+html[data-site-classification='professional-services'] .credibility-metrics { grid-template-columns:repeat(2,minmax(0,1fr)); }
+html[data-site-classification='professional-services'] .credibility-metrics article:not(.credibility-tech) { min-height:120px; }
+html[data-site-classification='local-business'] .credibility-section .section-heading { margin-bottom:18px; }
+html[data-site-classification='local-business'] .credibility-metrics { grid-template-columns:repeat(3,minmax(0,1fr)); }
+html[data-site-classification='local-business'] .credibility-metrics article:not(.credibility-tech) { min-height:96px; padding:15px; }
+html[data-site-classification='catalog'] .site-shell > main > #projetos,html[data-site-classification='blog-editorial'] .site-shell > main > #projetos { order:2; }
+html[data-site-classification='catalog'] .site-shell > main > #servicos,html[data-site-classification='blog-editorial'] .site-shell > main > #servicos { order:3; }
+html[data-site-classification='catalog'] .expertise-card { display:none; }
+html[data-site-classification='catalog'] .hero__grid { grid-template-columns:1fr; }
+html[data-site-classification='catalog'] .hero__copy { max-width:860px; }
+html[data-site-classification='catalog'] .projects-grid { grid-template-columns:repeat(3,minmax(0,1fr)); }
+html[data-site-classification='catalog'] .project-card__preview { aspect-ratio:4/3; }
+html[data-site-classification='blog-editorial'] .credibility-metrics article:not(.credibility-tech) { min-height:90px; padding:14px; }
+html[data-site-classification='event'] .credibility-metrics { grid-template-columns:repeat(3,minmax(0,1fr)); }
+html[data-site-classification='event'] .credibility-metrics article:not(.credibility-tech) { text-align:center; min-height:125px; }
+.classification-preview[data-classification-preview='catalog'] main { text-align:left; }.classification-preview[data-classification-preview='catalog'] main article { min-height:140px; align-content:end; }
+@media(max-width:760px) { .landing-highlights__grid { grid-template-columns:1fr; }.landing-highlights { padding-bottom:42px; } html[data-site-classification='landing-conversion'] .credibility-metrics { display:grid; grid-template-columns:1fr; } html[data-site-classification='landing-conversion'] .credibility-metrics article:not(.credibility-tech) { border-right:0; border-bottom:1px solid var(--line); } }

@@ -18,7 +18,7 @@ C:\Users\jever\Documents\Site JD
 
 Versão atual e próximos passos: [`docs/MEMORIA_DO_PROJETO.md`](docs/MEMORIA_DO_PROJETO.md).
 
-Versão do aplicativo: **v1.4.1**. A regra permanente de atualização MAJOR, MINOR e PATCH está em [`docs/VERSIONAMENTO.md`](docs/VERSIONAMENTO.md).
+Versão do aplicativo: **v1.5.0**. A regra permanente de atualização MAJOR, MINOR e PATCH está em [`docs/VERSIONAMENTO.md`](docs/VERSIONAMENTO.md).
 
 ## O que foi criado
 
@@ -40,7 +40,8 @@ Versão do aplicativo: **v1.4.1**. A regra permanente de atualização MAJOR, MI
 - Modo administrador local com PIN, cadastro, edição, ordenação, imagem, importação e exportação JSON.
 - Layout responsivo para computador, tablet e celular.
 - Configuração pronta para build e publicação no Netlify.
-- Aba Classificação do site com 15 modelos comerciais, filtros por público, prévia e aplicação automática de design, paleta e fonte.
+- Aba Classificação do site com 8 estruturas básicas. A classificação muda organização e conteúdo, enquanto cores, fontes e acabamento permanecem exclusivos da aba Aparência.
+- Landing page com campos próprios para oferta, título, explicação, botão e benefícios.
 
 ## Estrutura de pastas
 

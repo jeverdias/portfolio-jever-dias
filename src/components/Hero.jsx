@@ -1,5 +1,6 @@
 import { ArrowRight, Award, BarChart3, Bot, Braces, BriefcaseBusiness, Code2, Database, DatabaseZap, Gauge, Globe2, GraduationCap, HeartPulse, LayoutDashboard, Microscope, Rocket, Scale, Send, ShieldCheck, Sigma, Sparkles, Target, TrendingUp, Users, Workflow } from 'lucide-react'
 import { useState } from 'react'
+import { getClassificationPresentation } from '../data/classificationPresentation'
 
 const iconMap = { chart: BarChart3, sigma: Sigma, code: Braces, database: DatabaseZap, bot: Bot, workflow: Workflow }
 const metricIconMap = { chart: BarChart3, code: Code2, database: Database, award: Award, users: Users, briefcase: BriefcaseBusiness, bot: Bot, sparkles: Sparkles, trend: TrendingUp, target: Target, gauge: Gauge, health: HeartPulse, research: Microscope, education: GraduationCap, law: Scale, global: Globe2, rocket: Rocket, security: ShieldCheck }
@@ -11,6 +12,8 @@ export function Hero({ site, onContact }) {
   const stats = (site.metrics || []).filter((item) => item.visible !== false).slice(0, 3)
   const roles = site.role.split('|').map((role) => role.trim()).filter(Boolean)
   const techItems = site.techItems || []
+  const copy = getClassificationPresentation(site.siteClassificationId)
+  const isLanding = site.siteClassificationId === 'landing-conversion'
 
   return (
     <section className="hero" id="inicio">
@@ -19,23 +22,21 @@ export function Hero({ site, onContact }) {
       <div className="container hero__grid">
         <div className="hero__copy">
           <div className="eyebrow-pill"><Sparkles size={14} /> {site.eyebrow}</div>
-          <h1>
-            {firstName} <span>{lastName}</span>
-          </h1>
+          <h1>{isLanding ? site.landingHeadline : <>{firstName} <span>{lastName}</span></>}</h1>
           <p className="hero__role">
-            {roles.map((role, index) => {
+            {(isLanding ? [site.landingLabel] : roles).map((role, index, displayedRoles) => {
               return (
                 <span className="role-item" key={role}>
                   <span>{role}</span>
-                  {index < roles.length - 1 && <span className="role-separator" aria-hidden="true">|</span>}
+                  {index < displayedRoles.length - 1 && <span className="role-separator" aria-hidden="true">|</span>}
                 </span>
               )
             })}
           </p>
-          <p className="hero__intro">{site.intro}</p>
+          <p className="hero__intro">{isLanding ? site.landingText : site.intro}</p>
           <div className="hero__actions">
             <a className="button button--primary" href="#projetos">
-              Ver portfólio <ArrowRight size={18} />
+              {isLanding ? site.landingCta : copy.heroCta} <ArrowRight size={18} />
             </a>
             <button className="button button--secondary" type="button" onClick={onContact}>
               <Send size={17} /> Falar comigo

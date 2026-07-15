@@ -2,7 +2,7 @@ import { defaultAppearance } from './appearance'
 import { defaultSiteClassification, siteClassifications } from './siteClassifications'
 
 export const siteConfig = {
-  classificationLayoutVersion: 2,
+  classificationLayoutVersion: 3,
   siteClassificationId: defaultSiteClassification,
   siteClassification: siteClassifications.find((item) => item.id === defaultSiteClassification)?.classification,
   siteClassificationDescription: siteClassifications.find((item) => item.id === defaultSiteClassification)?.goal,
@@ -11,6 +11,11 @@ export const siteConfig = {
   eyebrow: 'BI · Dados · Sistemas · Impacto',
   intro:
     'Transformo dados em dashboards, insights e sistemas simples para apoiar decisões e melhorar processos.',
+  landingLabel: 'UMA SOLUÇÃO DIRETA PARA SUA NECESSIDADE',
+  landingHeadline: 'Transforme uma necessidade em uma solução clara.',
+  landingText: 'Apresente a oferta, os principais benefícios e conduza o visitante para uma única ação.',
+  landingCta: 'Quero saber mais',
+  landingBenefitsText: 'Clareza|Explique rapidamente o que está sendo oferecido.\nConfiança|Mostre resultados, experiência ou depoimentos.\nAção|Direcione o visitante para contato, inscrição ou compra.',
   email: 'jeverdias.dev@gmail.com',
   emailSecondary: '',
   linkedin: 'https://www.linkedin.com/in/jever-dias/',

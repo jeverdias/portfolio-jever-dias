@@ -8,7 +8,7 @@ Site publicado: `https://jeverdias.netlify.app`
 
 ## Estado atual
 
-**Versão ativa: v1.4.1 — arquiteturas por classificação e identidade dinâmica.**
+**Versão ativa: v1.5.0 — estruturas básicas separadas da aparência.**
 
 Regra permanente: toda correção, adição ou modificação deve atualizar a versão conforme `docs/VERSIONAMENTO.md`. Ao finalizar, sempre sugerir uma mensagem de commit, sem executar commit ou push sem autorização.
 
@@ -297,6 +297,26 @@ Ao iniciar uma nova versão:
 - Classificação do site reposicionada logo após a identificação no painel e exibida abaixo do nome profissional.
 - Iniciais do cabeçalho, rodapé, login, painel e estudo de caso agora são geradas automaticamente a partir do nome cadastrado, com no máximo três letras.
 - Versão atualizada de v1.4.0 para v1.4.1 como correção funcional e visual compatível.
+
+### v1.4.2 — Classificações com mudanças estruturais visíveis
+
+- Corrigida a percepção de que a classificação alterava somente cores e fontes.
+- Menu, botão principal, títulos de serviços, títulos de projetos e chamada de contato agora acompanham a finalidade do site.
+- As classificações podem reordenar as seções públicas sem apagar o conteúdo cadastrado.
+- Loja e catálogo priorizam a vitrine; blog prioriza publicações; curso prioriza conteúdos; landing page prioriza benefícios, confiança e conversão.
+- Landing page, loja, catálogo e blog ganharam heroes estruturalmente diferentes do portfólio JD.
+- Versão atualizada de v1.4.1 para v1.4.2 como correção visual e comportamental compatível.
+
+### v1.5.0 — Estruturas básicas separadas da aparência
+
+- Classificações simplificadas para oito tipos básicos: Portfólio, Landing Page, Institucional, Serviços Profissionais, Negócio Local, Catálogo, Blog e Evento.
+- Aplicar uma classificação não altera mais paleta, fonte, estilo ou tema.
+- Aparência continua sendo a única área responsável por cores e acabamento visual.
+- Métricas ganharam composições específicas: prova social na landing page, faixa de resultados institucional, confiança para serviços, formato compacto local e destaque de evento.
+- Landing Page ganhou campos editáveis próprios para etiqueta, oferta, explicação, botão e benefícios.
+- Criada uma seção pública exclusiva de benefícios para a Landing Page.
+- A migração preserva a aparência existente e restaura somente a estrutura Portfólio quando necessário.
+- Versão atualizada de v1.4.2 para v1.5.0 por se tratar de nova funcionalidade compatível.
 - Nenhum commit ou push foi realizado sem autorização.
 
 ## Informações ainda necessárias de Jever

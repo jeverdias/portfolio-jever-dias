@@ -1,6 +1,6 @@
 # Regra permanente de versionamento
 
-Versão atual: **v1.4.1**.
+Versão atual: **v1.5.0**.
 
 Toda solicitação que corrigir, adicionar ou modificar o código deve atualizar a versão antes da entrega:
 

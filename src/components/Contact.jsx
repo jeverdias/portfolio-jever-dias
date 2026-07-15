@@ -1,8 +1,10 @@
 import { ArrowUpRight, CheckCircle2, Mail, Send } from 'lucide-react'
 import { useState } from 'react'
+import { getClassificationPresentation } from '../data/classificationPresentation'
 
 export function Contact({ site, onOpen }) {
   const [status, setStatus] = useState('idle')
+  const copy = getClassificationPresentation(site.siteClassificationId)
 
   const submitContact = async (event) => {
     event.preventDefault()
@@ -30,9 +32,9 @@ export function Contact({ site, onOpen }) {
         <div className="contact-card">
           <div className="contact-card__orb" />
           <div>
-            <span className="contact-card__eyebrow">Vamos tirar a ideia do papel?</span>
-            <h2>Dados e sistemas podem ser mais simples.</h2>
-            <p>Conte o que você precisa. Eu retorno para conversarmos sobre o cenário e o melhor caminho.</p>
+            <span className="contact-card__eyebrow">{copy.contactEyebrow}</span>
+            <h2>{copy.contactTitle}</h2>
+            <p>{copy.contactText}</p>
           </div>
           <button className="button button--light" type="button" onClick={onOpen}>
             <Mail size={18} /> Falar com {site.name.split(' ')[0]} <ArrowUpRight size={17} />

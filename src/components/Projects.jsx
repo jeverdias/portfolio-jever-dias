@@ -3,13 +3,15 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { getProjectTypeLabel } from '../data/projects'
 import { ProjectCard } from './ProjectCard'
 import { SectionTitle } from './ui/SectionTitle'
+import { getClassificationPresentation } from '../data/classificationPresentation'
 
-export function Projects({ projects, onOpen }) {
+export function Projects({ projects, onOpen, classificationId }) {
   const [filter, setFilter] = useState('all')
   const [guideOpen, setGuideOpen] = useState(false)
   const closeRef = useRef(null)
   const filters = useMemo(() => ['all', ...new Set(projects.map(getProjectTypeLabel))], [projects])
   const visibleProjects = filter === 'all' ? projects : projects.filter((project) => getProjectTypeLabel(project) === filter)
+  const copy = getClassificationPresentation(classificationId)
 
   useEffect(() => {
     if (!guideOpen) return undefined
@@ -27,15 +29,15 @@ export function Projects({ projects, onOpen }) {
     <section className="section section--projects" id="projetos">
       <div className="container">
         <SectionTitle
-          eyebrow="Portfólio em destaque"
-          title="Soluções feitas para gerar clareza."
-          text="Selecione um projeto para conhecer a proposta e explorar a entrega."
+          eyebrow={copy.projectsEyebrow}
+          title={copy.projectsTitle}
+          text={copy.projectsText}
           action={(
             <div className="project-heading-actions">
-              <a className="text-link" href="#contato">Tem um projeto? <ArrowRight size={16} /></a>
+              <a className="text-link" href="#contato">{copy.projectsAction} <ArrowRight size={16} /></a>
               <button className="project-guide-trigger" type="button" onClick={() => setGuideOpen(true)} aria-haspopup="dialog">
                 <span className="specialties-guide__hand" aria-hidden="true">☝️</span>
-                Clique e entenda o portfólio
+                {copy.projectsGuide}
               </button>
             </div>
           )}
