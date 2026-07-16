@@ -1,15 +1,11 @@
-import { useEffect, useState } from 'react'
+import { lazy, Suspense, useEffect, useState } from 'react'
 import { About } from './components/About'
-import { AdminPanel } from './components/AdminPanel'
 import { Contact } from './components/Contact'
-import { ContactModal } from './components/ContactModal'
 import { Credibility } from './components/Credibility'
 import { Footer } from './components/Footer'
 import { Header } from './components/Header'
 import { Hero } from './components/Hero'
 import { LandingHighlights } from './components/LandingHighlights'
-import { ProjectModal } from './components/ProjectModal'
-import { ProjectDetail } from './components/ProjectDetail'
 import { Projects } from './components/Projects'
 import { Resume } from './components/Resume'
 import { Specialties } from './components/Specialties'
@@ -17,6 +13,11 @@ import { useProjectStore } from './hooks/useProjectStore'
 import { useSiteStore } from './hooks/useSiteStore'
 import { useAdminAuth } from './hooks/useAdminAuth'
 import { applyAppearance } from './data/appearance'
+
+const AdminPanel = lazy(() => import('./components/AdminPanel').then((module) => ({ default: module.AdminPanel })))
+const ContactModal = lazy(() => import('./components/ContactModal').then((module) => ({ default: module.ContactModal })))
+const ProjectDetail = lazy(() => import('./components/ProjectDetail').then((module) => ({ default: module.ProjectDetail })))
+const ProjectModal = lazy(() => import('./components/ProjectModal').then((module) => ({ default: module.ProjectModal })))
 
 function App() {
   const projectStore = useProjectStore()
@@ -77,8 +78,8 @@ function App() {
   if (routeProject) {
     return <>
       <a className="skip-link" href="#conteudo">Pular para o conteúdo</a>
-      <ProjectDetail project={routeProject} siteName={siteStore.site.name} onBack={closeProjectPage} onDemo={() => setSelectedProject(routeProject)} />
-      <ProjectModal key={currentProject?.id || 'project-modal'} project={currentProject} onClose={() => setSelectedProject(null)} />
+      <Suspense fallback={<div className="route-loading" role="status">Carregando projeto...</div>}><ProjectDetail project={routeProject} siteName={siteStore.site.name} onBack={closeProjectPage} onDemo={() => setSelectedProject(routeProject)} /></Suspense>
+      {currentProject && <Suspense fallback={null}><ProjectModal key={currentProject.id} project={currentProject} onClose={() => setSelectedProject(null)} /></Suspense>}
     </>
   }
 
@@ -99,15 +100,15 @@ function App() {
         </main>
         {visibility.footer !== false && <Footer site={siteStore.site} />}
       </div>
-      <ProjectModal key={currentProject?.id || 'project-modal'} project={currentProject} onClose={() => setSelectedProject(null)} />
-      <ContactModal open={contactOpen} site={siteStore.site} onClose={() => setContactOpen(false)} />
-      <AdminPanel
-        open={adminOpen}
-        onClose={() => setAdminOpen(false)}
-        projectStore={projectStore}
-        siteStore={siteStore}
-        adminAuth={adminAuth}
-      />
+      {currentProject && <Suspense fallback={null}><ProjectModal key={currentProject.id} project={currentProject} onClose={() => setSelectedProject(null)} /></Suspense>}
+      {contactOpen && <Suspense fallback={null}><ContactModal open site={siteStore.site} onClose={() => setContactOpen(false)} /></Suspense>}
+      {adminOpen && <Suspense fallback={<div className="admin-backdrop"><div className="admin-route-loading" role="status">Abrindo painel seguro...</div></div>}><AdminPanel
+          open
+          onClose={() => setAdminOpen(false)}
+          projectStore={projectStore}
+          siteStore={siteStore}
+          adminAuth={adminAuth}
+        /></Suspense>}
     </>
   )
 }

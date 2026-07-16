@@ -1,70 +1,48 @@
-# Checklist futuro — Pulso do Supabase
+# Checklist — Pulso do Supabase
 
-Status: **aguardando o banco de dados exclusivo do portfólio ficar pronto**.
+Status: **workflow preparado, ainda inativo**.
 
-Este checklist deve ser executado somente depois que o projeto Supabase do portfólio estiver criado, conectado e funcionando. Por enquanto, nenhum workflow de pulso está ativo no GitHub.
+O arquivo `.github/workflows/supabase-keep-alive.yml` faz duas consultas públicas pequenas a cada seis dias. Ele só funcionará depois de estar na branch padrão e receber os Secrets definitivos.
 
-## 1. Confirmar que o banco está pronto
+## 1. Banco e segurança
 
-- [ ] Criar um projeto Supabase separado e exclusivo para o portfólio.
-- [ ] Confirmar que o projeto está ativo no painel do Supabase.
-- [ ] Aplicar o arquivo `supabase/schema.sql` no projeto correto.
-- [ ] Confirmar que as tabelas `site_settings`, `portfolio_projects` e `portfolio_admins` existem.
-- [ ] Confirmar que as políticas RLS foram aplicadas.
-- [ ] Criar e testar o usuário administrador do portfólio.
-- [ ] Testar o login do painel administrativo.
-- [ ] Testar a leitura e a gravação de um projeto.
-- [ ] Testar o envio de uma imagem para o Storage.
+- [x] Criar um projeto separado e exclusivo para o portfólio.
+- [x] Aplicar o schema, tabelas, políticas RLS e bucket.
+- [x] Redefinir a senha técnica com valor aleatório forte.
+- [ ] Criar e autorizar o usuário administrador.
+- [ ] Testar o login do painel.
+- [ ] Testar leitura e gravação de um projeto.
+- [ ] Testar envio de imagem ao Storage.
+- [ ] Testar recebimento de mensagem.
 
-## 2. Separar as informações necessárias
+## 2. Workflow
 
-- [ ] Copiar a URL do projeto, no formato `https://xxxxxxxx.supabase.co`.
-- [ ] Copiar somente a chave pública `anon` ou `publishable`.
-- [ ] Não copiar nem utilizar a chave `service_role` no GitHub Actions.
-- [ ] Confirmar que a chave pública consegue consultar as tabelas permitidas pelas políticas RLS.
+- [x] Criar `.github/workflows/supabase-keep-alive.yml`.
+- [x] Adicionar execução manual com `workflow_dispatch`.
+- [x] Agendar a cada seis dias, fora do início da hora.
+- [x] Consultar somente `site_settings` e `portfolio_projects`.
+- [x] Configurar repetição, tempo máximo e logs sem conteúdo sensível.
+- [x] Revisar o workflow após a configuração do projeto definitivo.
 
-## 3. Criar o workflow no momento correto
+## 3. Secrets do GitHub
 
-- [ ] Criar `.github/workflows/supabase-keep-alive.yml`.
-- [ ] Adicionar execução manual com `workflow_dispatch`.
-- [ ] Adicionar agendamento para gerar atividade antes do período de sete dias.
-- [ ] Usar um horário fora do início de cada hora para reduzir atrasos do GitHub Actions.
-- [ ] Fazer consultas pequenas e reais em `site_settings` e `portfolio_projects`.
-- [ ] Configurar tentativas automáticas para falhas temporárias.
-- [ ] Limitar o tempo máximo da execução.
-- [ ] Garantir que a resposta e as chaves não sejam impressas nos logs.
+- [ ] Abrir `jeverdias/portfolio-jever-dias` em **Settings > Secrets and variables > Actions**.
+- [ ] Criar `SUPABASE_URL` com a URL definitiva.
+- [ ] Criar `SUPABASE_ANON_KEY` com a chave pública definitiva.
+- [ ] Confirmar que nenhuma chave foi escrita diretamente no workflow.
 
-## 4. Configurar os Secrets no GitHub
+## 4. Publicação e teste
 
-- [ ] Abrir o repositório `jeverdias/portfolio-jever-dias` no GitHub.
-- [ ] Entrar em **Settings > Secrets and variables > Actions**.
-- [ ] Criar o Secret `SUPABASE_URL`.
-- [ ] Criar o Secret `SUPABASE_ANON_KEY`.
-- [ ] Conferir se nenhum valor secreto foi colocado diretamente no arquivo do workflow.
+- [ ] Pedir autorização explícita antes de qualquer commit.
+- [ ] Revisar as mudanças na branch de desenvolvimento.
+- [ ] Pedir autorização explícita antes de qualquer push.
+- [ ] Publicar na `main`, pois o agendamento usa a branch padrão.
+- [ ] Executar manualmente em **Actions > Manter Supabase ativo > Run workflow**.
+- [ ] Confirmar execução em verde e atividade no Supabase.
+- [ ] Conferir a primeira execução agendada.
 
-## 5. Publicar e testar
+## Observações
 
-- [ ] Pedir autorização de Jever antes de fazer commit.
-- [ ] Colocar o workflow primeiro na branch de desenvolvimento.
-- [ ] Revisar o arquivo antes de enviar para a branch `main`.
-- [ ] Lembrar que workflows agendados só funcionam quando estão na branch padrão.
-- [ ] Abrir **Actions > Manter Supabase ativo > Run workflow**.
-- [ ] Confirmar que a execução manual terminou em verde.
-- [ ] Conferir no Supabase se as consultas apareceram nos logs.
-- [ ] Aguardar a primeira execução agendada e confirmar o resultado.
-
-## 6. Acompanhamento
-
-- [ ] Verificar periodicamente se o workflow continua habilitado.
-- [ ] Observar emails de aviso de pausa enviados pelo Supabase.
-- [ ] Observar falhas ou atrasos enviados pelo GitHub Actions.
-- [ ] Reativar o workflow se o GitHub o desabilitar por inatividade do repositório.
-- [ ] Reavaliar o intervalo caso o Supabase continue enviando avisos.
-- [ ] Considerar o plano Pro se o portfólio precisar de disponibilidade garantida.
-
-## Observações importantes
-
-- O plano gratuito do Supabase pode pausar projetos com pouca atividade.
-- Um pulso reduz o risco de pausa, mas não oferece garantia equivalente a um plano pago.
-- A rotina não deve ser criada antes do banco porque ainda não existem endereço, chave e tabelas definitivas para testar.
-- O workflow só será ativado depois de autorização explícita para commit e envio à branch `main`.
+- Um pulso reduz o risco de pausa no plano gratuito, mas não garante disponibilidade equivalente ao plano pago.
+- O workflow não está ativo apenas por existir localmente; requer commit, push e Secrets.
+- Nenhum commit ou push deve ser realizado sem autorização de Jever.

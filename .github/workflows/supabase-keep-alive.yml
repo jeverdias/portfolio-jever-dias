@@ -1,0 +1,27 @@
+name: Manter Supabase ativo
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '17 11 */6 * *'
+
+permissions:
+  contents: read
+
+jobs:
+  pulse:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - name: Consultar conteúdo público mínimo
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+        run: |
+          set -euo pipefail
+          test -n "$SUPABASE_URL"
+          test -n "$SUPABASE_ANON_KEY"
+          headers=(-H "apikey: $SUPABASE_ANON_KEY" -H "Authorization: Bearer $SUPABASE_ANON_KEY")
+          curl --fail --silent --show-error --retry 3 --max-time 20 "${headers[@]}" "$SUPABASE_URL/rest/v1/site_settings?select=id&limit=1" > /dev/null
+          curl --fail --silent --show-error --retry 3 --max-time 20 "${headers[@]}" "$SUPABASE_URL/rest/v1/portfolio_projects?select=id&limit=1" > /dev/null
+          echo "Pulso concluído sem exibir chaves ou conteúdo."

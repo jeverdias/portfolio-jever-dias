@@ -8,11 +8,11 @@ Site publicado: `https://jeverdias.netlify.app`
 
 ## Estado atual
 
-**Versão ativa: v1.5.1 — classificações com ajuda e prévias fiéis.**
+**Versão ativa: v1.6.0 — base online isolada, mensagens e desempenho.**
 
 Regra permanente: toda correção, adição ou modificação deve atualizar a versão conforme `docs/VERSIONAMENTO.md`. Ao finalizar, sempre sugerir uma mensagem de commit, sem executar commit ou push sem autorização.
 
-A base visual está concluída em React + Vite. O painel possui integração preparada com Supabase Auth, Database e Storage, formulário Netlify, currículo profissional, trajetória, depoimentos e SEO ampliado. A criação do projeto Supabase exclusivo está pendente porque a organização atual atingiu o limite de dois projetos gratuitos.
+A base visual está concluída em React + Vite. O painel possui integração com Supabase Auth, Database e Storage, caixa de mensagens, formulário com fallback Netlify, currículo profissional, trajetória, depoimentos e SEO ampliado. O projeto Supabase exclusivo `site-jd` foi criado, recebeu o schema inicial e teve sua senha técnica redefinida com segurança; antes do uso real ainda é necessário cadastrar o administrador e configurar o Netlify.
 
 ## Plano de versões
 
@@ -330,6 +330,22 @@ Ao iniciar uma nova versão:
 - Catálogo simples passou a priorizar uma vitrine de itens com capas quadradas e faixa resumida de informações.
 - As mudanças estruturais continuam preservando paleta, fonte e estilo configurados em Aparência.
 - Versão atualizada de v1.5.0 para v1.5.1 como correção visual e funcional compatível.
+- Nenhum commit ou push foi realizado sem autorização.
+
+### v1.6.0 — Base online isolada, mensagens e desempenho
+
+- Criado o projeto Supabase separado `site-jd`, na região de São Paulo, sem compartilhar dados com os sistemas existentes.
+- Pausado somente o projeto `sistema-campo-homologacao`; o projeto `sistema-campo-vita` foi preservado.
+- Schema ampliado com mensagens de contato, políticas RLS, índices e bucket exclusivo para arquivos.
+- Adicionada a caixa **Mensagens** ao painel, com busca, filtros, leitura, arquivamento e exclusão.
+- Formulário público passa a gravar no Supabase quando configurado e mantém o Netlify como alternativa.
+- Uploads de figurinhas passam a usar o Storage no modo online, com validação de tipo e tamanho.
+- Painel, páginas de projeto e modais passaram a ser carregados sob demanda.
+- Criado teste automatizado das oito classificações e realizada conferência estrutural em desktop e celular.
+- Corrigido o layout móvel de Serviços profissionais para uma coluna.
+- Preparado workflow de atividade do Supabase a cada seis dias, ainda inativo até existir autorização de commit/push e Secrets no GitHub.
+- Identificada antes do uso uma senha técnica inadequada na criação inicial; a senha foi redefinida pelo painel oficial com valor aleatório forte, sem recriar o projeto e sem expor o valor.
+- Versão atualizada de v1.5.1 para v1.6.0 por se tratar de novas funcionalidades compatíveis.
 - Nenhum commit ou push foi realizado sem autorização.
 
 ## Informações ainda necessárias de Jever

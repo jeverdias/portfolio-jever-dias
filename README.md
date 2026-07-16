@@ -18,7 +18,7 @@ C:\Users\jever\Documents\Site JD
 
 Versão atual e próximos passos: [`docs/MEMORIA_DO_PROJETO.md`](docs/MEMORIA_DO_PROJETO.md).
 
-Versão do aplicativo: **v1.5.1**. A regra permanente de atualização MAJOR, MINOR e PATCH está em [`docs/VERSIONAMENTO.md`](docs/VERSIONAMENTO.md).
+Versão do aplicativo: **v1.6.0**. A regra permanente de atualização MAJOR, MINOR e PATCH está em [`docs/VERSIONAMENTO.md`](docs/VERSIONAMENTO.md).
 
 ## O que foi criado
 
@@ -42,6 +42,9 @@ Versão do aplicativo: **v1.5.1**. A regra permanente de atualização MAJOR, MI
 - Configuração pronta para build e publicação no Netlify.
 - Aba Classificação do site com 8 estruturas básicas. A classificação muda organização e conteúdo, enquanto cores, fontes e acabamento permanecem exclusivos da aba Aparência.
 - Landing page com campos próprios para oferta, título, explicação, botão e benefícios.
+- Caixa de mensagens no painel, com filtros, leitura, arquivamento e exclusão.
+- Integração preparada com Supabase Auth, Database e Storage em projeto exclusivo.
+- Componentes administrativos e modais carregados sob demanda para reduzir o JavaScript inicial.
 
 ## Estrutura de pastas
 
@@ -132,10 +135,12 @@ Abra `src/data/site.js` e ajuste:
 ## Usar o modo administrador
 
 1. Clique em **Login** no canto superior direito do portfólio.
-3. No primeiro acesso, use o PIN `jd2026`.
+2. Sem Supabase, no primeiro acesso local, use o PIN `jd2026`.
+3. Com Supabase, entre com o email e a senha do administrador autorizado.
 4. Use **Configurações** para editar apresentação, contatos, LinkedIn, Instagram, GitHub e números do site.
 5. Use **Repositórios** para cadastrar projetos, estudos de caso, links, capa e até quatro prints.
 6. Use **Box/figurinhas** para editar o box de tecnologias da página inicial, buscar ícones ou enviar uma imagem própria.
+7. Use **Mensagens** para consultar os contatos enviados pelo formulário público.
 
 Os dados são salvos automaticamente. Em **Repositórios**, o campo **Tipo do portfólio** permite selecionar um dos tipos existentes ou escrever um novo; o novo tipo passa a aparecer na lista lateral e nos filtros públicos. Em **Box/figurinhas**, imagens enviadas ficam guardadas na coleção para reutilização e podem ser excluídas.
 
@@ -149,7 +154,7 @@ Para mudar o PIN:
 2. Altere `VITE_ADMIN_PIN`.
 3. Reinicie o site local.
 
-> O PIN é apenas uma barreira visual. Como o site é estático e não usa backend, ele não oferece autenticação segura.
+> O PIN é apenas uma alternativa local de desenvolvimento. No site publicado, a proteção correta usa Supabase Auth e políticas RLS.
 
 ### Organização dos repositórios
 
@@ -160,7 +165,7 @@ Para mudar o PIN:
 
 ### Precisa de banco de dados?
 
-A versão atual funciona sem banco para edição no próprio computador. Os dados ficam no armazenamento do navegador e podem ser exportados como backup JSON.
+A versão atual continua funcionando sem banco para edição no próprio computador. Os dados ficam no armazenamento do navegador e podem ser exportados como backup JSON. A integração online já está preparada e o projeto Supabase exclusivo `site-jd` foi criado com senha técnica forte; a ativação final depende do cadastro do administrador e das variáveis do Netlify.
 
 Para que o Login seja seguro e as alterações apareçam online para todos sem editar o código, a recomendação é usar:
 
@@ -228,7 +233,7 @@ O arquivo `netlify.toml` contém essas configurações. O deploy contínuo está
 
 ## Atividade programada do Supabase
 
-O pulso automático ainda não está ativo. Ele só será criado depois que o banco de dados exclusivo do portfólio estiver pronto, com tabelas, políticas, login e Storage testados.
+O workflow de pulso a cada seis dias já foi preparado em `.github/workflows/supabase-keep-alive.yml`, mas ainda não está ativo. Ele só passa a executar depois de autorização para commit/push na `main` e da configuração dos Secrets no GitHub. O login, a gravação e o Storage também devem ser testados antes da ativação.
 
 O checklist para essa etapa futura está em [`docs/GITHUB_SUPABASE_KEEP_ALIVE.md`](docs/GITHUB_SUPABASE_KEEP_ALIVE.md).
 

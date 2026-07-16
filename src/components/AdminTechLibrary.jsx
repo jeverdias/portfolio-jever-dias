@@ -78,7 +78,9 @@ export function AdminTechLibrary({ siteStore }) {
     try {
       const optimized = await optimizeImage(file, { maxWidth: 320, maxHeight: 320, quality: 0.84 })
       if (optimized.size > 250_000) throw new Error('Use uma figurinha com até 250 KB depois da otimização.')
-      const image = await fileToDataUrl(optimized)
+      const image = siteStore.mode === 'supabase'
+        ? await siteStore.uploadAsset(optimized, 'figurinhas')
+        : await fileToDataUrl(optimized)
       const sticker = {
         id: `figurinha-${Date.now()}`,
         name: file.name.replace(/\.[^.]+$/, '') || 'Nova figurinha',

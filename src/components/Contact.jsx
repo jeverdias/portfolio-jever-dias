@@ -1,6 +1,7 @@
 import { ArrowUpRight, CheckCircle2, Mail, Send } from 'lucide-react'
 import { useState } from 'react'
 import { getClassificationPresentation } from '../data/classificationPresentation'
+import { isSupabaseConfigured, submitContactMessage } from '../lib/supabase'
 
 export function Contact({ site, onOpen }) {
   const [status, setStatus] = useState('idle')
@@ -11,14 +12,24 @@ export function Contact({ site, onOpen }) {
     setStatus('sending')
     const form = event.currentTarget
     const formData = new FormData(form)
+    if (formData.get('empresa-site')) return
 
     try {
-      const response = await fetch('/', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: new URLSearchParams(formData).toString(),
-      })
-      if (!response.ok) throw new Error('Falha no envio')
+      if (isSupabaseConfigured) {
+        await submitContactMessage({
+          name: formData.get('nome'),
+          email: formData.get('email'),
+          subject: formData.get('assunto'),
+          message: formData.get('mensagem'),
+        })
+      } else {
+        const response = await fetch('/', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: new URLSearchParams(formData).toString(),
+        })
+        if (!response.ok) throw new Error('Falha no envio')
+      }
       form.reset()
       setStatus('success')
     } catch {
@@ -45,16 +56,16 @@ export function Contact({ site, onOpen }) {
           <div className="contact-form-card__intro">
             <span className="section-heading__eyebrow">Contato direto</span>
             <h2>Conte um pouco sobre o seu projeto.</h2>
-            <p>Preencha os dados abaixo. A mensagem será recebida com segurança pelo formulário do site.</p>
+            <p>Preencha os dados abaixo. A mensagem será salva com segurança e ficará disponível no painel administrativo.</p>
             <button type="button" onClick={onOpen}>Prefere outro canal? Ver redes e emails <ArrowUpRight size={15} /></button>
           </div>
           <form name="contato-portfolio" method="POST" data-netlify="true" data-netlify-honeypot="empresa-site" onSubmit={submitContact}>
             <input type="hidden" name="form-name" value="contato-portfolio" />
             <p className="honeypot"><label>Não preencha este campo<input name="empresa-site" tabIndex="-1" autoComplete="off" /></label></p>
-            <label>Nome<input name="nome" required autoComplete="name" /></label>
-            <label>Email<input name="email" type="email" required autoComplete="email" /></label>
-            <label className="field--wide">Assunto<input name="assunto" required /></label>
-            <label className="field--wide">Mensagem<textarea name="mensagem" rows="5" required /></label>
+            <label>Nome<input name="nome" minLength="2" maxLength="120" required autoComplete="name" /></label>
+            <label>Email<input name="email" type="email" maxLength="254" required autoComplete="email" /></label>
+            <label className="field--wide">Assunto<input name="assunto" minLength="2" maxLength="180" required /></label>
+            <label className="field--wide">Mensagem<textarea name="mensagem" rows="5" minLength="10" maxLength="5000" required /></label>
             <button className="button button--primary" type="submit" disabled={status === 'sending'}>
               <Send size={17} /> {status === 'sending' ? 'Enviando...' : 'Enviar mensagem'}
             </button>

@@ -1,7 +1,7 @@
 {
   "name": "portfolio-jever-dias",
   "private": true,
-  "version": "1.5.1",
+  "version": "1.6.0",
   "description": "Aplicação web de portfólio profissional com landing page pública e painel administrativo.",
   "keywords": ["portfolio-website", "web-application", "react", "vite", "business-intelligence", "analytics"],
   "homepage": "https://jeverdias.netlify.app",
@@ -14,7 +14,8 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "test:classifications": "node scripts/test-classifications.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.110.3",

@@ -2,10 +2,12 @@ node_modules
 dist
 .env
 .env.local
+.env.*.local
 .DS_Store
 *.log
 .vite
 .pnpm-store
+supabase/.temp
 /Site JD/
 
 # Local Netlify folder

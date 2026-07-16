@@ -100,6 +100,8 @@ export function useSiteStore() {
     return url
   }, [updateSite])
 
+  const uploadAsset = useCallback((file, folder = 'figurinhas') => uploadPortfolioAsset(file, folder), [])
+
   return {
     site,
     loading,
@@ -109,6 +111,7 @@ export function useSiteStore() {
     importSite,
     resetSite,
     uploadResume,
+    uploadAsset,
     refresh,
   }
 }

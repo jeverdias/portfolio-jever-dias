@@ -17,6 +17,7 @@ import {
   LayoutDashboard,
   Link2,
   LogOut,
+  Mail,
   Plus,
   Palette,
   Pencil,
@@ -41,6 +42,7 @@ import { AdminProfessionalContent } from './AdminProfessionalContent'
 import { DisplayModelPreview } from './DisplayModelPreview'
 import { AdminProjectPreview } from './AdminProjectPreview'
 import { AdminSiteClassification } from './AdminSiteClassification'
+import { AdminMessages } from './AdminMessages'
 import { getInitials } from '../utils/getInitials'
 
 const ADMIN_PIN = import.meta.env.VITE_ADMIN_PIN || 'jd2026'
@@ -591,6 +593,7 @@ export function AdminPanel({ open, onClose, projectStore, siteStore, adminAuth }
                 <button className={view === 'repositories' ? 'is-active' : ''} type="button" onClick={() => setView('repositories')}><FolderKanban size={17} /> Repositórios</button>
                 <button className={view === 'library' ? 'is-active' : ''} type="button" onClick={() => setView('library')}><ImagePlus size={17} /> Box/figurinhas</button>
                 <button className={view === 'specialties' ? 'is-active' : ''} type="button" onClick={() => setView('specialties')}><Sparkles size={17} /> Especialidades</button>
+                {adminAuth.configured && <button className={view === 'messages' ? 'is-active' : ''} type="button" onClick={() => setView('messages')}><Mail size={17} /> Mensagens</button>}
                 <button className={view === 'guide' ? 'is-active' : ''} type="button" onClick={() => setView('guide')}><BookOpenCheck size={17} /> Guia do site</button>
               </nav>
               <div className="admin-console__security"><ShieldCheck size={16} /><span><strong>{adminAuth.configured ? 'Sessão protegida' : 'Sessão local'}</strong><small>{adminAuth.configured ? adminAuth.user?.email : 'Dados neste dispositivo'}</small></span></div>
@@ -598,7 +601,7 @@ export function AdminPanel({ open, onClose, projectStore, siteStore, adminAuth }
             </aside>
 
             <main className="admin-console__main">
-              <header className="admin-console__topbar"><div><span>Painel administrativo</span><strong id="admin-title">{view === 'overview' ? 'Visão geral' : view === 'settings' ? 'Configurações' : view === 'appearance' ? 'Aparência' : view === 'classification' ? 'Classificação do site' : view === 'professional' ? 'Trajetória e métricas' : view === 'library' ? 'Box/figurinhas' : view === 'specialties' ? 'Especialidades' : view === 'guide' ? 'Guia do site' : 'Repositórios'}</strong></div><div><span className="admin-status-dot" /> {siteStore.mode === 'supabase' ? 'Sincronização online' : 'Alterações locais'}</div></header>
+              <header className="admin-console__topbar"><div><span>Painel administrativo</span><strong id="admin-title">{view === 'overview' ? 'Visão geral' : view === 'settings' ? 'Configurações' : view === 'appearance' ? 'Aparência' : view === 'classification' ? 'Classificação do site' : view === 'professional' ? 'Trajetória e métricas' : view === 'library' ? 'Box/figurinhas' : view === 'specialties' ? 'Especialidades' : view === 'messages' ? 'Mensagens recebidas' : view === 'guide' ? 'Guia do site' : 'Repositórios'}</strong></div><div><span className="admin-status-dot" /> {siteStore.mode === 'supabase' ? 'Sincronização online' : 'Alterações locais'}</div></header>
               {error && view !== 'repositories' && <div className="form-error form-error--block admin-global-error">{error}</div>}
               {view === 'overview' && renderOverview()}
               {view === 'settings' && renderSettings()}
@@ -608,6 +611,7 @@ export function AdminPanel({ open, onClose, projectStore, siteStore, adminAuth }
               {view === 'repositories' && renderRepositories()}
               {view === 'library' && <div className="admin-page"><AdminTechLibrary siteStore={siteStore} /></div>}
               {view === 'specialties' && <div className="admin-page"><AdminSpecialties siteStore={siteStore} /></div>}
+              {view === 'messages' && adminAuth.configured && <div className="admin-page"><AdminMessages /></div>}
               {view === 'guide' && <div className="admin-page"><AdminGuide /></div>}
             </main>
           </div>
