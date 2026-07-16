@@ -10,7 +10,7 @@ O arquivo `.github/workflows/supabase-keep-alive.yml` faz duas consultas públic
 - [x] Aplicar o schema, tabelas, políticas RLS e bucket.
 - [x] Redefinir a senha técnica com valor aleatório forte.
 - [x] Criar e autorizar o usuário administrador.
-- [ ] Testar o login do painel.
+- [x] Testar o login do painel local com Supabase Auth.
 - [ ] Testar leitura e gravação de um projeto.
 - [ ] Testar envio de imagem ao Storage.
 - [ ] Testar recebimento de mensagem.
@@ -27,9 +27,9 @@ O arquivo `.github/workflows/supabase-keep-alive.yml` faz duas consultas públic
 ## 3. Secrets do GitHub
 
 - [ ] Abrir `jeverdias/portfolio-jever-dias` em **Settings > Secrets and variables > Actions**.
-- [ ] Criar `SUPABASE_URL` com a URL definitiva.
-- [ ] Criar `SUPABASE_ANON_KEY` com a chave pública definitiva.
-- [ ] Confirmar que nenhuma chave foi escrita diretamente no workflow.
+- [x] Criar `SUPABASE_URL` com a URL definitiva.
+- [x] Criar `SUPABASE_ANON_KEY` com a chave pública definitiva.
+- [x] Confirmar que nenhuma chave foi escrita diretamente no workflow.
 
 ## 4. Publicação e teste
 

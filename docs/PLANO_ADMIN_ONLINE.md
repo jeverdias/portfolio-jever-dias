@@ -35,15 +35,15 @@ O schema completo e as políticas estão em `supabase/schema.sql` e na migration
 - `sistema-campo-homologacao` pausado; `sistema-campo-vita` preservado.
 - Schema e Storage aplicados no projeto novo.
 - Integração do frontend, mensagens e upload implementados.
+- Login local com Supabase Auth testado com sucesso pelo administrador.
 - Senha técnica redefinida pelo painel oficial com valor aleatório forte, sem apagar o projeto ou o schema.
 - Administrador `jever_dias@hotmail.com` criado e autorizado em `portfolio_admins`.
 - Variáveis públicas de produção cadastradas no Netlify para todos os contextos.
-- Workflow de pulso depende de commit/push autorizado e Secrets do GitHub.
+- Secrets do GitHub configurados; o workflow de pulso depende apenas de publicação autorizada na `main` e teste manual.
 
 ## Próximas ações
 
 1. Publicar a v1.6.0 somente após autorização explícita de commit e push.
 2. Testar login, gravação, mensagens e upload no deploy atualizado.
 3. Importar o backup atual, se desejado.
-4. Cadastrar os Secrets do workflow no GitHub.
-5. Somente com autorização, ativar o workflow na branch `main`.
+4. Somente com autorização futura, ativar o workflow na branch `main`.

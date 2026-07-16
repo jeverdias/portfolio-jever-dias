@@ -347,6 +347,8 @@ Ao iniciar uma nova versão:
 - Identificada antes do uso uma senha técnica inadequada na criação inicial; a senha foi redefinida pelo painel oficial com valor aleatório forte, sem recriar o projeto e sem expor o valor.
 - Variáveis `VITE_SUPABASE_URL` e `VITE_SUPABASE_ANON_KEY` cadastradas no Netlify para todos os contextos de deploy.
 - Usuário `jever_dias@hotmail.com` criado no Supabase Auth e autorizado em `portfolio_admins`.
+- Secrets `SUPABASE_URL` e `SUPABASE_ANON_KEY` cadastrados nas Actions do repositório; o workflow permanece inativo enquanto não estiver na `main`.
+- Login local testado com sucesso usando Supabase Auth e o administrador autorizado.
 - Versão atualizada de v1.5.1 para v1.6.0 por se tratar de novas funcionalidades compatíveis.
 - Nenhum commit ou push foi realizado sem autorização.
 
