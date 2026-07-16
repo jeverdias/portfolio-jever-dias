@@ -25,6 +25,8 @@ values ('UUID-DO-USUARIO');
 
 O envio do convite por email é uma ação externa e deve ser confirmado por Jever antes de ser realizado.
 
+Situação atual: `jever_dias@hotmail.com` foi criado diretamente, confirmado e autorizado na tabela `portfolio_admins`.
+
 ## Variáveis locais e Netlify
 
 Use apenas a URL e a chave pública `anon` ou `publishable` do projeto definitivo:
@@ -35,6 +37,8 @@ VITE_SUPABASE_ANON_KEY=SUA_CHAVE_PUBLICA
 ```
 
 No Netlify, cadastre as mesmas variáveis em **Site configuration > Environment variables**. Nunca coloque a chave `service_role` no frontend ou no GitHub.
+
+Situação atual: as duas variáveis públicas foram cadastradas no Netlify com o mesmo valor para todos os contextos.
 
 ## Primeira sincronização
 

@@ -36,14 +36,14 @@ O schema completo e as políticas estão em `supabase/schema.sql` e na migration
 - Schema e Storage aplicados no projeto novo.
 - Integração do frontend, mensagens e upload implementados.
 - Senha técnica redefinida pelo painel oficial com valor aleatório forte, sem apagar o projeto ou o schema.
-- Convite/cadastro do administrador depende da confirmação do email por Jever.
-- Variáveis de produção dependem de acesso autenticado ao Netlify.
+- Administrador `jever_dias@hotmail.com` criado e autorizado em `portfolio_admins`.
+- Variáveis públicas de produção cadastradas no Netlify para todos os contextos.
 - Workflow de pulso depende de commit/push autorizado e Secrets do GitHub.
 
 ## Próximas ações
 
-1. Criar ou convidar o administrador e cadastrar seu UUID em `portfolio_admins`.
-2. Configurar `VITE_SUPABASE_URL` e `VITE_SUPABASE_ANON_KEY` no Netlify.
-3. Testar login, gravação, mensagens e upload.
-4. Importar o backup atual, se desejado.
-5. Somente com autorização, publicar o workflow e cadastrar seus Secrets no GitHub.
+1. Publicar a v1.6.0 somente após autorização explícita de commit e push.
+2. Testar login, gravação, mensagens e upload no deploy atualizado.
+3. Importar o backup atual, se desejado.
+4. Cadastrar os Secrets do workflow no GitHub.
+5. Somente com autorização, ativar o workflow na branch `main`.

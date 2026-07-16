@@ -12,7 +12,7 @@ Site publicado: `https://jeverdias.netlify.app`
 
 Regra permanente: toda correção, adição ou modificação deve atualizar a versão conforme `docs/VERSIONAMENTO.md`. Ao finalizar, sempre sugerir uma mensagem de commit, sem executar commit ou push sem autorização.
 
-A base visual está concluída em React + Vite. O painel possui integração com Supabase Auth, Database e Storage, caixa de mensagens, formulário com fallback Netlify, currículo profissional, trajetória, depoimentos e SEO ampliado. O projeto Supabase exclusivo `site-jd` foi criado, recebeu o schema inicial e teve sua senha técnica redefinida com segurança; antes do uso real ainda é necessário cadastrar o administrador e configurar o Netlify.
+A base visual está concluída em React + Vite. O painel possui integração com Supabase Auth, Database e Storage, caixa de mensagens, formulário com fallback Netlify, currículo profissional, trajetória, depoimentos e SEO ampliado. O projeto Supabase exclusivo `site-jd` foi criado, recebeu o schema inicial, teve sua senha técnica redefinida com segurança e já possui o administrador autorizado. As variáveis públicas também foram configuradas no Netlify; falta publicar a v1.6.0 mediante autorização e testar o Login em produção.
 
 ## Plano de versões
 
@@ -345,6 +345,8 @@ Ao iniciar uma nova versão:
 - Corrigido o layout móvel de Serviços profissionais para uma coluna.
 - Preparado workflow de atividade do Supabase a cada seis dias, ainda inativo até existir autorização de commit/push e Secrets no GitHub.
 - Identificada antes do uso uma senha técnica inadequada na criação inicial; a senha foi redefinida pelo painel oficial com valor aleatório forte, sem recriar o projeto e sem expor o valor.
+- Variáveis `VITE_SUPABASE_URL` e `VITE_SUPABASE_ANON_KEY` cadastradas no Netlify para todos os contextos de deploy.
+- Usuário `jever_dias@hotmail.com` criado no Supabase Auth e autorizado em `portfolio_admins`.
 - Versão atualizada de v1.5.1 para v1.6.0 por se tratar de novas funcionalidades compatíveis.
 - Nenhum commit ou push foi realizado sem autorização.
 

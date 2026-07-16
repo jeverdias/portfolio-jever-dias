@@ -9,7 +9,7 @@ O arquivo `.github/workflows/supabase-keep-alive.yml` faz duas consultas públic
 - [x] Criar um projeto separado e exclusivo para o portfólio.
 - [x] Aplicar o schema, tabelas, políticas RLS e bucket.
 - [x] Redefinir a senha técnica com valor aleatório forte.
-- [ ] Criar e autorizar o usuário administrador.
+- [x] Criar e autorizar o usuário administrador.
 - [ ] Testar o login do painel.
 - [ ] Testar leitura e gravação de um projeto.
 - [ ] Testar envio de imagem ao Storage.
