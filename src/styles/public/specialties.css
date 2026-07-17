@@ -1,0 +1,23 @@
+.specialties-guide { display: flex; justify-content: flex-end; margin: -27px 0 20px; }
+.specialties-guide button { display: flex; align-items: center; gap: 9px; padding: 8px 12px; border: 1px solid rgba(112, 145, 224, .16); border-radius: 999px; color: #8292af; background: rgba(11, 17, 33, .62); cursor: pointer; font-size: 11px; transition: color .2s ease, border-color .2s ease, transform .2s ease; }
+.specialties-guide button:hover { color: #dbe6fb; border-color: rgba(119, 105, 255, .42); transform: translateY(-2px); }
+.specialties-guide__hand { display: inline-block; font-size: 17px; filter: drop-shadow(0 0 7px rgba(107, 155, 255, .55)); animation: specialty-hand-tap 1.35s ease-in-out infinite; transform-origin: 50% 100%; }
+.specialties-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; }
+.specialty-card { position: relative; width: 100%; min-height: 250px; padding: 24px; border: 1px solid var(--line); border-radius: 18px; color: #f4f7ff; text-align: left; background: linear-gradient(145deg, rgba(13, 20, 38, .72), rgba(8, 12, 24, .55)); overflow: hidden; cursor: pointer; font: inherit; transition: transform .25s ease, border-color .25s ease, background .25s ease, box-shadow .25s ease; }
+.specialty-card:hover { transform: translateY(-7px); border-color: rgba(107, 117, 255, .36); background: linear-gradient(145deg, rgba(18, 28, 53, .82), rgba(10, 15, 31, .66)); }
+.specialty-card:focus-visible { outline: 2px solid #7e75ff; outline-offset: 3px; box-shadow: 0 0 28px rgba(96, 79, 226, .22); }
+.specialty-card::before { content: ''; position: absolute; width: 100px; height: 100px; top: -70px; left: -40px; border-radius: 50%; background: rgba(67, 134, 255, .18); filter: blur(35px); opacity: 0; transition: opacity .25s; }
+.specialty-card:hover::before { opacity: 1; }
+.specialty-card__top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 25px; }
+.specialty-card__top > span { color: #4f5c77; font-family: 'Manrope'; font-size: 12px; }
+.specialty-card__icon { width: 47px; height: 47px; display: grid; place-items: center; border-radius: 13px; color: #8ed4ff; background: linear-gradient(145deg, rgba(42, 110, 230, .55), rgba(80, 47, 177, .65)); box-shadow: inset 0 1px rgba(255, 255, 255, .14), 0 10px 20px rgba(16, 42, 116, .25); }
+.specialty-card__icon img, .specialties-modal__single-icon img, .specialties-modal__grid article > div img { width: 27px; height: 27px; object-fit: contain; }
+.specialty-card:nth-child(even) .specialty-card__icon { color: #d4a0ff; background: linear-gradient(145deg, rgba(86, 55, 196, .62), rgba(139, 48, 190, .55)); }
+.specialty-card h3 { margin: 0 0 11px; font-size: 17px; }
+.specialty-card p { margin: 0; color: #8f9ab2; font-size: 13px; line-height: 1.6; }
+.specialty-card__hint { position: absolute; left: 24px; bottom: 20px; display: flex; align-items: center; gap: 7px; color: #71809d; font-size: 10px; opacity: 0; transform: translateY(6px); transition: opacity .22s ease, transform .22s ease, color .22s ease; }
+.specialty-card:hover .specialty-card__hint, .specialty-card:focus-visible .specialty-card__hint { color: #9bbfff; opacity: 1; transform: none; }
+.specialty-card__hint span { transition: transform .2s ease; }
+.specialty-card:hover .specialty-card__hint span { transform: translateX(3px); }
+.specialty-card__line { position: absolute; left: 24px; bottom: 0; height: 2px; width: 0; background: var(--gradient); transition: width .3s ease; }
+.specialty-card:hover .specialty-card__line { width: calc(100% - 48px); }

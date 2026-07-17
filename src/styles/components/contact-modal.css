@@ -1,0 +1,12 @@
+.contact-modal { position: relative; width: min(620px, 100%); max-height: min(88vh, 760px); padding: 38px; border: 1px solid rgba(132, 119, 255, .38); border-radius: 22px; overflow-y: auto; background: radial-gradient(circle at 85% 0, rgba(137, 68, 255, .16), transparent 34%), #090e1b; box-shadow: 0 40px 130px rgba(0, 0, 0, .65), 0 0 70px rgba(87, 65, 210, .16); animation: modal-up .25s ease; }
+.contact-modal__eyebrow { color: #76c8ff; font-size: 10px; font-weight: 700; letter-spacing: .15em; text-transform: uppercase; }
+.contact-modal h2 { margin: 10px 45px 9px 0; font-family: 'Manrope', sans-serif; font-size: clamp(30px, 5vw, 40px); letter-spacing: -1.8px; }
+.contact-modal > p { max-width: 500px; margin: 0; color: #8f9bb2; font-size: 14px; line-height: 1.6; }
+.contact-modal__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 28px; }
+.contact-modal__grid > a { min-width: 0; display: grid; grid-template-columns: 39px minmax(0, 1fr) auto; align-items: center; gap: 11px; padding: 14px; border: 1px solid rgba(132, 151, 202, .13); border-radius: 12px; color: #dfe7f6; background: rgba(11, 18, 35, .7); transition: transform .2s ease, border-color .2s ease, background .2s ease; }
+.contact-modal__grid > a:hover { transform: translateY(-2px); border-color: rgba(119, 105, 255, .48); background: rgba(24, 27, 58, .82); }
+.contact-modal__icon { width: 39px; height: 39px; display: grid; place-items: center; border-radius: 10px; color: #7fcaff; background: linear-gradient(145deg, rgba(43, 108, 219, .28), rgba(116, 58, 196, .28)); }
+.contact-modal__grid strong, .contact-modal__grid small { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.contact-modal__grid strong { font-size: 13px; }
+.contact-modal__grid small { margin-top: 3px; color: #74819a; font-size: 10px; }
+.contact-modal__grid > a > svg { color: #65738e; }

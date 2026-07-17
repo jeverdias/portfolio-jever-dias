@@ -1,0 +1,28 @@
+.modal-backdrop, .admin-backdrop { position: fixed; inset: 0; z-index: 100; display: grid; place-items: center; padding: 20px; background: rgba(1, 3, 9, .82); backdrop-filter: blur(16px); animation: fade-in .18s ease; }
+.project-modal { position: relative; width: min(1080px, 100%); max-height: min(88vh, 850px); display: grid; grid-template-columns: 1.45fr .75fr; border: 1px solid rgba(135, 123, 255, .38); border-radius: 22px; background: #090e1b; box-shadow: 0 40px 130px rgba(0, 0, 0, .65), 0 0 70px rgba(87, 65, 210, .16); overflow: hidden; animation: modal-up .25s ease; }
+.modal-close { position: absolute; right: 14px; top: 14px; z-index: 5; width: 37px; height: 37px; display: grid; place-items: center; border: 1px solid rgba(255, 255, 255, .13); border-radius: 10px; color: white; background: rgba(4, 7, 15, .74); cursor: pointer; backdrop-filter: blur(10px); }
+.project-modal__viewer { min-height: 590px; background: #040711; border-right: 1px solid var(--line); }
+.project-modal__viewer iframe { width: 100%; height: 100%; min-height: 590px; border: 0; background: white; }
+.project-modal__placeholder { width: 100%; height: 100%; min-height: 590px; position: relative; display: grid; place-items: center; padding: 50px; }
+.project-modal__placeholder .project-visual { width: min(620px, 100%); height: auto; aspect-ratio: 1.55; border: 1px solid rgba(155, 174, 222, .18); border-radius: 16px; padding: 24px 24px 0; overflow: hidden; box-shadow: 0 30px 70px rgba(0, 0, 0, .5); }
+.preview-notice { position: absolute; left: 50%; bottom: 26px; transform: translateX(-50%); width: max-content; max-width: calc(100% - 30px); display: flex; align-items: center; gap: 8px; padding: 10px 13px; border: 1px solid rgba(124, 148, 207, .15); border-radius: 9px; color: #93a0ba; background: rgba(8, 13, 25, .86); font-size: 11px; }
+.project-modal__content { padding: 55px 32px 34px; overflow-y: auto; }
+.project-modal__type { display: flex; align-items: center; gap: 8px; color: #79c9ff; font-size: 10px; text-transform: uppercase; letter-spacing: .12em; font-weight: 700; }
+.project-modal__content h2 { margin: 15px 0 16px; font-family: 'Manrope'; font-size: 31px; line-height: 1.13; letter-spacing: -1.3px; }
+.project-modal__content > p { color: #98a4bb; font-size: 14px; line-height: 1.7; }
+.tag-list--large { margin-top: 23px; }
+.tag-list--large span { font-size: 11px; }
+.project-modal__actions { display: flex; flex-direction: column; gap: 10px; margin-top: 30px; }
+.project-modal__theme { margin: -7px 0 17px; color: #74819c; font-size: 12px; line-height: 1.5; }
+.project-modal__tabs { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; margin: 22px 0; }
+.project-modal__tabs button { min-height: 38px; display: flex; align-items: center; justify-content: center; gap: 7px; border: 1px solid rgba(130, 151, 203, .13); border-radius: 9px; color: #77849e; background: rgba(9, 14, 28, .72); cursor: pointer; font-size: 10px; font-weight: 700; }
+.project-modal__tabs button.is-active { color: white; border-color: rgba(118, 99, 255, .4); background: rgba(102, 74, 212, .18); }
+.project-modal__facts { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 0 0 18px; }
+.project-modal__facts div { padding: 10px; border: 1px solid rgba(130, 151, 202, .1); border-radius: 8px; background: rgba(12, 18, 34, .58); }
+.project-modal__facts dt { color: #59667d; font-size: 8px; text-transform: uppercase; letter-spacing: .1em; }
+.project-modal__facts dd { margin: 5px 0 0; color: #a7b2c7; font-size: 10px; line-height: 1.4; }
+.project-gallery { min-height: 590px; display: grid; grid-template-columns: repeat(2, 1fr); align-content: center; gap: 12px; padding: 25px; background: radial-gradient(circle at 50% 0, rgba(104, 75, 222, .12), transparent 43%), #040711; overflow-y: auto; }
+.project-gallery img { width: 100%; aspect-ratio: 1.55; object-fit: cover; border: 1px solid rgba(145, 163, 211, .17); border-radius: 11px; box-shadow: 0 16px 38px rgba(0, 0, 0, .3); }
+.project-gallery.is-comparison img:first-child { border-color: rgba(255, 159, 126, .34); }
+.project-gallery.is-comparison img:nth-child(2) { border-color: rgba(82, 219, 170, .34); }
+.project-gallery__empty { grid-column: 1 / -1; display: grid; place-items: center; gap: 12px; color: #68748c; font-size: 12px; text-align: center; }
