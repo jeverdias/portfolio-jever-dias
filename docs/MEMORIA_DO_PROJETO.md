@@ -349,6 +349,7 @@ Ao iniciar uma nova versão:
 - Usuário `jever_dias@hotmail.com` criado no Supabase Auth e autorizado em `portfolio_admins`.
 - Secrets `SUPABASE_URL` e `SUPABASE_ANON_KEY` cadastrados nas Actions do repositório; o workflow permanece inativo enquanto não estiver na `main`.
 - Login local testado com sucesso usando Supabase Auth e o administrador autorizado.
+- Senha temporária do administrador alterada pela API administrativa do Supabase; novo Login validado e UUID preservado, sem registrar a senha ou tokens no projeto.
 - Versão atualizada de v1.5.1 para v1.6.0 por se tratar de novas funcionalidades compatíveis.
 - Nenhum commit ou push foi realizado sem autorização.
 

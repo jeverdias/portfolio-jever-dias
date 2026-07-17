@@ -36,6 +36,7 @@ O schema completo e as políticas estão em `supabase/schema.sql` e na migration
 - Schema e Storage aplicados no projeto novo.
 - Integração do frontend, mensagens e upload implementados.
 - Login local com Supabase Auth testado com sucesso pelo administrador.
+- Troca temporária de senha e novo Login validados sem alteração do UUID administrativo.
 - Senha técnica redefinida pelo painel oficial com valor aleatório forte, sem apagar o projeto ou o schema.
 - Administrador `jever_dias@hotmail.com` criado e autorizado em `portfolio_admins`.
 - Variáveis públicas de produção cadastradas no Netlify para todos os contextos.
