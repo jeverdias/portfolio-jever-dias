@@ -139,8 +139,8 @@ O alias atua somente na consulta ao registry. Ele não regrava dados existentes 
 - não há publicação seletiva de templates futuros;
 - não houve modularização de `AdminPanel.jsx` nem reorganização de CSS.
 
-## 16. Etapa 5 futura
+## 16. Integração concluída na Etapa 5
 
-A Etapa 5 poderá introduzir, mediante aprovação separada, um compositor público que transforme a lista resolvida de seções em componentes React. Essa evolução deverá reaproveitar os registries atuais, preservar a política pública, comparar novamente o baseline visual e manter conteúdo, aparência e persistência independentes.
+A Etapa 5 introduziu `PublicSiteRenderer` e `PortfolioTemplate`, transformando a lista resolvida em componentes React sem publicar templates futuros. A implementação está detalhada em [COMPOSICAO_PUBLICA.md](COMPOSICAO_PUBLICA.md).
 
-Até lá, a integração em `App.jsx` é mínima: a política central fornece a classificação pública segura aos componentes que possuem variações de texto, sem mudar a ordem ou a renderização atual.
+O resolvedor canônico de seções está em `resolveSections.js`. A exportação histórica por `resolveTemplate.js` permanece compatível e injeta o catálogo completo; o caminho público usa apenas o registro enxuto das seções públicas para preservar o bundle inicial.

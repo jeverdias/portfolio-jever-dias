@@ -1,6 +1,12 @@
 import { hasTemplateCapability } from './templateCapabilities.js'
-import { getSectionDefinition, isKnownSection } from './sectionRegistry.js'
+import { listSections } from './sectionRegistry.js'
 import { DEFAULT_TEMPLATE_ID, getTemplateDefinition } from './templateRegistry.js'
+import { resolveSections as resolveSectionsFromDefinition } from './resolveSections.js'
+
+const registeredSections = listSections()
+const knownSectionIds = registeredSections.map(({ id }) => id)
+const requiredSectionIds = registeredSections.filter(({ required }) => required).map(({ id }) => id)
+const knownSections = new Set(knownSectionIds)
 
 export const TEMPLATE_CONTEXT = Object.freeze({
   PUBLIC: 'public',
@@ -27,7 +33,7 @@ export const templateSupportsCapability = (templateOrId, capability) => {
 
 export const templateAllowsSection = (templateOrId, sectionId) => {
   const template = typeof templateOrId === 'string' ? getTemplateDefinition(templateOrId) : templateOrId
-  return Boolean(template && isKnownSection(sectionId) && template.sections.includes(sectionId))
+  return Boolean(template && knownSections.has(sectionId) && template.sections.includes(sectionId))
 }
 
 export const getDefaultTemplateSections = (templateOrId) => {
@@ -35,28 +41,7 @@ export const getDefaultTemplateSections = (templateOrId) => {
   return template ? [...template.defaultSectionOrder] : []
 }
 
-export function resolveSections({ template: templateOrId, visibility = {}, preferredOrder, availableSections } = {}) {
+export const resolveSections = ({ template: templateOrId, ...options } = {}) => {
   const template = typeof templateOrId === 'string' ? getTemplateDefinition(templateOrId) : templateOrId
-  if (!template) return []
-
-  const allowed = new Set(template.sections.filter(isKnownSection))
-  const available = Array.isArray(availableSections) ? new Set(availableSections) : allowed
-  const required = new Set([...allowed].filter((id) => getSectionDefinition(id)?.required))
-  const emptyOrderIsIntentional = Array.isArray(preferredOrder) && preferredOrder.length === 0
-  const sourceOrder = Array.isArray(preferredOrder) && preferredOrder.length
-    ? [...preferredOrder, ...template.defaultSectionOrder]
-    : emptyOrderIsIntentional
-      ? [...required]
-      : template.defaultSectionOrder
-
-  const result = []
-  for (const id of sourceOrder) {
-    if (!allowed.has(id) || !available.has(id) || result.includes(id)) continue
-    if (visibility?.[id] === false && !required.has(id)) continue
-    result.push(id)
-  }
-  for (const id of required) {
-    if (available.has(id) && !result.includes(id)) result.push(id)
-  }
-  return result
+  return resolveSectionsFromDefinition({ knownSectionIds, requiredSectionIds, ...options, template })
 }

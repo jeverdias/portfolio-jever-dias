@@ -1,20 +1,12 @@
 import { lazy, Suspense, useEffect, useState } from 'react'
-import { About } from './components/About'
-import { Contact } from './components/Contact'
-import { Credibility } from './components/Credibility'
-import { Footer } from './components/Footer'
-import { Header } from './components/Header'
-import { Hero } from './components/Hero'
-import { LandingHighlights } from './components/LandingHighlights'
-import { Projects } from './components/Projects'
-import { Resume } from './components/Resume'
-import { Specialties } from './components/Specialties'
+import { PublicSiteRenderer } from './app/PublicSiteRenderer'
+import { createPortfolioReturnPath, createProjectPath, readProjectIdFromPath } from './app/appNavigation'
 import { useProjectStore } from './hooks/useProjectStore'
 import { useSiteStore } from './hooks/useSiteStore'
 import { useAdminAuth } from './hooks/useAdminAuth'
 import { applyAppearance } from './data/appearance'
-import { getPublicClassification, selectPublicProjects } from './utils/compatibility'
-import { resolvePublicTemplate } from './core/site-engine/publicTemplatePolicy'
+import { getPublicClassification } from './utils/compatibility'
+import { PUBLIC_TEMPLATE_ID } from './core/site-engine/publicTemplatePolicy'
 
 const AdminPanel = lazy(() => import('./components/AdminPanel').then((module) => ({ default: module.AdminPanel })))
 const ContactModal = lazy(() => import('./components/ContactModal').then((module) => ({ default: module.ContactModal })))
@@ -27,12 +19,10 @@ function App() {
   const adminAuth = useAdminAuth()
   const refreshProjects = projectStore.refresh
   const refreshSite = siteStore.refresh
-  const projectIdFromPath = () => decodeURIComponent(window.location.pathname.match(/^\/portfolio\/([^/]+)\/?$/)?.[1] || '')
-  const [routeProjectId, setRouteProjectId] = useState(projectIdFromPath)
+  const [routeProjectId, setRouteProjectId] = useState(() => readProjectIdFromPath(window.location.pathname))
   const [selectedProject, setSelectedProject] = useState(null)
   const [adminOpen, setAdminOpen] = useState(false)
   const [contactOpen, setContactOpen] = useState(false)
-  const publicTemplate = resolvePublicTemplate(siteStore.site.siteClassificationId)
   const publicClassification = getPublicClassification()
 
   useEffect(() => {
@@ -43,8 +33,8 @@ function App() {
 
   useEffect(() => {
     applyAppearance(siteStore.site.appearance)
-    document.documentElement.dataset.siteClassification = publicTemplate.id
-  }, [siteStore.site.appearance, publicTemplate.id])
+    document.documentElement.dataset.siteClassification = PUBLIC_TEMPLATE_ID
+  }, [siteStore.site.appearance])
 
   useEffect(() => {
     const description = publicClassification?.goal || 'Portfólio profissional de Jever Dias.'
@@ -55,19 +45,19 @@ function App() {
   }, [publicClassification])
 
   useEffect(() => {
-    const syncRoute = () => setRouteProjectId(projectIdFromPath())
+    const syncRoute = () => setRouteProjectId(readProjectIdFromPath(window.location.pathname))
     window.addEventListener('popstate', syncRoute)
     return () => window.removeEventListener('popstate', syncRoute)
   }, [])
 
   const openProjectPage = (project) => {
-    window.history.pushState({}, '', `/portfolio/${encodeURIComponent(project.id)}`)
+    window.history.pushState({}, '', createProjectPath(project.id))
     setRouteProjectId(project.id)
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
   const closeProjectPage = () => {
-    window.history.replaceState({}, '', '/#projetos')
+    window.history.replaceState({}, '', createPortfolioReturnPath())
     setRouteProjectId('')
     window.setTimeout(() => document.querySelector('#projetos')?.scrollIntoView(), 0)
   }
@@ -77,7 +67,6 @@ function App() {
     : null
 
   const routeProject = projectStore.projects.find((project) => project.id === routeProjectId)
-  const visibility = siteStore.site.sectionVisibility || {}
 
   if (routeProject) {
     return <>
@@ -90,20 +79,16 @@ function App() {
   return (
     <>
       <a className="skip-link" href="#conteudo">Pular para o conteúdo</a>
-      <div className="site-shell">
-        <Header site={siteStore.site} visibility={visibility} classificationId={publicTemplate.id} onLogin={() => setAdminOpen(true)} />
-        <main id="conteudo">
-          {visibility.hero !== false && <Hero site={siteStore.site} classificationId={publicTemplate.id} onContact={() => setContactOpen(true)} />}
-          {publicTemplate.id === 'landing-conversion' && <LandingHighlights site={siteStore.site} />}
-          {visibility.specialties !== false && <Specialties items={siteStore.site.specialties} classificationId={publicTemplate.id} />}
-          {visibility.projects !== false && <Projects projects={selectPublicProjects(projectStore.projects)} classificationId={publicTemplate.id} onOpen={openProjectPage} />}
-          {visibility.about !== false && <About />}
-          {visibility.credibility !== false && <Credibility site={siteStore.site} />}
-          {visibility.resume !== false && <Resume site={siteStore.site} />}
-          {visibility.contact !== false && <Contact site={siteStore.site} classificationId={publicTemplate.id} onOpen={() => setContactOpen(true)} />}
-        </main>
-        {visibility.footer !== false && <Footer site={siteStore.site} />}
-      </div>
+      <PublicSiteRenderer
+        requestedTemplateId={siteStore.site.siteClassificationId}
+        siteConfig={siteStore.site}
+        projects={projectStore.projects}
+        handlers={{
+          onLogin: () => setAdminOpen(true),
+          onContact: () => setContactOpen(true),
+          onOpenProject: openProjectPage,
+        }}
+      />
       {currentProject && <Suspense fallback={null}><ProjectModal key={currentProject.id} project={currentProject} onClose={() => setSelectedProject(null)} /></Suspense>}
       {contactOpen && <Suspense fallback={null}><ContactModal open site={siteStore.site} onClose={() => setContactOpen(false)} /></Suspense>}
       {adminOpen && <Suspense fallback={<div className="admin-backdrop"><div className="admin-route-loading" role="status">Abrindo painel seguro...</div></div>}><AdminPanel

@@ -1,14 +1,19 @@
 import { cloneConfigValue, deepFreezeConfig } from '../config/siteSchema.js'
+import { listPublicSections } from './publicSectionRegistry.js'
+
+const publicSectionMetadata = {
+  hero: { label: 'Apresentação', description: 'Identidade, proposta principal e primeira ação.', category: 'introduction', publicComponentKey: 'Hero', adminEditorKey: 'settings', defaultVisibility: true, capabilities: [] },
+  specialties: { label: 'Especialidades', description: 'Áreas de atuação explicadas de forma objetiva.', category: 'content', publicComponentKey: 'Specialties', adminEditorKey: 'specialties', defaultVisibility: true, capabilities: ['specialties'] },
+  projects: { label: 'Portfólio', description: 'Projetos, entregas e estudos de caso.', category: 'proof', publicComponentKey: 'Projects', adminEditorKey: 'repositories', defaultVisibility: true, capabilities: ['projects'] },
+  about: { label: 'Sobre', description: 'Contexto profissional ou institucional.', category: 'identity', publicComponentKey: 'About', adminEditorKey: 'settings', defaultVisibility: true, capabilities: [] },
+  credibility: { label: 'Trajetória e credibilidade', description: 'Métricas, tecnologias, experiências e depoimentos.', category: 'proof', publicComponentKey: 'Credibility', adminEditorKey: 'professional', defaultVisibility: true, capabilities: ['metrics'] },
+  resume: { label: 'Currículo', description: 'Resumo profissional e acesso ao currículo.', category: 'credentials', publicComponentKey: 'Resume', adminEditorKey: 'settings', defaultVisibility: true, capabilities: ['resume'] },
+  contact: { label: 'Contato', description: 'Canais de contato e captura de mensagem.', category: 'conversion', publicComponentKey: 'Contact', adminEditorKey: 'settings', defaultVisibility: true, capabilities: ['contact'] },
+  footer: { label: 'Rodapé', description: 'Identidade e links finais.', category: 'navigation', publicComponentKey: 'Footer', adminEditorKey: 'settings', defaultVisibility: true, capabilities: [] },
+}
 
 const definitions = [
-  { id: 'hero', label: 'Apresentação', description: 'Identidade, proposta principal e primeira ação.', category: 'introduction', publicComponentKey: 'Hero', adminEditorKey: 'settings', defaultVisibility: true, required: true, capabilities: [] },
-  { id: 'specialties', label: 'Especialidades', description: 'Áreas de atuação explicadas de forma objetiva.', category: 'content', publicComponentKey: 'Specialties', adminEditorKey: 'specialties', defaultVisibility: true, required: false, capabilities: ['specialties'] },
-  { id: 'projects', label: 'Portfólio', description: 'Projetos, entregas e estudos de caso.', category: 'proof', publicComponentKey: 'Projects', adminEditorKey: 'repositories', defaultVisibility: true, required: false, capabilities: ['projects'] },
-  { id: 'about', label: 'Sobre', description: 'Contexto profissional ou institucional.', category: 'identity', publicComponentKey: 'About', adminEditorKey: 'settings', defaultVisibility: true, required: false, capabilities: [] },
-  { id: 'credibility', label: 'Trajetória e credibilidade', description: 'Métricas, tecnologias, experiências e depoimentos.', category: 'proof', publicComponentKey: 'Credibility', adminEditorKey: 'professional', defaultVisibility: true, required: false, capabilities: ['metrics'] },
-  { id: 'resume', label: 'Currículo', description: 'Resumo profissional e acesso ao currículo.', category: 'credentials', publicComponentKey: 'Resume', adminEditorKey: 'settings', defaultVisibility: true, required: false, capabilities: ['resume'] },
-  { id: 'contact', label: 'Contato', description: 'Canais de contato e captura de mensagem.', category: 'conversion', publicComponentKey: 'Contact', adminEditorKey: 'settings', defaultVisibility: true, required: true, capabilities: ['contact'] },
-  { id: 'footer', label: 'Rodapé', description: 'Identidade e links finais.', category: 'navigation', publicComponentKey: 'Footer', adminEditorKey: 'settings', defaultVisibility: true, required: false, capabilities: [] },
+  ...listPublicSections().map((definition) => ({ ...definition, ...publicSectionMetadata[definition.id] })),
   { id: 'problem', label: 'Problema', description: 'Necessidade que a oferta resolve.', category: 'landing', publicComponentKey: null, adminEditorKey: null, defaultVisibility: true, required: false, capabilities: [] },
   { id: 'solution', label: 'Solução', description: 'Proposta oferecida para a necessidade.', category: 'landing', publicComponentKey: null, adminEditorKey: null, defaultVisibility: true, required: false, capabilities: ['services'] },
   { id: 'benefits', label: 'Benefícios', description: 'Ganhos e diferenciais principais.', category: 'landing', publicComponentKey: 'LandingHighlights', adminEditorKey: 'classification', defaultVisibility: true, required: false, capabilities: ['leadCapture'] },
