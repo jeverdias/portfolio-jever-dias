@@ -18,9 +18,9 @@ C:\Users\jever\Documents\Site JD
 
 Versão atual e próximos passos: [`docs/MEMORIA_DO_PROJETO.md`](docs/MEMORIA_DO_PROJETO.md).
 
-Documentação técnica: [`docs/DOCUMENTACAO_TECNICA_SITE_JD.md`](docs/DOCUMENTACAO_TECNICA_SITE_JD.md) · [Configuração](docs/ARQUITETURA_CONFIGURACAO.md) · [Motor de templates](docs/architecture/MOTOR_DE_TEMPLATES.md) · [Composição pública](docs/architecture/COMPOSICAO_PUBLICA.md) · [Persistência v1.8.4](docs/architecture/PERSISTENCIA.md) · [PDF do baseline v1.8.1](docs/generated/documentacao-tecnica-site-jd-v1.8.1.pdf).
+Documentação técnica: [`docs/DOCUMENTACAO_TECNICA_SITE_JD.md`](docs/DOCUMENTACAO_TECNICA_SITE_JD.md) · [Configuração](docs/ARQUITETURA_CONFIGURACAO.md) · [Motor de templates](docs/architecture/MOTOR_DE_TEMPLATES.md) · [Composição pública](docs/architecture/COMPOSICAO_PUBLICA.md) · [Painel administrativo](docs/architecture/PAINEL_ADMINISTRATIVO.md) · [Persistência v1.8.4](docs/architecture/PERSISTENCIA.md) · [PDF do baseline v1.8.1](docs/generated/documentacao-tecnica-site-jd-v1.8.1.pdf).
 
-Versão do aplicativo: **v1.8.6**. A regra permanente de atualização MAJOR, MINOR e PATCH está em [`docs/VERSIONAMENTO.md`](docs/VERSIONAMENTO.md).
+Versão do aplicativo: **v1.8.7**. A regra permanente de atualização MAJOR, MINOR e PATCH está em [`docs/VERSIONAMENTO.md`](docs/VERSIONAMENTO.md).
 
 ## O que foi criado
 
