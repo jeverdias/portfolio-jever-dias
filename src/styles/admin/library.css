@@ -1,0 +1,52 @@
+.admin-tech-library { min-height: 100%; }
+.tech-library-layout { display: grid; grid-template-columns: 285px 1fr; gap: 13px; margin-top: 28px; }
+.tech-library-list, .tech-library-editor { border: 1px solid rgba(129, 149, 197, .11); border-radius: 14px; background: rgba(7, 12, 24, .58); }
+.tech-library-list { padding: 12px; }
+.tech-search { min-height: 41px; display: flex; align-items: center; gap: 8px; padding: 0 11px; border: 1px solid rgba(130, 149, 197, .14); border-radius: 9px; color: #62718d; background: rgba(4, 8, 17, .7); }
+.tech-search input { min-width: 0; flex: 1; border: 0; outline: 0; color: white; background: transparent; font-size: 11px; }
+.tech-library-add { width: 100%; min-height: 39px; display: flex; align-items: center; justify-content: center; gap: 7px; margin: 8px 0; border: 1px dashed rgba(121, 107, 255, .35); border-radius: 8px; color: #b9afff; background: rgba(92, 70, 194, .08); cursor: pointer; font-size: 11px; }
+.tech-library-list > div { display: grid; gap: 5px; max-height: 540px; overflow-y: auto; }
+.tech-library-list > div > button { min-height: 60px; display: grid; grid-template-columns: 31px 1fr; align-items: center; gap: 10px; padding: 9px; border: 1px solid transparent; border-radius: 9px; color: #aab5c8; background: transparent; cursor: pointer; text-align: left; }
+.tech-library-list > div > button:hover, .tech-library-list > div > button.is-active { border-color: rgba(121, 106, 255, .24); background: rgba(73, 60, 155, .13); }
+.tech-library-list img { width: 27px; height: 27px; object-fit: contain; }
+.tech-library-list strong, .tech-library-list small { display: block; }
+.tech-library-list strong { color: #e5e8f1; font-size: 12px; }
+.tech-library-list small { margin-top: 3px; color: #67748b; font-size: 9px; }
+.tech-library-editor { min-width: 0; padding: 24px; }
+.tech-library-editor__head { display: flex; align-items: center; justify-content: space-between; gap: 20px; margin-bottom: 22px; }
+.tech-library-editor__head span, .tech-library-editor__head strong { display: block; }
+.tech-library-editor__head span { color: #6b7a93; font-size: 9px; text-transform: uppercase; letter-spacing: .1em; }
+.tech-library-editor__head strong { margin-top: 5px; font: 700 22px 'Manrope'; }
+.tech-library-editor__head button { display: flex; align-items: center; gap: 6px; padding: 8px 10px; border: 1px solid rgba(255, 106, 106, .17); border-radius: 8px; color: #d57979; background: rgba(154, 45, 45, .08); cursor: pointer; font-size: 10px; }
+.tech-upload-button { min-height: 42px; display: flex; align-items: center; justify-content: center; gap: 7px; border: 1px solid rgba(130, 149, 197, .14); border-radius: 9px; color: #9ba8be; background: rgba(14, 21, 39, .72); cursor: pointer; font-size: 11px; }
+.custom-icon-preview { flex-direction: row; align-items: center; padding: 12px; border: 1px solid rgba(130, 149, 197, .12); border-radius: 10px; }
+.custom-icon-preview img { width: 48px; height: 48px; object-fit: contain; }
+.custom-icon-preview button { padding: 8px 10px; border: 1px solid rgba(130, 149, 197, .14); border-radius: 8px; color: #91a0ba; background: rgba(14, 21, 39, .72); cursor: pointer; font-size: 10px; }
+.icon-picker { margin-top: 24px; padding: 17px; border: 1px solid rgba(130, 149, 197, .12); border-radius: 12px; background: rgba(4, 8, 17, .34); }
+.icon-picker__head { display: flex; align-items: center; justify-content: space-between; gap: 15px; }
+.icon-picker__head strong, .icon-picker__head span { display: block; }
+.icon-picker__head strong { font-size: 12px; }
+.icon-picker__head span { margin-top: 3px; color: #67748c; font-size: 9px; }
+.icon-picker__head label { min-width: 235px; display: flex; align-items: center; gap: 7px; padding: 0 10px; border: 1px solid rgba(130, 149, 197, .13); border-radius: 8px; color: #65738d; }
+.icon-picker__head input { min-width: 0; height: 36px; flex: 1; border: 0; outline: 0; color: white; background: transparent; font-size: 10px; }
+.icon-picker__grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 7px; margin-top: 15px; }
+.icon-picker__grid button { min-height: 76px; display: grid; place-items: center; align-content: center; gap: 7px; border: 1px solid rgba(130, 149, 197, .1); border-radius: 9px; color: #8f9bb1; background: rgba(13, 20, 37, .6); cursor: pointer; font-size: 9px; }
+.icon-picker__grid button:hover, .icon-picker__grid button.is-active { color: #d9e6fa; border-color: rgba(118, 99, 255, .4); background: rgba(102, 74, 212, .16); }
+.icon-source-note { display: flex; gap: 11px; margin-top: 13px; padding: 14px; border: 1px solid rgba(108, 171, 242, .12); border-radius: 10px; color: #73c5f9; background: rgba(48, 101, 171, .06); }
+.icon-source-note strong { color: #a9b8ce; font-size: 11px; }
+.icon-source-note p { margin: 4px 0 0; color: #75859e; font-size: 10px; line-height: 1.55; }
+.icon-source-note a { color: #8ed0ff; text-decoration: underline; }
+.tech-library-message { margin: 12px 0 0; color: #68cda9; font-size: 10px; }
+.sticker-collection { margin-top: 13px; padding: 17px; border: 1px solid rgba(130, 149, 197, .12); border-radius: 12px; background: rgba(4, 8, 17, .34); }
+.sticker-collection__head { display: flex; align-items: center; justify-content: space-between; gap: 15px; }
+.sticker-collection__head strong, .sticker-collection__head span { display: block; }
+.sticker-collection__head strong { font-size: 12px; }
+.sticker-collection__head span { margin-top: 3px; color: #67748c; font-size: 9px; }
+.sticker-collection__head > button { display: flex; align-items: center; gap: 6px; padding: 8px 10px; border: 1px solid rgba(121, 107, 255, .3); border-radius: 8px; color: #b9afff; background: rgba(92, 70, 194, .1); cursor: pointer; font-size: 10px; }
+.sticker-collection__grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 15px; }
+.sticker-collection__grid article { position: relative; min-width: 0; border: 1px solid rgba(130, 149, 197, .11); border-radius: 10px; background: rgba(13, 20, 37, .6); overflow: hidden; }
+.sticker-collection__use { width: 100%; min-height: 90px; display: grid; place-items: center; align-content: center; gap: 7px; padding: 10px 30px 10px 10px; border: 0; color: #9da9be; background: transparent; cursor: pointer; font-size: 9px; }
+.sticker-collection__use img { width: 38px; height: 38px; object-fit: contain; }
+.sticker-collection__use span { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.sticker-collection__remove { position: absolute; right: 5px; top: 5px; width: 25px; height: 25px; display: grid; place-items: center; padding: 0; border: 1px solid rgba(255, 106, 106, .15); border-radius: 7px; color: #c97777; background: rgba(57, 16, 24, .72); cursor: pointer; }
+.sticker-collection__empty { margin: 14px 0 0; padding: 17px; border: 1px dashed rgba(130, 149, 197, .14); border-radius: 9px; color: #66738a; font-size: 10px; text-align: center; }

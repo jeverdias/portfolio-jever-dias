@@ -1,0 +1,40 @@
+.admin-workspace { height: 100%; display: grid; grid-template-columns: 310px 1fr; }
+.admin-sidebar { display: flex; flex-direction: column; padding: 25px 18px 18px; border-right: 1px solid var(--line); background: rgba(4, 8, 17, .5); }
+.admin-sidebar__head { display: flex; align-items: center; justify-content: space-between; padding: 0 7px 20px; }
+.admin-sidebar__head span { color: #6abfff; font-size: 9px; text-transform: uppercase; letter-spacing: .12em; }
+.admin-sidebar__head h2 { margin: 4px 0 0; font: 700 24px 'Manrope'; }
+.admin-sidebar__head button, .admin-editor__head button { width: 34px; height: 34px; display: grid; place-items: center; border: 1px solid rgba(131, 150, 196, .14); border-radius: 8px; background: rgba(15, 22, 40, .6); cursor: pointer; }
+.admin-add { width: 100%; min-height: 41px; display: flex; align-items: center; justify-content: center; gap: 7px; border: 1px dashed rgba(121, 107, 255, .37); border-radius: 9px; color: #bdb4ff; background: rgba(92, 70, 194, .08); cursor: pointer; font-size: 12px; }
+.admin-projects { flex: 1; min-height: 0; display: flex; flex-direction: column; gap: 6px; margin: 15px 0; overflow-y: auto; }
+.admin-projects button { width: 100%; min-height: 70px; display: grid; grid-template-columns: 4px 1fr auto; align-items: center; gap: 12px; padding: 10px 11px; border: 1px solid transparent; border-radius: 9px; text-align: left; color: #a2acc0; background: transparent; cursor: pointer; }
+.admin-projects button:hover, .admin-projects button.is-active { border-color: rgba(121, 106, 255, .23); background: rgba(73, 60, 155, .12); }
+.admin-projects i { width: 4px; height: 30px; border-radius: 4px; }
+.admin-projects span { min-width: 0; }
+.admin-projects strong, .admin-projects small { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.admin-projects strong { color: #e5e8f1; font-size: 13px; }
+.admin-projects small { margin-top: 5px; color: #66728a; font-size: 11px; }
+.admin-projects em { color: #59657d; font-size: 11px; font-style: normal; }
+.admin-sidebar__actions { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.admin-sidebar__actions button, .image-upload button, .admin-reset { min-height: 38px; display: flex; align-items: center; justify-content: center; gap: 6px; border: 1px solid rgba(130, 149, 197, .12); border-radius: 8px; color: #8490a8; background: rgba(14, 20, 37, .6); cursor: pointer; font-size: 11px; }
+.admin-editor { position: relative; padding: 29px 35px 65px; overflow-y: auto; }
+.admin-editor__head { display: flex; justify-content: space-between; align-items: center; gap: 20px; margin-bottom: 25px; }
+.admin-editor__head span { display: flex; align-items: center; gap: 6px; color: #68cda9; font-size: 11px; text-transform: uppercase; letter-spacing: .08em; }
+.admin-editor__head h3 { margin: 7px 0 0; font: 700 28px 'Manrope'; }
+.admin-editor__head > div:last-child { display: flex; gap: 5px; }
+.admin-editor__head .danger { color: #ff9292; }
+.admin-form { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 20px; }
+.field { display: flex; flex-direction: column; gap: 8px; color: #aeb7c9; font-size: 12px; text-transform: uppercase; letter-spacing: .05em; }
+.field small { color: #6e7a91; font-size: 11px; text-transform: none; letter-spacing: 0; }
+.field--wide { grid-column: 1 / -1; }
+.field input, .field select { height: 46px; padding: 0 13px; font-size: 13px; }
+.field textarea { min-height: 86px; padding: 13px; resize: vertical; font-size: 13px; line-height: 1.55; }
+.field input[type='color'] { padding: 5px; }
+.checkbox-field { flex-direction: row; align-items: center; padding-top: 23px; }
+.checkbox-field input { width: 17px; height: 17px; accent-color: #8063ff; }
+.image-upload { flex-direction: row; align-items: center; flex-wrap: wrap; padding: 12px; border: 1px dashed rgba(130, 149, 197, .15); border-radius: 9px; }
+.image-upload > span { margin-right: auto; }
+.image-upload button { min-height: 32px; padding: 0 10px; }
+.image-upload button:disabled { opacity: .42; cursor: not-allowed; }
+.admin-note { margin-top: 24px; padding: 13px 15px; border: 1px solid rgba(92, 165, 255, .14); border-radius: 9px; color: #7f8ba3; background: rgba(35, 82, 153, .07); font-size: 10px; line-height: 1.6; }
+.admin-reset { position: absolute; right: 35px; bottom: 17px; padding: 0 10px; }
+.admin-empty { height: 90%; display: grid; place-items: center; align-content: center; gap: 10px; color: #77839b; }

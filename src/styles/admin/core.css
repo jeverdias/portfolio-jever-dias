@@ -1,0 +1,17 @@
+.admin-panel { position: relative; width: calc(100vw - 24px); height: calc(100dvh - 24px); max-width: 1800px; max-height: 1100px; border: 1px solid rgba(130, 119, 255, .35); border-radius: 18px; background: #090e1a; box-shadow: 0 40px 140px rgba(0, 0, 0, .7); overflow: hidden; animation: modal-up .25s ease; }
+.admin-login { width: min(410px, calc(100% - 40px)); height: 100%; margin: auto; display: flex; flex-direction: column; justify-content: center; text-align: center; }
+.admin-login__mark { width: 58px; height: 58px; display: grid; place-items: center; margin: 0 auto 20px; border: 1px solid rgba(125, 108, 255, .4); border-radius: 16px; font-family: 'Manrope'; font-size: 20px; font-weight: 800; background: linear-gradient(145deg, rgba(43, 103, 211, .35), rgba(116, 56, 194, .38)); box-shadow: 0 16px 40px rgba(67, 50, 177, .24); }
+.admin-login > span { color: #73c5ff; font-size: 10px; text-transform: uppercase; letter-spacing: .14em; }
+.admin-login h2 { margin: 10px 0 7px; font: 800 32px 'Manrope'; letter-spacing: -1.3px; }
+.admin-login > p { margin: 0 auto 24px; color: #8995ac; font-size: 13px; }
+.admin-login form { display: grid; gap: 10px; text-align: left; }
+.admin-login label { color: #aeb8ca; font-size: 11px; }
+.admin-login input, .field input, .field textarea, .field select { width: 100%; border: 1px solid rgba(130, 150, 199, .16); border-radius: 9px; outline: 0; color: white; background: rgba(4, 8, 17, .7); transition: border-color .2s, box-shadow .2s; }
+.admin-login input { height: 46px; padding: 0 13px; }
+.admin-login input:focus, .field input:focus, .field textarea:focus, .field select:focus { border-color: rgba(117, 99, 255, .65); box-shadow: 0 0 0 3px rgba(104, 82, 232, .1); }
+.admin-login small { margin-top: 18px; color: #59667d; font-size: 10px; }
+.admin-login__setup { display: grid; place-items: center; gap: 8px; padding: 19px; border: 1px solid rgba(82, 190, 148, .15); border-radius: 12px; color: #65d3ac; background: rgba(42, 117, 88, .07); }
+.admin-login__setup p { margin: 0; color: #849a91; font-size: 11px; line-height: 1.55; }
+.admin-login code { color: #92a4c4; }
+.form-error { color: #ff9b9b; font-size: 11px; }
+.form-error--block { padding: 10px 12px; border: 1px solid rgba(255, 106, 106, .2); border-radius: 8px; background: rgba(154, 45, 45, .1); }

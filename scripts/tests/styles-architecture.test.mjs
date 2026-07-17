@@ -26,11 +26,19 @@ const modulePaths = [
   'public/site-closing.css',
   'components/project-modal.css',
   'public/project-detail.css',
+  'admin/core.css',
+  'admin/legacy.css',
+  'admin/shell.css',
+  'admin/views.css',
+  'admin/projects.css',
+  'admin/library.css',
+  'admin/guide.css',
 ]
 const modules = Object.fromEntries(modulePaths.map((path) => [path, read(`src/styles/${path}`)]))
 const expectedImports = ['tokens.css', ...modulePaths, 'global.css']
 const expectedIndex = [fontImport, ...expectedImports.map((path) => `@import "./${path}";`)].join('\n')
 const effectiveSources = [tokens, ...modulePaths.map((path) => modules[path]), global]
+const compactBoundaries = new Set(['admin/legacy.css', 'admin/views.css', 'admin/projects.css'])
 const expectedProperties = [
   ['--bg', '#050814'],
   ['--bg-deep', '#02040b'],
@@ -70,7 +78,9 @@ test('06 tokens contém um único bloco root canônico', () => assert.equal((tok
 test('07 propriedades e CSS efetivo permanecem semanticamente idênticos', () => {
   const properties = [...tokens.matchAll(/\s+(--[\w-]+):\s*([^;]+);/g)].map((match) => [match[1], match[2]])
   assert.deepEqual(properties, expectedProperties)
-  const effective = `${fontImport}\n\n${effectiveSources.map((source) => source.trimEnd()).join('\n\n')}\n`
+  let effective = `${fontImport}\n\n${tokens.trimEnd()}`
+  for (const path of modulePaths) effective += `${compactBoundaries.has(path) ? '\n' : '\n\n'}${modules[path].trimEnd()}`
+  effective += `\n\n${global.trimEnd()}\n`
   assert.equal(createHash('sha256').update(effective).digest('hex'), '47dc37021e0d1075930947bf59a43a12f8bde688d0fe248d196a746775d37e82')
 })
 test('08 global não repete o root canônico', () => assert.doesNotMatch(global, /:root\s*\{/))
@@ -85,7 +95,7 @@ test('14 classificações fundacionais preservam as quatro media queries iniciai
   assert.equal((foundation.match(/@media\b/g) || []).length, 4)
   assert.ok(foundation.indexOf('.admin-classification') < foundation.indexOf("html[data-site-classification='institutional']"))
 })
-test('15 global começa pelo primeiro bloco administrativo não movido', () => assert.match(global, /^\.admin-panel\b/))
+test('15 global começa pelo primeiro bloco tardio não movido', () => assert.match(global, /^@keyframes fade-in\b/))
 test('16 arquitetura não introduz layer', () => assert.doesNotMatch([index, ...effectiveSources].join('\n'), /@layer\b/))
 test('17 button e section permanecem na posição original do site intro', () => {
   const siteIntro = modules['public/site-intro.css']
@@ -103,12 +113,61 @@ test('18 modais permanecem separados e na posição física original', () => {
   assert.ok(expectedImports.indexOf('public/site-closing.css') < projectIndex)
   assert.ok(projectIndex < expectedImports.indexOf('public/project-detail.css'))
 })
+test('18a módulos administrativos ocupam a posição física anterior ao global', () => {
+  const adminPaths = ['admin/core.css', 'admin/legacy.css', 'admin/shell.css', 'admin/views.css', 'admin/projects.css', 'admin/library.css', 'admin/guide.css']
+  assert.deepEqual(expectedImports.slice(-8), [...adminPaths, 'global.css'])
+  assert.ok(expectedImports.indexOf('public/project-detail.css') < expectedImports.indexOf('admin/core.css'))
+})
+test('18b core preserva painel, login, campos compartilhados e erros', () => {
+  const core = modules['admin/core.css']
+  assert.match(core, /^\.admin-panel\b/)
+  assert.match(core, /\.admin-login\b/)
+  assert.match(core, /\.field input/)
+  assert.match(core, /\.form-error--block/)
+})
+test('18c legado, shell e views preservam suas fronteiras', () => {
+  assert.match(modules['admin/legacy.css'], /^\.admin-workspace\b/)
+  assert.match(modules['admin/legacy.css'], /\.admin-empty\b/)
+  assert.match(modules['admin/shell.css'], /^\.admin-panel--console\b/)
+  assert.match(modules['admin/shell.css'], /\.admin-metrics span/)
+  assert.match(modules['admin/views.css'], /^\.admin-overview-grid\b/)
+  assert.match(modules['admin/views.css'], /\.admin-global-error\b/)
+})
+test('18d projetos, biblioteca e guia preservam suas fronteiras', () => {
+  assert.match(modules['admin/projects.css'], /^\.admin-repositories\b/)
+  assert.match(modules['admin/projects.css'], /\.display-model-library \.edit/)
+  assert.match(modules['admin/library.css'], /^\.admin-tech-library\b/)
+  assert.match(modules['admin/library.css'], /\.sticker-collection__empty/)
+  assert.match(modules['admin/guide.css'], /^\.admin-guide\b/)
+  assert.match(modules['admin/guide.css'], /\.guide-demo-rules details p/)
+})
+test('18e módulos administrativos não antecipam responsividade ou animações', () => {
+  const adminSources = modulePaths.filter((path) => path.startsWith('admin/')).map((path) => modules[path]).join('\n')
+  assert.doesNotMatch(adminSources, /@media\b|@keyframes\b|data-design|data-site-classification/)
+  assert.equal((global.match(/@media\b/g) || []).length, 10)
+  assert.equal((global.match(/@keyframes\b/g) || []).length, 8)
+})
+test('18f previews, mensagens e sincronização tardios permanecem no global', () => {
+  assert.match(global, /Pré-visualizações administrativas v1\.2/)
+  assert.match(global, /\.project-change-preview\b/)
+  assert.match(global, /Caixa de entrada protegida/)
+  assert.match(global, /\.admin-messages\b/)
+  assert.match(global, /Estado real da sincronização administrativa/)
+  assert.match(global, /prefers-reduced-motion/)
+})
 test('19 blocos movidos não permanecem no global', () => {
   assert.doesNotMatch(global, /^\.site-shell \{ position: relative; overflow: clip; \}$/m)
   assert.doesNotMatch(global, /^\.specialties-modal \{ position: relative; width: min\(900px, 100%\);/m)
   assert.doesNotMatch(global, /^\.project-filters \{ display: flex; flex-wrap: wrap;/m)
   assert.doesNotMatch(global, /^\.contact-modal \{ position: relative; width: min\(620px, 100%\);/m)
   assert.doesNotMatch(global, /^\.case-page \{ min-height: 100vh;/m)
+  assert.doesNotMatch(global, /^\.admin-panel \{ position: relative;/m)
+  assert.doesNotMatch(global, /^\.admin-workspace \{ height: 100%;/m)
+  assert.doesNotMatch(global, /^\.admin-panel--console \{ width:/m)
+  assert.doesNotMatch(global, /^\.admin-overview-grid \{ display: grid;/m)
+  assert.doesNotMatch(global, /^\.admin-repositories \{ flex: 1;/m)
+  assert.doesNotMatch(global, /^\.admin-tech-library \{ min-height:/m)
+  assert.doesNotMatch(global, /^\.admin-guide \{ max-width:/m)
 })
 test('20 somente as quatro media queries fundacionais saíram do global', () => {
   assert.equal((global.match(/@media\b/g) || []).length, 10)
@@ -135,6 +194,13 @@ test('22 arquivos modulares não repetem assinaturas dos blocos extraídos', () 
     ['public/site-closing.css', '.footer { border-top: 1px solid var(--line);'],
     ['components/project-modal.css', '.project-modal { position: relative; width: min(1080px, 100%);'],
     ['public/project-detail.css', '.case-page { min-height: 100vh;'],
+    ['admin/core.css', '.admin-panel { position: relative; width: calc(100vw - 24px);'],
+    ['admin/legacy.css', '.admin-workspace { height: 100%;'],
+    ['admin/shell.css', '.admin-panel--console { width: calc(100vw - 24px);'],
+    ['admin/views.css', '.admin-overview-grid { display: grid;'],
+    ['admin/projects.css', '.admin-repositories { flex: 1;'],
+    ['admin/library.css', '.admin-tech-library { min-height: 100%;'],
+    ['admin/guide.css', '.admin-guide { max-width: 1240px;'],
   ]
   for (const [owner, signature] of signatures) {
     assert.equal(effectiveSources.filter((source) => source.includes(signature)).length, 1, `${signature} deve existir somente em ${owner}`)

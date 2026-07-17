@@ -1,0 +1,27 @@
+.admin-overview-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 13px; }
+.admin-overview-card { display: grid; grid-template-columns: auto 1fr; gap: 13px; padding: 18px; border: 1px solid rgba(129, 150, 199, .11); border-radius: 12px; background: rgba(10, 16, 30, .64); }
+.admin-overview-card__icon { width: 40px; height: 40px; display: grid; place-items: center; border-radius: 10px; color: #a58cff; background: rgba(100, 72, 205, .14); }
+.admin-overview-card h4 { margin: 2px 0 6px; font-size: 14px; }
+.admin-overview-card p { margin: 0; color: #8390a7; font-size: 11px; line-height: 1.6; }
+.admin-overview-card button { grid-column: 2; width: fit-content; padding: 0; border: 0; color: #7fc9fb; background: transparent; cursor: pointer; font-size: 11px; }
+.admin-storage-card { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 13px; margin-top: 13px; padding: 17px; border: 1px solid rgba(78, 194, 151, .12); border-radius: 12px; background: rgba(31, 100, 75, .07); }
+.admin-storage-card > svg { color: #55cfa4; }
+.admin-storage-card strong { font-size: 12px; }
+.admin-storage-card p { margin: 4px 0 0; color: #768b82; font-size: 11px; line-height: 1.55; }
+.admin-storage-card > span { padding: 6px 9px; border-radius: 999px; color: #80b9a5; background: rgba(60, 146, 113, .1); font-size: 10px; }
+.admin-form--settings { max-width: 980px; }
+.section-visibility-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 7px; }
+.section-visibility-grid button { min-height: 65px; display: flex; align-items: center; gap: 9px; padding: 10px; border: 1px solid rgba(130, 149, 197, .12); border-radius: 9px; color: #8795ad; background: rgba(12, 19, 35, .6); cursor: pointer; text-align: left; }
+.section-visibility-grid button.is-visible { color: #78cfae; border-color: rgba(82, 190, 148, .17); background: rgba(42, 117, 88, .07); }
+.section-visibility-grid button.is-hidden { color: #778197; opacity: .7; }
+.section-visibility-grid strong, .section-visibility-grid small { display: block; }
+.section-visibility-grid strong { font-size: 10px; }
+.section-visibility-grid small { margin-top: 3px; color: #66748b; font-size: 8px; }
+.admin-settings-section-title { display: flex; align-items: center; gap: 8px; margin: 5px 0 -3px; padding-top: 13px; border-top: 1px solid rgba(132, 151, 202, .1); color: #8292ad; font-size: 11px; font-weight: 700; letter-spacing: .09em; text-transform: uppercase; }
+.admin-settings-info { position: relative; display: inline-flex; }
+.admin-settings-info > button { width: 18px; height: 18px; display: grid; place-items: center; padding: 0; border: 1px solid rgba(113, 164, 255, .45); border-radius: 50%; color: #8bcaff; background: rgba(46, 83, 163, .14); cursor: help; font: 700 10px/1 'Inter', sans-serif; transition: .2s ease; }
+.admin-settings-info > button:hover, .admin-settings-info > button:focus-visible { color: white; border-color: #8b78ff; background: rgba(111, 79, 226, .32); outline: none; box-shadow: 0 0 15px rgba(99, 120, 255, .24); }
+.admin-settings-info > span { position: absolute; z-index: 8; left: 50%; bottom: calc(100% + 10px); width: min(290px, calc(100vw - 44px)); padding: 10px 12px; border: 1px solid rgba(125, 141, 255, .28); border-radius: 10px; color: #dbe5f8; background: rgba(7, 12, 27, .98); box-shadow: 0 14px 38px rgba(0, 0, 0, .38); font-size: 11px; font-weight: 400; line-height: 1.5; letter-spacing: 0; text-transform: none; opacity: 0; visibility: hidden; pointer-events: none; transform: translate(-50%, 5px); transition: opacity .18s ease, visibility .18s ease, transform .18s ease; }
+.admin-settings-info:hover > span, .admin-settings-info:focus-within > span { opacity: 1; visibility: visible; transform: translate(-50%, 0); }
+.admin-inline-action { display: flex; align-items: center; gap: 6px; margin-top: 22px; padding: 9px 11px; border: 1px solid rgba(130, 151, 199, .12); border-radius: 8px; color: #78859d; background: rgba(13, 20, 37, .6); cursor: pointer; font-size: 9px; }
+.admin-global-error { margin: 14px 34px 0; }

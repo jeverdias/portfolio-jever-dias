@@ -12,4 +12,11 @@
 @import "./public/site-closing.css";
 @import "./components/project-modal.css";
 @import "./public/project-detail.css";
+@import "./admin/core.css";
+@import "./admin/legacy.css";
+@import "./admin/shell.css";
+@import "./admin/views.css";
+@import "./admin/projects.css";
+@import "./admin/library.css";
+@import "./admin/guide.css";
 @import "./global.css";
