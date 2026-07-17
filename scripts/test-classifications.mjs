@@ -13,7 +13,10 @@ const previewClasses = {
   'blog-editorial': 'blog',
   event: 'event',
 }
-const css = await readFile(new URL('../src/styles/global.css', import.meta.url), 'utf8')
+const stylesIndexUrl = new URL('../src/styles/index.css', import.meta.url)
+const stylesIndex = await readFile(stylesIndexUrl, 'utf8')
+const localImports = [...stylesIndex.matchAll(/@import "(\.\/[^\"]+\.css)";/g)].map((match) => match[1])
+const css = (await Promise.all(localImports.map((path) => readFile(new URL(path, stylesIndexUrl), 'utf8')))).join('\n')
 const admin = await readFile(new URL('../src/components/AdminSiteClassification.jsx', import.meta.url), 'utf8')
 
 assert.deepEqual(siteClassifications.map((item) => item.id), expected, 'As oito classificações devem permanecer disponíveis e ordenadas.')

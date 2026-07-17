@@ -1,6 +1,6 @@
 # Site JD - Documentação técnica e guia de estudo
 
-**Versão documentada:** 1.8.1  
+**Versão documentada:** 1.8.8
 **Data:** 16/07/2026  
 **Projeto:** Portfolio profissional de Jever Dias  
 **Classificação:** aplicação web de portfolio profissional, com landing page pública e painel administrativo  
@@ -515,7 +515,7 @@ salvamento e a persistencia local trabalham juntos.
 | Tipos de projeto | `src/data/projects.js` |
 | Classificacoes | `src/data/siteClassifications.js` |
 | Paletas, fontes e estilos | `src/data/appearance.js` |
-| Visual geral | `src/styles/global.css` |
+| Visual geral | `src/styles/index.css` e módulos em `src/styles/` |
 | Login | `src/hooks/useAdminAuth.js` |
 | Salvamento do site | `src/hooks/useSiteStore.js` |
 | Salvamento de projetos | `src/hooks/useProjectStore.js` |
@@ -540,3 +540,9 @@ O contrato e as regras atuais dessa camada estão documentados em [`ARQUITETURA_
 A persistência local e remota passou a usar adaptadores testáveis e uma fila compartilhada de salvamento. Os hooks `useSiteStore` e `useProjectStore` continuam especializados e preservam suas APIs públicas. A arquitetura, os fluxos de hidratação, debounce, retry e fallback estão descritos em [`architecture/PERSISTENCIA.md`](architecture/PERSISTENCIA.md).
 
 Nenhuma migration ou alteração de banco faz parte dessa atualização.
+
+## Atualização arquitetural da versão 1.8.8
+
+A Etapa 7 concluiu a separação física do CSS. `src/styles/index.css` é o ponto único; `global.css` foi totalmente mapeado e removido. Tokens, base, estilos públicos, modais, painel, animações, responsividade, appearance, previews, classificações tardias, mensagens e reduced motion agora possuem módulos explícitos na mesma ordem da cascata anterior.
+
+O contrato completo está em [`architecture/ARQUITETURA_DE_ESTILOS.md`](architecture/ARQUITETURA_DE_ESTILOS.md), e o baseline da etapa está em [`baseline/ETAPA_7_CSS.md`](baseline/ETAPA_7_CSS.md). Nenhuma propriedade, seletor, fonte, persistência, migration ou configuração do Supabase foi alterada.

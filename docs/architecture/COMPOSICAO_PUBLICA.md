@@ -168,3 +168,7 @@ A Etapa 6 poderá evoluir edição ou preview dos templates futuros, mediante es
 - nenhum CSS foi alterado;
 - AdminPanel não foi modularizado;
 - Etapa 8 não foi executada.
+
+## Atualização da Etapa 7
+
+O item histórico “CSS global não foi reorganizado” descreve somente o escopo original da Etapa 5. Na versão 1.8.8, o CSS foi modularizado fisicamente sem alterar a composição React, a ordem das seções ou a política pública de templates. Consulte [ARQUITETURA_DE_ESTILOS.md](ARQUITETURA_DE_ESTILOS.md).

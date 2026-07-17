@@ -19,4 +19,14 @@
 @import "./admin/projects.css";
 @import "./admin/library.css";
 @import "./admin/guide.css";
-@import "./global.css";
+@import "./animations.css";
+@import "./responsive/main.css";
+@import "./responsive/reduced-motion-early.css";
+@import "./themes/appearance.css";
+@import "./themes/admin-previews.css";
+@import "./themes/classifications-preview.css";
+@import "./themes/classifications-structures.css";
+@import "./themes/classifications-late.css";
+@import "./admin/messages-late.css";
+@import "./status/focus.css";
+@import "./responsive/reduced-motion-final.css";

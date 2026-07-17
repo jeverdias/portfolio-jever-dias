@@ -144,3 +144,7 @@ O alias atua somente na consulta ao registry. Ele não regrava dados existentes 
 A Etapa 5 introduziu `PublicSiteRenderer` e `PortfolioTemplate`, transformando a lista resolvida em componentes React sem publicar templates futuros. A implementação está detalhada em [COMPOSICAO_PUBLICA.md](COMPOSICAO_PUBLICA.md).
 
 O resolvedor canônico de seções está em `resolveSections.js`. A exportação histórica por `resolveTemplate.js` permanece compatível e injeta o catálogo completo; o caminho público usa apenas o registro enxuto das seções públicas para preservar o bundle inicial.
+
+## 17. Integração com a arquitetura de estilos
+
+A limitação histórica sobre CSS descrevia o estado da Etapa 4. Na versão 1.8.8, classificações fundacionais, previews e classificações tardias possuem módulos separados, mas a política do motor não mudou: somente `portfolio-app` é público. A reorganização não altera registros JavaScript nem publica templates futuros. Consulte [ARQUITETURA_DE_ESTILOS.md](ARQUITETURA_DE_ESTILOS.md).

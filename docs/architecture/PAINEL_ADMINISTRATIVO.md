@@ -1,6 +1,6 @@
 # Arquitetura do painel administrativo
 
-**Versão:** 1.8.7
+**Versão:** 1.8.8
 **Etapa:** 6 — modularização progressiva do painel
 
 ## Objetivo
@@ -240,3 +240,7 @@ A Etapa 7 poderá avaliar separadamente:
 - refinamento de modais internos e foco aninhado.
 
 Esses itens não fazem parte da Etapa 6 e não foram implementados aqui.
+
+## Atualização da Etapa 7
+
+As afirmações históricas de que o CSS não havia sido reorganizado pertencem à Etapa 6. Na versão 1.8.8, os estilos do painel foram separados em módulos físicos, preservando exatamente classes, cascata, responsividade e visual. Mensagens e sincronização permanecem em um módulo tardio para manter sua posição original. Consulte [ARQUITETURA_DE_ESTILOS.md](ARQUITETURA_DE_ESTILOS.md).
