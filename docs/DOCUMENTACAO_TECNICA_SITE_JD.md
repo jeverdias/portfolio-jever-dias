@@ -1,10 +1,10 @@
 # Site JD - Documentação técnica e guia de estudo
 
 **Versão documentada:** 1.8.8
-**Data:** 16/07/2026  
-**Projeto:** Portfolio profissional de Jever Dias  
-**Classificação:** aplicação web de portfolio profissional, com landing page pública e painel administrativo  
-**Repositório:** https://github.com/jeverdias/portfolio-jever-dias  
+**Data:** 16/07/2026<br>
+**Projeto:** Portfolio profissional de Jever Dias<br>
+**Classificação:** aplicação web de portfolio profissional, com landing page pública e painel administrativo<br>
+**Repositório:** https://github.com/jeverdias/portfolio-jever-dias
 **Produção:** https://jeverdias.netlify.app
 
 ## 1. Resumo executivo
@@ -333,7 +333,7 @@ Ao substituir ou remover uma imagem hospedada no bucket do próprio projeto, o s
 
 ## 16. CSS, classes e responsividade
 
-O projeto usa um unico arquivo principal: `src/styles/global.css`. Nao existem CSS Modules nem Tailwind. As classes seguem uma convenção proxima de BEM:
+Na arquitetura atual, `src/styles/index.css` é o único ponto de entrada dos estilos. Na v1.8.8, o antigo `global.css` foi integralmente mapeado e removido, e seu conteúdo foi separado em módulos de tokens, base, site público, componentes, painel administrativo, animações, responsividade, temas e estados. A ordem dos imports em `index.css` preserva a cascata original, e o CSS compilado permaneceu idêntico ao baseline. Componentes React não importam CSS diretamente. O projeto continua usando CSS puro, sem CSS Modules nem Tailwind, e as classes seguem uma convenção próxima de BEM:
 
 ```css
 .project-card { }                 /* bloco */

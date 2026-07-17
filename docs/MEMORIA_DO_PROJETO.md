@@ -1,18 +1,18 @@
 # Memória persistente — Portfólio Jever Dias
 
-Última atualização: **15 de julho de 2026**  
+Última atualização: **17 de julho de 2026**<br>
 Local do projeto: `C:\Users\jever\Documents\Site JD`  
-Branch principal: `main`
+Branch de trabalho: `develop` (a produção permanece vinculada à `main`)
 Repositório: `https://github.com/jeverdias/portfolio-jever-dias`
 Site publicado: `https://jeverdias.netlify.app`
 
 ## Estado atual
 
-**Versão ativa: v1.6.0 — base online isolada, mensagens e desempenho.**
+**Versão ativa: v1.8.8 — arquitetura modular concluída na `develop`, ainda sem integração na `main`.**
 
 Regra permanente: toda correção, adição ou modificação deve atualizar a versão conforme `docs/VERSIONAMENTO.md`. Ao finalizar, sempre sugerir uma mensagem de commit, sem executar commit ou push sem autorização.
 
-A base visual está concluída em React + Vite. O painel possui integração com Supabase Auth, Database e Storage, caixa de mensagens, formulário com fallback Netlify, currículo profissional, trajetória, depoimentos e SEO ampliado. O projeto Supabase exclusivo `site-jd` foi criado, recebeu o schema inicial, teve sua senha técnica redefinida com segurança e já possui o administrador autorizado. As variáveis públicas também foram configuradas no Netlify; falta publicar a v1.6.0 mediante autorização e testar o Login em produção.
+A base visual está concluída em React + Vite. O painel possui integração com Supabase Auth, Database e Storage, caixa de mensagens, formulário com fallback Netlify, currículo profissional, trajetória, depoimentos e SEO ampliado. A Etapa 7 foi concluída: `src/styles/index.css` é o ponto único de entrada, o antigo `global.css` foi removido e o CSS está modularizado sem alteração do baseline compilado. A validação atual possui 376 testes Node e 8 classificações, totalizando 384 verificações. A `main`, o Netlify e a produção permanecem inalterados; a v1.8.8 ainda não foi integrada nem publicada. A Etapa 8 está cancelada e não foi iniciada. Limpeza de CSS legado, duplicações, fontes e breakpoints permanece fora do escopo.
 
 ## Plano de versões
 
@@ -352,6 +352,14 @@ Ao iniciar uma nova versão:
 - Senha temporária do administrador alterada pela API administrativa do Supabase; novo Login validado e UUID preservado, sem registrar a senha ou tokens no projeto.
 - Versão atualizada de v1.5.1 para v1.6.0 por se tratar de novas funcionalidades compatíveis.
 - Nenhum commit ou push foi realizado sem autorização.
+
+### v1.8.8 — Arquitetura modular validada na develop
+
+- Etapa 7 concluída com CSS modularizado e `src/styles/index.css` como ponto único de entrada.
+- O antigo `global.css` foi removido sem alterar o CSS compilado em relação ao baseline.
+- Validação consolidada em 376 testes Node e 8 classificações, totalizando 384 verificações.
+- A `main` e a produção continuam inalteradas; a integração da v1.8.8 ainda não ocorreu.
+- A Etapa 8 permanece cancelada e não iniciada. Limpeza de CSS legado, duplicações, fontes e breakpoints continua fora do escopo.
 
 ## Informações ainda necessárias de Jever
 

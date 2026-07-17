@@ -60,8 +60,10 @@ Site JD/
 │   ├── favicon.svg
 │   └── og.png                   # imagem usada ao compartilhar o site
 ├── src/
-│   ├── components/              # seções, cards, modais e painel administrativo
-│   │   └── ui/                  # componentes pequenos e reutilizáveis
+│   ├── admin/                   # shell, navegação e views administrativas
+│   ├── app/                     # renderer e composição pública
+│   ├── components/              # seções, cards, modais e componentes reutilizáveis
+│   ├── core/                    # configuração, persistência e motor de templates
 │   ├── data/
 │   │   ├── projects.json        # projetos publicados por padrão
 │   │   ├── projects.js          # tipos de projeto
@@ -69,7 +71,17 @@ Site JD/
 │   ├── hooks/
 │   │   └── useProjectStore.js   # edição e persistência local dos projetos
 │   ├── styles/
-│   │   └── global.css           # identidade visual e responsividade
+│   │   ├── index.css            # ponto único de entrada e ordem da cascata
+│   │   ├── tokens.css           # variáveis visuais
+│   │   ├── base.css             # reset e estilos fundamentais
+│   │   ├── public/              # seções do site público
+│   │   ├── components/          # modais e componentes compartilhados
+│   │   ├── admin/               # painel administrativo
+│   │   ├── animations.css
+│   │   ├── responsive/
+│   │   ├── themes/
+│   │   └── status/
+│   ├── templates/               # definições dos tipos de site
 │   ├── App.jsx
 │   └── main.jsx
 ├── .env.example                 # exemplo do PIN local
