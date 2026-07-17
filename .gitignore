@@ -9,6 +9,7 @@ dist
 .pnpm-store
 supabase/.temp
 /Site JD/
+/output/
 
 # Local Netlify folder
 .netlify

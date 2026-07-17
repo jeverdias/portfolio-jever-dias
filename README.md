@@ -18,7 +18,9 @@ C:\Users\jever\Documents\Site JD
 
 Versão atual e próximos passos: [`docs/MEMORIA_DO_PROJETO.md`](docs/MEMORIA_DO_PROJETO.md).
 
-Versão do aplicativo: **v1.6.0**. A regra permanente de atualização MAJOR, MINOR e PATCH está em [`docs/VERSIONAMENTO.md`](docs/VERSIONAMENTO.md).
+Documentação técnica: [`docs/DOCUMENTACAO_TECNICA_SITE_JD.md`](docs/DOCUMENTACAO_TECNICA_SITE_JD.md) · [PDF](docs/generated/documentacao-tecnica-site-jd-v1.8.1.pdf).
+
+Versão do aplicativo: **v1.8.1**. A regra permanente de atualização MAJOR, MINOR e PATCH está em [`docs/VERSIONAMENTO.md`](docs/VERSIONAMENTO.md).
 
 ## O que foi criado
 
@@ -135,7 +137,7 @@ Abra `src/data/site.js` e ajuste:
 ## Usar o modo administrador
 
 1. Clique em **Login** no canto superior direito do portfólio.
-2. Sem Supabase, no primeiro acesso local, use o PIN `jd2026`.
+2. Sem Supabase, defina `VITE_ADMIN_PIN` no arquivo `.env.local`; não existe PIN padrão embutido.
 3. Com Supabase, entre com o email e a senha do administrador autorizado.
 4. Use **Configurações** para editar apresentação, contatos, LinkedIn, Instagram, GitHub e números do site.
 5. Use **Repositórios** para cadastrar projetos, estudos de caso, links, capa e até quatro prints.
