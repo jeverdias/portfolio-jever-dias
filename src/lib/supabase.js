@@ -1,4 +1,5 @@
 import { createClient } from '@supabase/supabase-js'
+import { validateContactPayload } from '../utils/validation'
 
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY
@@ -24,14 +25,19 @@ export const safeFileName = (name) => name
   .replace(/[\u0300-\u036f]/g, '')
   .toLowerCase()
   .replace(/[^a-z0-9.]+/g, '-')
-  .replace(/^-+|-+$/g, '')
+  .replace(/^-+|-+$/g, '') || 'arquivo'
+
+const safeFolder = (folder) => String(folder || 'arquivos')
+  .split('/')
+  .map((part) => safeFileName(part).replace(/\.+$/g, '') || 'arquivos')
+  .join('/')
 
 export async function uploadPortfolioAsset(file, folder) {
   if (!supabase) throw new Error('Supabase ainda não foi configurado.')
   if (!file || !allowedAssetTypes.has(file.type)) throw new Error('Formato de arquivo não permitido.')
   if (file.size > MAX_ASSET_SIZE) throw new Error('O arquivo deve ter no máximo 10 MB.')
   const fileName = `${Date.now()}-${safeFileName(file.name)}`
-  const path = `${folder}/${fileName}`
+  const path = `${safeFolder(folder)}/${fileName}`
   const { error } = await supabase.storage.from(portfolioBucket).upload(path, file, {
     cacheControl: '3600',
     contentType: file.type,
@@ -41,18 +47,39 @@ export async function uploadPortfolioAsset(file, folder) {
   return supabase.storage.from(portfolioBucket).getPublicUrl(path).data.publicUrl
 }
 
+export function getPortfolioAssetPath(url) {
+  if (!url || !supabaseUrl) return ''
+  try {
+    const parsed = new URL(url)
+    const base = new URL(supabaseUrl)
+    const marker = `/storage/v1/object/public/${portfolioBucket}/`
+    if (parsed.origin !== base.origin || !parsed.pathname.startsWith(marker)) return ''
+    return decodeURIComponent(parsed.pathname.slice(marker.length))
+  } catch {
+    return ''
+  }
+}
+
+export async function removePortfolioAsset(url) {
+  if (!supabase) return false
+  const path = getPortfolioAssetPath(url)
+  if (!path) return false
+  const { error } = await supabase.storage.from(portfolioBucket).remove([path])
+  if (error) throw error
+  return true
+}
+
 export async function submitContactMessage(payload) {
   if (!supabase) throw new Error('Supabase ainda não foi configurado.')
-  const message = {
-    name: String(payload.name || '').trim().slice(0, 120),
-    email: String(payload.email || '').trim().toLowerCase().slice(0, 254),
-    subject: String(payload.subject || '').trim().slice(0, 180),
-    message: String(payload.message || '').trim().slice(0, 5000),
-    status: 'new',
+  const message = validateContactPayload(payload)
+  const { error } = await supabase.rpc('submit_contact_message', {
+    p_name: message.name,
+    p_email: message.email,
+    p_subject: message.subject,
+    p_message: message.message,
+  })
+  if (error) {
+    if (/aguarde|limite|repetida/i.test(error.message || '')) throw new Error(error.message)
+    throw new Error('Não foi possível enviar a mensagem agora.')
   }
-  if (message.name.length < 2 || message.subject.length < 2 || message.message.length < 10 || !/^\S+@\S+\.\S+$/.test(message.email)) {
-    throw new Error('Confira os dados antes de enviar.')
-  }
-  const { error } = await supabase.from('contact_messages').insert(message)
-  if (error) throw error
 }

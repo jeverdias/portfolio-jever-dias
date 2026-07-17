@@ -1,7 +1,8 @@
 import { BarChart3, Bot, Braces, Database, LineChart, Sparkles, Workflow, X } from 'lucide-react'
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useRef, useState } from 'react'
 import { SectionTitle } from './ui/SectionTitle'
 import { getClassificationPresentation } from '../data/classificationPresentation'
+import { useModalA11y } from '../hooks/useModalA11y'
 
 const iconMap = { chart: BarChart3, analytics: LineChart, code: Braces, database: Database, bot: Bot, workflow: Workflow, sparkles: Sparkles }
 
@@ -11,24 +12,15 @@ export function Specialties({ items = [], classificationId }) {
   const [selectedSpecialty, setSelectedSpecialty] = useState(null)
   const SelectedIcon = iconMap[selectedSpecialty?.icon] || Sparkles
   const closeRef = useRef(null)
+  const modalRef = useRef(null)
   const copy = getClassificationPresentation(classificationId)
+  const closeGuide = useCallback(() => setGuideOpen(false), [])
+  useModalA11y({ active: guideOpen, containerRef: modalRef, initialFocusRef: closeRef, onClose: closeGuide })
 
   const openGuide = (specialty = null) => {
     setSelectedSpecialty(specialty)
     setGuideOpen(true)
   }
-
-  useEffect(() => {
-    if (!guideOpen) return undefined
-    const closeOnEscape = (event) => event.key === 'Escape' && setGuideOpen(false)
-    document.body.classList.add('modal-open')
-    window.addEventListener('keydown', closeOnEscape)
-    closeRef.current?.focus()
-    return () => {
-      document.body.classList.remove('modal-open')
-      window.removeEventListener('keydown', closeOnEscape)
-    }
-  }, [guideOpen])
 
   return (
     <section className="section" id="servicos">
@@ -64,9 +56,9 @@ export function Specialties({ items = [], classificationId }) {
         </div>
       </div>
       {guideOpen && (
-        <div className="modal-backdrop" role="presentation" onMouseDown={(event) => event.target === event.currentTarget && setGuideOpen(false)}>
-          <section className="specialties-modal" role="dialog" aria-modal="true" aria-labelledby="specialties-modal-title">
-            <button ref={closeRef} className="modal-close" type="button" onClick={() => setGuideOpen(false)} aria-label="Fechar explicação"><X size={21} /></button>
+        <div className="modal-backdrop" role="presentation" onMouseDown={(event) => event.target === event.currentTarget && closeGuide()}>
+          <section ref={modalRef} className="specialties-modal" role="dialog" aria-modal="true" aria-labelledby="specialties-modal-title">
+            <button ref={closeRef} className="modal-close" type="button" onClick={closeGuide} aria-label="Fechar explicação"><X size={21} /></button>
             <span className="contact-modal__eyebrow">Guia rápido</span>
             <div className="specialties-assistant" aria-hidden="true">
               <span className="specialties-assistant__robot">🤖</span>

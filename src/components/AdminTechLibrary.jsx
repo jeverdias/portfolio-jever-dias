@@ -100,13 +100,25 @@ export function AdminTechLibrary({ siteStore }) {
 
   const applySticker = (sticker) => update({ image: sticker.image, stickerId: sticker.id })
 
-  const removeSticker = (sticker) => {
+  const removeSticker = async (sticker) => {
     if (!window.confirm(`Excluir a figurinha “${sticker.name}” da coleção?`)) return
+    const usedOutsideTech = [...(siteStore.site.metrics || []), ...(siteStore.site.specialties || [])]
+      .some((item) => item.image === sticker.image)
     siteStore.updateSite({
       stickerLibrary: stickers.filter((item) => item.id !== sticker.id),
       techItems: items.map((item) => item.stickerId === sticker.id || item.image === sticker.image ? { ...item, image: '', stickerId: '' } : item),
     })
-    setMessage('Figurinha excluída da coleção e removida dos boxes que a utilizavam.')
+    if (!usedOutsideTech && siteStore.mode === 'supabase') {
+      try {
+        await siteStore.removeAsset(sticker.image)
+      } catch {
+        setMessage('Figurinha removida da coleção, mas o arquivo não pôde ser limpo do Storage.')
+        return
+      }
+    }
+    setMessage(usedOutsideTech
+      ? 'Figurinha removida da coleção; o arquivo foi preservado porque ainda está em uso.'
+      : 'Figurinha excluída da coleção, dos boxes e do Storage.')
   }
 
   return (
@@ -143,7 +155,7 @@ export function AdminTechLibrary({ siteStore }) {
               <label className="field">Área / categoria<input placeholder="BI, Web, IA, Dados..." value={selected.category || ''} onChange={(event) => update({ category: event.target.value })} /></label>
               <label className="field field--wide">Explicação para leigos<textarea rows="3" value={selected.description || ''} onChange={(event) => update({ description: event.target.value })} /></label>
               <label className="field">Cor do ícone<input type="color" value={selected.color || '#7fcaff'} onChange={(event) => update({ color: event.target.value })} /></label>
-              <div className="field"><span>Figurinha personalizada</span><button className="tech-upload-button" type="button" onClick={() => uploadRef.current?.click()}><Upload size={15} /> Enviar imagem</button><input ref={uploadRef} type="file" accept="image/png,image/jpeg,image/webp,image/svg+xml" onChange={upload} hidden /></div>
+              <div className="field"><span>Figurinha personalizada</span><button className="tech-upload-button" type="button" onClick={() => uploadRef.current?.click()}><Upload size={15} /> Enviar imagem</button><input ref={uploadRef} type="file" accept="image/png,image/jpeg,image/webp" onChange={upload} hidden /></div>
               {selected.image && <div className="field field--wide custom-icon-preview"><img src={selected.image} alt={`Figurinha de ${selected.name}`} /><button type="button" onClick={() => update({ image: '', stickerId: '' })}>Remover deste box</button></div>}
             </div>
 

@@ -1,8 +1,10 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { siteConfig } from '../data/site'
-import { isSupabaseConfigured, supabase, uploadPortfolioAsset } from '../lib/supabase'
+import { isSupabaseConfigured, removePortfolioAsset, supabase, uploadPortfolioAsset } from '../lib/supabase'
+import { validateSiteImport } from '../utils/validation'
 
 const STORAGE_KEY = 'jd-portfolio-site-v1'
+const SAVE_DELAY = 700
 
 const normalizeDisplayModels = (models) => {
   const saved = Array.isArray(models) ? models : []
@@ -44,6 +46,9 @@ export function useSiteStore() {
   const [site, setSite] = useState(readSite)
   const [loading, setLoading] = useState(isSupabaseConfigured)
   const [error, setError] = useState('')
+  const [saveStatus, setSaveStatus] = useState('idle')
+  const saveTimerRef = useRef(null)
+  const saveSequenceRef = useRef(0)
 
   const refresh = useCallback(async () => {
     if (!supabase) return
@@ -61,57 +66,83 @@ export function useSiteStore() {
   // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => { void refresh() }, [refresh])
 
-  const persistOnline = useCallback(async (next) => {
-    if (!supabase) return
-    const { error: saveError } = await supabase.from('site_settings').upsert({
-      id: 'main',
-      data: next,
-      updated_at: new Date().toISOString(),
-    })
+  const persistOnline = useCallback(async (next, sequence) => {
+    if (!supabase) return true
+    setSaveStatus('saving')
+    let saveError = null
+    for (let attempt = 0; attempt < 3; attempt += 1) {
+      if (sequence !== saveSequenceRef.current) return false
+      const response = await supabase.from('site_settings').upsert({
+        id: 'main',
+        data: next,
+        updated_at: new Date().toISOString(),
+      })
+      saveError = response.error
+      if (!saveError) break
+      if (attempt < 2) await new Promise((resolve) => window.setTimeout(resolve, 2000 * (attempt + 1)))
+    }
+    if (sequence !== saveSequenceRef.current) return !saveError
     setError(saveError ? 'A alteração ficou local, mas ainda não foi salva no Supabase.' : '')
+    setSaveStatus(saveError ? 'error' : 'saved')
+    return !saveError
   }, [])
+
+  const queueOnlineSave = useCallback((next) => {
+    if (!supabase) return
+    const sequence = ++saveSequenceRef.current
+    window.clearTimeout(saveTimerRef.current)
+    setSaveStatus('pending')
+    saveTimerRef.current = window.setTimeout(() => { void persistOnline(next, sequence) }, SAVE_DELAY)
+  }, [persistOnline])
+
+  useEffect(() => () => window.clearTimeout(saveTimerRef.current), [])
 
   const updateSite = useCallback((changes) => {
     setSite((current) => {
       const next = { ...current, ...changes }
       localStorage.setItem(STORAGE_KEY, JSON.stringify(next))
-      void persistOnline(next)
+      queueOnlineSave(next)
       return next
     })
-  }, [persistOnline])
+  }, [queueOnlineSave])
 
   const importSite = useCallback((next) => {
-    const normalized = normalizeSite(next)
+    const normalized = normalizeSite(validateSiteImport(next))
     setSite(normalized)
     localStorage.setItem(STORAGE_KEY, JSON.stringify(normalized))
-    void persistOnline(normalized)
-  }, [persistOnline])
+    queueOnlineSave(normalized)
+  }, [queueOnlineSave])
 
   const resetSite = useCallback(() => {
     const next = normalizeSite()
     setSite(next)
     localStorage.setItem(STORAGE_KEY, JSON.stringify(next))
-    void persistOnline(next)
-  }, [persistOnline])
+    queueOnlineSave(next)
+  }, [queueOnlineSave])
 
   const uploadResume = useCallback(async (file) => {
+    const previousUrl = site.resumeUrl
     const url = await uploadPortfolioAsset(file, 'curriculo')
     updateSite({ resumeUrl: url })
+    if (previousUrl && previousUrl !== url) void removePortfolioAsset(previousUrl).catch(() => undefined)
     return url
-  }, [updateSite])
+  }, [site.resumeUrl, updateSite])
 
   const uploadAsset = useCallback((file, folder = 'figurinhas') => uploadPortfolioAsset(file, folder), [])
+  const removeAsset = useCallback((url) => removePortfolioAsset(url), [])
 
   return {
     site,
     loading,
     error,
+    saveStatus,
     mode: isSupabaseConfigured ? 'supabase' : 'local',
     updateSite,
     importSite,
     resetSite,
     uploadResume,
     uploadAsset,
+    removeAsset,
     refresh,
   }
 }

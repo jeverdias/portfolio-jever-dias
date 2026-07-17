@@ -22,7 +22,6 @@ import {
   Palette,
   Pencil,
   RotateCcw,
-  Save,
   Settings,
   ShieldCheck,
   Sparkles,
@@ -31,7 +30,7 @@ import {
   Upload,
   X,
 } from 'lucide-react'
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useMemo, useRef, useState } from 'react'
 import { getProjectTypeLabel, projectTypes } from '../data/projects'
 import { optimizeImage } from '../utils/optimizeImage'
 import { AdminTechLibrary } from './AdminTechLibrary'
@@ -44,9 +43,12 @@ import { AdminProjectPreview } from './AdminProjectPreview'
 import { AdminSiteClassification } from './AdminSiteClassification'
 import { AdminMessages } from './AdminMessages'
 import { getInitials } from '../utils/getInitials'
+import { isHttpUrl } from '../utils/validation'
+import { AdminSaveStatus } from './admin/AdminSaveStatus'
+import { useModalA11y } from '../hooks/useModalA11y'
 
-const ADMIN_PIN = import.meta.env.VITE_ADMIN_PIN || 'jd2026'
-const validHttpUrl = (value) => /^https?:\/\//i.test(value || '')
+const ADMIN_PIN = import.meta.env.DEV ? (import.meta.env.VITE_ADMIN_PIN || '') : ''
+const validHttpUrl = isHttpUrl
 const publicSections = [
   ['hero', 'Apresentação inicial'], ['specialties', 'Especialidades'], ['projects', 'Portfólio'], ['about', 'Sobre'],
   ['credibility', 'Trajetória e credibilidade'], ['resume', 'Currículo'], ['contact', 'Contato'], ['footer', 'Rodapé'],
@@ -80,8 +82,11 @@ export function AdminPanel({ open, onClose, projectStore, siteStore, adminAuth }
   const coverRef = useRef(null)
   const galleryRef = useRef(null)
   const resumeRef = useRef(null)
+  const panelRef = useRef(null)
+  const closeRef = useRef(null)
   const authenticated = adminAuth.configured ? Boolean(adminAuth.user) : localAuthenticated
-  const localLoginAllowed = !adminAuth.configured && import.meta.env.DEV
+  const localLoginAllowed = !adminAuth.configured && import.meta.env.DEV && Boolean(ADMIN_PIN)
+  useModalA11y({ active: open, containerRef: panelRef, initialFocusRef: closeRef, onClose })
 
   const selected = useMemo(
     () => projectStore.projects.find((project) => project.id === selectedId) || projectStore.projects[0],
@@ -115,17 +120,6 @@ export function AdminPanel({ open, onClose, projectStore, siteStore, adminAuth }
     () => [...new Set(projectStore.projects.map(getProjectTypeLabel).filter(Boolean))].sort((a, b) => a.localeCompare(b, 'pt-BR')),
     [projectStore.projects],
   )
-
-  useEffect(() => {
-    if (!open) return undefined
-    const closeOnEscape = (event) => event.key === 'Escape' && onClose()
-    document.body.classList.add('modal-open')
-    window.addEventListener('keydown', closeOnEscape)
-    return () => {
-      document.body.classList.remove('modal-open')
-      window.removeEventListener('keydown', closeOnEscape)
-    }
-  }, [open, onClose])
 
   if (!open) return null
 
@@ -260,10 +254,14 @@ export function AdminPanel({ open, onClose, projectStore, siteStore, adminAuth }
       return
     }
     try {
+      const previousImage = selected.image
       const image = projectStore.mode === 'supabase'
         ? await projectStore.uploadImage(optimizedFile, selected.id, 'capa')
         : await readAsDataUrl(optimizedFile)
       updateProject('image', image)
+      if (projectStore.mode === 'supabase' && previousImage && previousImage !== image) {
+        void projectStore.removeImage(previousImage).catch(() => undefined)
+      }
       setError('')
     } catch (uploadError) {
       setError(uploadError.message)
@@ -337,7 +335,15 @@ export function AdminPanel({ open, onClose, projectStore, siteStore, adminAuth }
   }
 
   const removeGalleryImage = (index) => {
+    const image = selected.gallery?.[index]
     updateProject('gallery', (selected.gallery || []).filter((_, imageIndex) => imageIndex !== index))
+    if (projectStore.mode === 'supabase' && image) void projectStore.removeImage(image).catch(() => undefined)
+  }
+
+  const removeCoverImage = () => {
+    const image = selected.image
+    updateProject('image', '')
+    if (projectStore.mode === 'supabase' && image) void projectStore.removeImage(image).catch(() => undefined)
   }
 
   const renderOverview = () => {
@@ -452,7 +458,7 @@ export function AdminPanel({ open, onClose, projectStore, siteStore, adminAuth }
         {selected ? (
           <>
             <div className="admin-editor__head">
-              <div><span><Save size={14} /> Salvo automaticamente</span><h3>{selected.title}</h3></div>
+              <div><AdminSaveStatus status={projectStore.saveStatus} /><h3>{selected.title}</h3></div>
               <div>
                 <button type="button" onClick={() => projectStore.moveProject(selected.id, -1)} aria-label="Mover projeto para cima"><ArrowUp size={17} /></button>
                 <button type="button" onClick={() => projectStore.moveProject(selected.id, 1)} aria-label="Mover projeto para baixo"><ArrowDown size={17} /></button>
@@ -521,7 +527,7 @@ export function AdminPanel({ open, onClose, projectStore, siteStore, adminAuth }
               <div className="field field--wide image-upload">
                 <span>Ou envie uma capa local <small>PNG/JPG são reduzidos e convertidos para WebP automaticamente, quando isso deixar o arquivo mais leve.</small></span>
                 <button type="button" onClick={() => coverRef.current?.click()}><ImagePlus size={17} /> Selecionar capa</button>
-                {selected.image && <button type="button" onClick={() => updateProject('image', '')}>Remover capa</button>}
+                {selected.image && <button type="button" onClick={removeCoverImage}>Remover capa</button>}
                 <input ref={coverRef} type="file" accept="image/png,image/jpeg,image/webp" onChange={uploadCover} hidden />
               </div>
 
@@ -556,8 +562,8 @@ export function AdminPanel({ open, onClose, projectStore, siteStore, adminAuth }
 
   return (
     <div className="admin-backdrop">
-      <section className="admin-panel admin-panel--console" role="dialog" aria-modal="true" aria-labelledby="admin-title">
-        <button className="modal-close" type="button" onClick={onClose} aria-label="Fechar administração"><X size={21} /></button>
+      <section ref={panelRef} className="admin-panel admin-panel--console" role="dialog" aria-modal="true" aria-labelledby="admin-title">
+        <button ref={closeRef} className="modal-close" type="button" onClick={onClose} aria-label="Fechar administração"><X size={21} /></button>
 
         {!authenticated ? (
           <div className="admin-login">
@@ -601,7 +607,7 @@ export function AdminPanel({ open, onClose, projectStore, siteStore, adminAuth }
             </aside>
 
             <main className="admin-console__main">
-              <header className="admin-console__topbar"><div><span>Painel administrativo</span><strong id="admin-title">{view === 'overview' ? 'Visão geral' : view === 'settings' ? 'Configurações' : view === 'appearance' ? 'Aparência' : view === 'classification' ? 'Classificação do site' : view === 'professional' ? 'Trajetória e métricas' : view === 'library' ? 'Box/figurinhas' : view === 'specialties' ? 'Especialidades' : view === 'messages' ? 'Mensagens recebidas' : view === 'guide' ? 'Guia do site' : 'Repositórios'}</strong></div><div><span className="admin-status-dot" /> {siteStore.mode === 'supabase' ? 'Sincronização online' : 'Alterações locais'}</div></header>
+              <header className="admin-console__topbar"><div><span>Painel administrativo</span><strong id="admin-title">{view === 'overview' ? 'Visão geral' : view === 'settings' ? 'Configurações' : view === 'appearance' ? 'Aparência' : view === 'classification' ? 'Classificação do site' : view === 'professional' ? 'Trajetória e métricas' : view === 'library' ? 'Box/figurinhas' : view === 'specialties' ? 'Especialidades' : view === 'messages' ? 'Mensagens recebidas' : view === 'guide' ? 'Guia do site' : 'Repositórios'}</strong></div>{siteStore.mode === 'supabase' ? <AdminSaveStatus status={view === 'repositories' ? projectStore.saveStatus : siteStore.saveStatus} /> : <div><span className="admin-status-dot" /> Alterações locais</div>}</header>
               {error && view !== 'repositories' && <div className="form-error form-error--block admin-global-error">{error}</div>}
               {view === 'overview' && renderOverview()}
               {view === 'settings' && renderSettings()}

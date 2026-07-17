@@ -1,6 +1,7 @@
 import { ArrowUpRight, BarChart3, BookOpen, Bot, GalleryHorizontal, Globe2, MonitorPlay, Play, X } from 'lucide-react'
-import { useEffect, useState } from 'react'
+import { useRef, useState } from 'react'
 import { getProjectTypeLabel } from '../data/projects'
+import { useModalA11y } from '../hooks/useModalA11y'
 import { ProjectVisual } from './ProjectVisual'
 
 const typeIcons = { powerbi: BarChart3, website: Globe2, content: BookOpen, ai: Bot }
@@ -9,17 +10,9 @@ const validImage = (value) => validLink(value) || /^data:image\//i.test(value ||
 
 export function ProjectModal({ project, onClose }) {
   const [activeTab, setActiveTab] = useState(() => ['gallery', 'comparison'].includes(project?.presentation) ? 'gallery' : 'demo')
-
-  useEffect(() => {
-    if (!project) return undefined
-    const closeOnEscape = (event) => event.key === 'Escape' && onClose()
-    document.body.classList.add('modal-open')
-    window.addEventListener('keydown', closeOnEscape)
-    return () => {
-      document.body.classList.remove('modal-open')
-      window.removeEventListener('keydown', closeOnEscape)
-    }
-  }, [project, onClose])
+  const modalRef = useRef(null)
+  const closeRef = useRef(null)
+  useModalA11y({ active: Boolean(project), containerRef: modalRef, initialFocusRef: closeRef, onClose })
 
   if (!project) return null
 
@@ -33,8 +26,8 @@ export function ProjectModal({ project, onClose }) {
 
   return (
     <div className="modal-backdrop" role="presentation" onMouseDown={(event) => event.target === event.currentTarget && onClose()}>
-      <section className="project-modal" role="dialog" aria-modal="true" aria-labelledby="project-modal-title">
-        <button className="modal-close" type="button" onClick={onClose} aria-label="Fechar projeto"><X size={21} /></button>
+      <section ref={modalRef} className="project-modal" role="dialog" aria-modal="true" aria-labelledby="project-modal-title" aria-describedby="project-modal-description">
+        <button ref={closeRef} className="modal-close" type="button" onClick={onClose} aria-label="Fechar projeto"><X size={21} /></button>
 
         <div className="project-modal__viewer">
           {activeTab === 'gallery' ? (
@@ -46,7 +39,7 @@ export function ProjectModal({ project, onClose }) {
               )}
             </div>
           ) : presentation === 'video' && validLink(videoUrl) ? (
-            <iframe src={videoUrl} title={`Vídeo de ${project.title}`} allow="autoplay; fullscreen; picture-in-picture" allowFullScreen loading="lazy" />
+            <iframe src={videoUrl} title={`Vídeo de ${project.title}`} allow="autoplay; fullscreen; picture-in-picture" sandbox="allow-scripts allow-same-origin allow-presentation allow-popups" allowFullScreen loading="lazy" />
           ) : canEmbed ? (
             <iframe
               src={previewUrl}
@@ -54,6 +47,7 @@ export function ProjectModal({ project, onClose }) {
               allowFullScreen
               loading="lazy"
               referrerPolicy="strict-origin-when-cross-origin"
+              sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-downloads allow-presentation"
             />
           ) : (
             <div className="project-modal__placeholder">
@@ -69,7 +63,7 @@ export function ProjectModal({ project, onClose }) {
           <div className="project-modal__type"><Icon size={16} /> {getProjectTypeLabel(project)}</div>
           <h2 id="project-modal-title">{project.title}</h2>
           {project.theme && <div className="project-modal__theme">{project.theme}</div>}
-          <p>{project.details || project.description}</p>
+          <p id="project-modal-description">{project.details || project.description}</p>
 
           <div className="project-modal__tabs" role="tablist" aria-label="Conteúdo do projeto">
             <button className={activeTab === 'demo' ? 'is-active' : ''} type="button" onClick={() => setActiveTab('demo')}>

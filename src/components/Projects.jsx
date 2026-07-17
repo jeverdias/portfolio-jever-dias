@@ -1,29 +1,21 @@
 import { ArrowRight, X } from 'lucide-react'
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useMemo, useRef, useState } from 'react'
 import { getProjectTypeLabel } from '../data/projects'
 import { ProjectCard } from './ProjectCard'
 import { SectionTitle } from './ui/SectionTitle'
 import { getClassificationPresentation } from '../data/classificationPresentation'
+import { useModalA11y } from '../hooks/useModalA11y'
 
 export function Projects({ projects, onOpen, classificationId }) {
   const [filter, setFilter] = useState('all')
   const [guideOpen, setGuideOpen] = useState(false)
   const closeRef = useRef(null)
+  const modalRef = useRef(null)
   const filters = useMemo(() => ['all', ...new Set(projects.map(getProjectTypeLabel))], [projects])
   const visibleProjects = filter === 'all' ? projects : projects.filter((project) => getProjectTypeLabel(project) === filter)
   const copy = getClassificationPresentation(classificationId)
-
-  useEffect(() => {
-    if (!guideOpen) return undefined
-    const closeOnEscape = (event) => event.key === 'Escape' && setGuideOpen(false)
-    document.body.classList.add('modal-open')
-    window.addEventListener('keydown', closeOnEscape)
-    closeRef.current?.focus()
-    return () => {
-      document.body.classList.remove('modal-open')
-      window.removeEventListener('keydown', closeOnEscape)
-    }
-  }, [guideOpen])
+  const closeGuide = useCallback(() => setGuideOpen(false), [])
+  useModalA11y({ active: guideOpen, containerRef: modalRef, initialFocusRef: closeRef, onClose: closeGuide })
 
   return (
     <section className="section section--projects" id="projetos">
@@ -54,9 +46,9 @@ export function Projects({ projects, onOpen, classificationId }) {
         </div>
       </div>
       {guideOpen && (
-        <div className="modal-backdrop" role="presentation" onMouseDown={(event) => event.target === event.currentTarget && setGuideOpen(false)}>
-          <section className="portfolio-guide-modal" role="dialog" aria-modal="true" aria-labelledby="portfolio-guide-title">
-            <button ref={closeRef} className="modal-close" type="button" onClick={() => setGuideOpen(false)} aria-label="Fechar guia do portfólio"><X size={21} /></button>
+        <div className="modal-backdrop" role="presentation" onMouseDown={(event) => event.target === event.currentTarget && closeGuide()}>
+          <section ref={modalRef} className="portfolio-guide-modal" role="dialog" aria-modal="true" aria-labelledby="portfolio-guide-title">
+            <button ref={closeRef} className="modal-close" type="button" onClick={closeGuide} aria-label="Fechar guia do portfólio"><X size={21} /></button>
             <span className="contact-modal__eyebrow">Como explorar</span>
             <h2 id="portfolio-guide-title">Conheça as entregas do portfólio</h2>
             <p>O portfólio foi organizado para você encontrar rapidamente o tipo de solução e entender cada projeto.</p>

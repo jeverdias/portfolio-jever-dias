@@ -50,6 +50,6 @@ export function AdminMessages() {
       <h4>{item.subject}</h4><p>{item.message}</p>
       <footer>{item.status !== 'read' && <button type="button" onClick={() => changeStatus(item.id, 'read')}><Check size={14} /> Marcar como lida</button>}{item.status !== 'archived' && <button type="button" onClick={() => changeStatus(item.id, 'archived')}><Archive size={14} /> Arquivar</button>}<button className="danger" type="button" onClick={() => remove(item)}><Trash2 size={14} /> Excluir</button></footer>
     </article>)}</div> : <div className="admin-empty"><Mail size={25} /><p>Nenhuma mensagem nesta categoria.</p></div>}
-    <aside className="admin-messages__email-note"><strong>Notificação por email</strong><p>As mensagens já ficam salvas no painel. O envio de aviso por email poderá ser ativado depois por uma função segura no Supabase, sem expor senhas no site.</p></aside>
+    <aside className="admin-messages__email-note"><strong>Notificação por email</strong><p>No site publicado, o formulário também é encaminhado ao Netlify Forms. Ative o destinatário em Forms → Form notifications para receber os avisos sem expor senhas no navegador.</p></aside>
   </div>
 }

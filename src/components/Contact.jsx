@@ -3,6 +3,9 @@ import { useState } from 'react'
 import { getClassificationPresentation } from '../data/classificationPresentation'
 import { isSupabaseConfigured, submitContactMessage } from '../lib/supabase'
 
+const CONTACT_COOLDOWN_KEY = 'jd-contact-last-submit'
+const CONTACT_COOLDOWN_MS = 60_000
+
 export function Contact({ site, onOpen }) {
   const [status, setStatus] = useState('idle')
   const copy = getClassificationPresentation(site.siteClassificationId)
@@ -12,7 +15,15 @@ export function Contact({ site, onOpen }) {
     setStatus('sending')
     const form = event.currentTarget
     const formData = new FormData(form)
-    if (formData.get('empresa-site')) return
+    if (formData.get('empresa-site')) {
+      setStatus('idle')
+      return
+    }
+    const lastSubmit = Number(localStorage.getItem(CONTACT_COOLDOWN_KEY) || 0)
+    if (Date.now() - lastSubmit < CONTACT_COOLDOWN_MS) {
+      setStatus('rate-limited')
+      return
+    }
 
     try {
       if (isSupabaseConfigured) {
@@ -22,6 +33,14 @@ export function Contact({ site, onOpen }) {
           subject: formData.get('assunto'),
           message: formData.get('mensagem'),
         })
+        if (import.meta.env.PROD && window.location.protocol === 'https:') {
+          const response = await fetch('/', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: new URLSearchParams(formData).toString(),
+          })
+          if (!response.ok) setStatus('success-no-email')
+        }
       } else {
         const response = await fetch('/', {
           method: 'POST',
@@ -30,10 +49,11 @@ export function Contact({ site, onOpen }) {
         })
         if (!response.ok) throw new Error('Falha no envio')
       }
+      localStorage.setItem(CONTACT_COOLDOWN_KEY, String(Date.now()))
       form.reset()
-      setStatus('success')
-    } catch {
-      setStatus('error')
+      setStatus((current) => current === 'success-no-email' ? current : 'success')
+    } catch (submitError) {
+      setStatus(/aguarde|limite|repetida/i.test(submitError.message || '') ? 'rate-limited' : 'error')
     }
   }
 
@@ -69,8 +89,12 @@ export function Contact({ site, onOpen }) {
             <button className="button button--primary" type="submit" disabled={status === 'sending'}>
               <Send size={17} /> {status === 'sending' ? 'Enviando...' : 'Enviar mensagem'}
             </button>
-            {status === 'success' && <p className="contact-form-status is-success"><CheckCircle2 size={16} /> Mensagem enviada. Obrigado pelo contato!</p>}
-            {status === 'error' && <p className="contact-form-status is-error">Não foi possível enviar agora. Use um dos contatos acima.</p>}
+            <div aria-live="polite">
+              {status === 'success' && <p className="contact-form-status is-success"><CheckCircle2 size={16} /> Mensagem enviada. Obrigado pelo contato!</p>}
+              {status === 'success-no-email' && <p className="contact-form-status is-success"><CheckCircle2 size={16} /> Mensagem salva no painel. A notificação por email ficou pendente.</p>}
+              {status === 'rate-limited' && <p className="contact-form-status is-error">Aguarde um minuto antes de enviar outra mensagem.</p>}
+              {status === 'error' && <p className="contact-form-status is-error">Não foi possível enviar agora. Use um dos contatos acima.</p>}
+            </div>
           </form>
         </div>
       </div>

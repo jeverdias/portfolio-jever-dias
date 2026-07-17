@@ -1,5 +1,6 @@
 import { ArrowUpRight, AtSign, BookOpen, BriefcaseBusiness, Camera, Code2, Mail, MessageCircle, Users, X } from 'lucide-react'
-import { useEffect, useRef } from 'react'
+import { useRef } from 'react'
+import { useModalA11y } from '../hooks/useModalA11y'
 
 const validHttpUrl = (value) => /^https?:\/\//i.test(value || '')
 const getWhatsAppHref = (value) => {
@@ -10,19 +11,8 @@ const getWhatsAppHref = (value) => {
 
 export function ContactModal({ open, site, onClose }) {
   const closeRef = useRef(null)
-
-  useEffect(() => {
-    if (!open) return undefined
-    const closeOnEscape = (event) => event.key === 'Escape' && onClose()
-    document.body.classList.add('modal-open')
-    window.addEventListener('keydown', closeOnEscape)
-    closeRef.current?.focus()
-
-    return () => {
-      document.body.classList.remove('modal-open')
-      window.removeEventListener('keydown', closeOnEscape)
-    }
-  }, [open, onClose])
+  const modalRef = useRef(null)
+  useModalA11y({ active: open, containerRef: modalRef, initialFocusRef: closeRef, onClose })
 
   if (!open) return null
 
@@ -40,11 +30,11 @@ export function ContactModal({ open, site, onClose }) {
 
   return (
     <div className="modal-backdrop" role="presentation" onMouseDown={(event) => event.target === event.currentTarget && onClose()}>
-      <section className="contact-modal" role="dialog" aria-modal="true" aria-labelledby="contact-modal-title">
+      <section ref={modalRef} className="contact-modal" role="dialog" aria-modal="true" aria-labelledby="contact-modal-title" aria-describedby="contact-modal-description">
         <button ref={closeRef} className="modal-close" type="button" onClick={onClose} aria-label="Fechar contatos"><X size={21} /></button>
         <span className="contact-modal__eyebrow">Vamos conversar</span>
         <h2 id="contact-modal-title">Fale com {site.name.split(' ')[0]}</h2>
-        <p>Escolha o canal mais conveniente para entrar em contato ou conhecer meu trabalho.</p>
+        <p id="contact-modal-description">Escolha o canal mais conveniente para entrar em contato ou conhecer meu trabalho.</p>
 
         <div className="contact-modal__grid">
           {contacts.map(({ label, detail, href, icon: Icon }) => (
