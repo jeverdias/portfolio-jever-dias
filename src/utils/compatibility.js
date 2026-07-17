@@ -1,46 +1,15 @@
 import { defaultProjects, projectTypes } from '../data/projects.js'
-import { siteConfig } from '../data/site.js'
 import { defaultSiteClassification, siteClassifications } from '../data/siteClassifications.js'
+import { createDefaultSiteConfig } from '../core/config/defaultSiteConfig.js'
+import { normalizeSiteConfig } from '../core/config/normalizeSiteConfig.js'
+
+export { createDefaultSiteConfig, normalizeSiteConfig }
 
 export const SITE_STORAGE_KEY = 'jd-portfolio-site-v1'
 export const PROJECTS_STORAGE_KEY = 'jd-portfolio-projects-v1'
 export const CONTACT_STORAGE_KEY = 'jd-contact-last-submit'
 export const AI_MIGRATION_KEY = 'jd-portfolio-ai-category-v1'
 export const PUBLIC_SITE_CLASSIFICATION_ID = defaultSiteClassification
-
-const knownClassificationIds = new Set(siteClassifications.map((item) => item.id))
-
-const normalizeDisplayModels = (models) => {
-  const saved = Array.isArray(models) ? models : []
-  const builtInIds = new Set(siteConfig.displayModels.map((model) => model.id))
-  const custom = saved.filter((model) => !builtInIds.has(model.id) && model.builtIn !== true)
-  return [...siteConfig.displayModels, ...custom]
-}
-
-export const normalizeSiteConfig = (value = {}) => {
-  const source = value && typeof value === 'object' && !Array.isArray(value) ? value : {}
-  const classificationIsValid = knownClassificationIds.has(source.siteClassificationId)
-  const classificationId = classificationIsValid
-    ? source.siteClassificationId
-    : defaultSiteClassification
-  const classification = siteClassifications.find((item) => item.id === classificationId)
-
-  return {
-    ...siteConfig,
-    ...source,
-    classificationLayoutVersion: siteConfig.classificationLayoutVersion,
-    siteClassificationId: classificationId,
-    siteClassification: (classificationIsValid && source.siteClassification) || classification?.classification || siteConfig.siteClassification,
-    siteClassificationDescription: (classificationIsValid && source.siteClassificationDescription) || classification?.goal || siteConfig.siteClassificationDescription,
-    techItems: Array.isArray(source.techItems) && source.techItems.length ? source.techItems : siteConfig.techItems,
-    metrics: Array.isArray(source.metrics) && source.metrics.length ? source.metrics : siteConfig.metrics,
-    stickerLibrary: Array.isArray(source.stickerLibrary) ? source.stickerLibrary : siteConfig.stickerLibrary,
-    displayModels: normalizeDisplayModels(source.displayModels),
-    specialties: Array.isArray(source.specialties) && source.specialties.length ? source.specialties : siteConfig.specialties,
-    sectionVisibility: { ...siteConfig.sectionVisibility, ...(source.sectionVisibility || {}) },
-    appearance: { ...siteConfig.appearance, ...(source.appearance || {}) },
-  }
-}
 
 export const readSiteCache = (storage = globalThis.localStorage) => {
   try {

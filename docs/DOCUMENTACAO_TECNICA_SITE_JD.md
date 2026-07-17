@@ -510,7 +510,7 @@ salvamento e a persistencia local trabalham juntos.
 | Quero alterar | Arquivo ou área principal |
 |---|---|
 | Composição da página | `src/App.jsx` |
-| Textos e valores padrão | `src/data/site.js` |
+| Textos e valores padrão | `src/core/config/defaultSiteConfig.js` (`src/data/site.js` é uma fachada compatível) |
 | Projetos padrão | `src/data/projects.json` |
 | Tipos de projeto | `src/data/projects.js` |
 | Classificacoes | `src/data/siteClassifications.js` |
@@ -528,3 +528,9 @@ salvamento e a persistencia local trabalham juntos.
 ---
 
 Este documento descreve a arquitetura conhecida na versão 1.8.1. Antes de aplicar uma orientação automática, compare a documentação com o código atual, trabalhe na branch `develop`, execute os testes e não envie para `main` sem revisar o impacto no Netlify.
+
+## Atualização arquitetural da versão 1.8.3
+
+A versão 1.8.1 deste documento e o PDF correspondente continuam sendo o baseline visual e funcional capturado antes da refatoração. A versão 1.8.2 acrescentou a proteção automatizada de compatibilidade. A versão 1.8.3 centralizou os defaults, o schema conceitual, a normalização e as migrations somente em memória, sem alterar o formato persistido ou o visual.
+
+O contrato e as regras atuais dessa camada estão documentados em [`ARQUITETURA_CONFIGURACAO.md`](ARQUITETURA_CONFIGURACAO.md).

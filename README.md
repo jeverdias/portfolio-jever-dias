@@ -18,9 +18,9 @@ C:\Users\jever\Documents\Site JD
 
 Versão atual e próximos passos: [`docs/MEMORIA_DO_PROJETO.md`](docs/MEMORIA_DO_PROJETO.md).
 
-Documentação técnica: [`docs/DOCUMENTACAO_TECNICA_SITE_JD.md`](docs/DOCUMENTACAO_TECNICA_SITE_JD.md) · [PDF](docs/generated/documentacao-tecnica-site-jd-v1.8.1.pdf).
+Documentação técnica: [`docs/DOCUMENTACAO_TECNICA_SITE_JD.md`](docs/DOCUMENTACAO_TECNICA_SITE_JD.md) · [Configuração v1.8.3](docs/ARQUITETURA_CONFIGURACAO.md) · [PDF do baseline v1.8.1](docs/generated/documentacao-tecnica-site-jd-v1.8.1.pdf).
 
-Versão do aplicativo: **v1.8.2**. A regra permanente de atualização MAJOR, MINOR e PATCH está em [`docs/VERSIONAMENTO.md`](docs/VERSIONAMENTO.md).
+Versão do aplicativo: **v1.8.3**. A regra permanente de atualização MAJOR, MINOR e PATCH está em [`docs/VERSIONAMENTO.md`](docs/VERSIONAMENTO.md).
 
 ## O que foi criado
 
