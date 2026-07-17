@@ -1,7 +1,8 @@
 import { defaultProjects, projectTypes } from '../data/projects.js'
-import { defaultSiteClassification, siteClassifications } from '../data/siteClassifications.js'
+import { siteClassifications } from '../data/siteClassifications.js'
 import { createDefaultSiteConfig } from '../core/config/defaultSiteConfig.js'
 import { normalizeSiteConfig } from '../core/config/normalizeSiteConfig.js'
+import { PUBLIC_TEMPLATE_ID } from '../core/site-engine/publicTemplatePolicy.js'
 import {
   CONTACT_STORAGE_KEY,
   createLocalStorageAdapter,
@@ -13,7 +14,7 @@ import {
 export { createDefaultSiteConfig, normalizeSiteConfig }
 export { CONTACT_STORAGE_KEY, PROJECTS_STORAGE_KEY, SITE_STORAGE_KEY }
 export const AI_MIGRATION_KEY = 'jd-portfolio-ai-category-v1'
-export const PUBLIC_SITE_CLASSIFICATION_ID = defaultSiteClassification
+export const PUBLIC_SITE_CLASSIFICATION_ID = PUBLIC_TEMPLATE_ID
 
 const resolveStorageAdapter = (storage) => storage === undefined
   ? localStorageAdapter

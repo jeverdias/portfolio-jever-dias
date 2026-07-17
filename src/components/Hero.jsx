@@ -5,15 +5,15 @@ import { getClassificationPresentation } from '../data/classificationPresentatio
 const iconMap = { chart: BarChart3, sigma: Sigma, code: Braces, database: DatabaseZap, bot: Bot, workflow: Workflow }
 const metricIconMap = { chart: BarChart3, code: Code2, database: Database, award: Award, users: Users, briefcase: BriefcaseBusiness, bot: Bot, sparkles: Sparkles, trend: TrendingUp, target: Target, gauge: Gauge, health: HeartPulse, research: Microscope, education: GraduationCap, law: Scale, global: Globe2, rocket: Rocket, security: ShieldCheck }
 
-export function Hero({ site, onContact }) {
+export function Hero({ site, onContact, classificationId = site.siteClassificationId }) {
   const [selectedTech, setSelectedTech] = useState(null)
   const [firstName, ...lastNameParts] = site.name.split(' ')
   const lastName = lastNameParts.join(' ')
   const stats = (site.metrics || []).filter((item) => item.visible !== false).slice(0, 3)
   const roles = site.role.split('|').map((role) => role.trim()).filter(Boolean)
   const techItems = site.techItems || []
-  const copy = getClassificationPresentation(site.siteClassificationId)
-  const isLanding = site.siteClassificationId === 'landing-conversion'
+  const copy = getClassificationPresentation(classificationId)
+  const isLanding = classificationId === 'landing-conversion'
 
   return (
     <section className="hero" id="inicio">

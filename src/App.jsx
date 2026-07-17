@@ -13,7 +13,8 @@ import { useProjectStore } from './hooks/useProjectStore'
 import { useSiteStore } from './hooks/useSiteStore'
 import { useAdminAuth } from './hooks/useAdminAuth'
 import { applyAppearance } from './data/appearance'
-import { getPublicClassification, PUBLIC_SITE_CLASSIFICATION_ID, selectPublicProjects } from './utils/compatibility'
+import { getPublicClassification, selectPublicProjects } from './utils/compatibility'
+import { resolvePublicTemplate } from './core/site-engine/publicTemplatePolicy'
 
 const AdminPanel = lazy(() => import('./components/AdminPanel').then((module) => ({ default: module.AdminPanel })))
 const ContactModal = lazy(() => import('./components/ContactModal').then((module) => ({ default: module.ContactModal })))
@@ -31,6 +32,7 @@ function App() {
   const [selectedProject, setSelectedProject] = useState(null)
   const [adminOpen, setAdminOpen] = useState(false)
   const [contactOpen, setContactOpen] = useState(false)
+  const publicTemplate = resolvePublicTemplate(siteStore.site.siteClassificationId)
   const publicClassification = getPublicClassification()
 
   useEffect(() => {
@@ -41,8 +43,8 @@ function App() {
 
   useEffect(() => {
     applyAppearance(siteStore.site.appearance)
-    document.documentElement.dataset.siteClassification = PUBLIC_SITE_CLASSIFICATION_ID
-  }, [siteStore.site.appearance])
+    document.documentElement.dataset.siteClassification = publicTemplate.id
+  }, [siteStore.site.appearance, publicTemplate.id])
 
   useEffect(() => {
     const description = publicClassification?.goal || 'Portfólio profissional de Jever Dias.'
@@ -89,16 +91,16 @@ function App() {
     <>
       <a className="skip-link" href="#conteudo">Pular para o conteúdo</a>
       <div className="site-shell">
-        <Header site={siteStore.site} visibility={visibility} onLogin={() => setAdminOpen(true)} />
+        <Header site={siteStore.site} visibility={visibility} classificationId={publicTemplate.id} onLogin={() => setAdminOpen(true)} />
         <main id="conteudo">
-          {visibility.hero !== false && <Hero site={siteStore.site} onContact={() => setContactOpen(true)} />}
-          {PUBLIC_SITE_CLASSIFICATION_ID === 'landing-conversion' && <LandingHighlights site={siteStore.site} />}
-          {visibility.specialties !== false && <Specialties items={siteStore.site.specialties} classificationId={PUBLIC_SITE_CLASSIFICATION_ID} />}
-          {visibility.projects !== false && <Projects projects={selectPublicProjects(projectStore.projects)} classificationId={PUBLIC_SITE_CLASSIFICATION_ID} onOpen={openProjectPage} />}
+          {visibility.hero !== false && <Hero site={siteStore.site} classificationId={publicTemplate.id} onContact={() => setContactOpen(true)} />}
+          {publicTemplate.id === 'landing-conversion' && <LandingHighlights site={siteStore.site} />}
+          {visibility.specialties !== false && <Specialties items={siteStore.site.specialties} classificationId={publicTemplate.id} />}
+          {visibility.projects !== false && <Projects projects={selectPublicProjects(projectStore.projects)} classificationId={publicTemplate.id} onOpen={openProjectPage} />}
           {visibility.about !== false && <About />}
           {visibility.credibility !== false && <Credibility site={siteStore.site} />}
           {visibility.resume !== false && <Resume site={siteStore.site} />}
-          {visibility.contact !== false && <Contact site={siteStore.site} onOpen={() => setContactOpen(true)} />}
+          {visibility.contact !== false && <Contact site={siteStore.site} classificationId={publicTemplate.id} onOpen={() => setContactOpen(true)} />}
         </main>
         {visibility.footer !== false && <Footer site={siteStore.site} />}
       </div>

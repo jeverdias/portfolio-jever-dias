@@ -2,6 +2,7 @@ import assert from 'node:assert/strict'
 import { readFileSync } from 'node:fs'
 import test from 'node:test'
 import { defaultAppearance } from '../../src/data/appearance.js'
+import { resolvePublicTemplate } from '../../src/core/site-engine/publicTemplatePolicy.js'
 import { projectTypes } from '../../src/data/projects.js'
 import { siteConfig } from '../../src/data/site.js'
 import {
@@ -117,10 +118,9 @@ test('mantém o portfólio como única classificação publicada nesta etapa', (
 })
 
 test('a página pública usa a classificação fixa sem publicar a seleção administrativa', () => {
-  const app = readFileSync(new URL('../../src/App.jsx', import.meta.url), 'utf8')
-  assert.match(app, /dataset\.siteClassification = PUBLIC_SITE_CLASSIFICATION_ID/)
-  assert.match(app, /classificationId=\{PUBLIC_SITE_CLASSIFICATION_ID\}/)
-  assert.doesNotMatch(app, /classificationId=\{siteStore\.site\.siteClassificationId\}/)
+  for (const classification of ['institutional', 'professional-services', 'landing-conversion', 'event', 'inválida']) {
+    assert.equal(resolvePublicTemplate(classification).id, PUBLIC_SITE_CLASSIFICATION_ID)
+  }
 })
 
 test('normaliza projeto atual preservando id, URLs, tags e galeria', () => {

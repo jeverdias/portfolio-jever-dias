@@ -3,9 +3,9 @@ import { useState } from 'react'
 import { getInitials } from '../utils/getInitials'
 import { getClassificationPresentation } from '../data/classificationPresentation'
 
-export function Header({ onLogin, visibility = {}, site }) {
+export function Header({ onLogin, visibility = {}, site, classificationId = site?.siteClassificationId }) {
   const [open, setOpen] = useState(false)
-  const copy = getClassificationPresentation(site?.siteClassificationId)
+  const copy = getClassificationPresentation(classificationId)
   const links = [['Início', '#inicio', 'hero'], [copy.navProjects, '#projetos', 'projects'], [copy.navServices, '#servicos', 'specialties'], ['Sobre', '#sobre', 'about'], ['Currículo', '#curriculo', 'resume'], ['Contato', '#contato', 'contact']]
 
   return (

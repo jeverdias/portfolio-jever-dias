@@ -6,9 +6,9 @@ import { CONTACT_STORAGE_KEY, localStorageAdapter } from '../core/persistence/lo
 
 const CONTACT_COOLDOWN_MS = 60_000
 
-export function Contact({ site, onOpen }) {
+export function Contact({ site, onOpen, classificationId = site.siteClassificationId }) {
   const [status, setStatus] = useState('idle')
-  const copy = getClassificationPresentation(site.siteClassificationId)
+  const copy = getClassificationPresentation(classificationId)
 
   const submitContact = async (event) => {
     event.preventDefault()

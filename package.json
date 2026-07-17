@@ -1,7 +1,7 @@
 {
   "name": "portfolio-jever-dias",
   "private": true,
-  "version": "1.8.4",
+  "version": "1.8.5",
   "description": "Aplicação web de portfólio profissional com landing page pública e painel administrativo.",
   "keywords": ["portfolio-website", "web-application", "react", "vite", "business-intelligence", "analytics"],
   "homepage": "https://jeverdias.netlify.app",
@@ -15,7 +15,7 @@
     "build": "vite build",
     "preview": "vite preview",
     "lint": "eslint .",
-    "test": "node --test scripts/tests/validation.test.mjs scripts/tests/security.test.mjs scripts/tests/compatibility.test.mjs scripts/tests/config.test.mjs scripts/tests/persistence.test.mjs",
+    "test": "node --test scripts/tests/validation.test.mjs scripts/tests/security.test.mjs scripts/tests/compatibility.test.mjs scripts/tests/config.test.mjs scripts/tests/persistence.test.mjs scripts/tests/site-engine.test.mjs",
     "test:classifications": "node scripts/test-classifications.mjs",
     "test:all": "pnpm run test && pnpm run test:classifications",
     "check:bundle": "node scripts/check-bundle-size.mjs"
