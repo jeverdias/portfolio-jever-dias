@@ -1,4 +1,4 @@
-import projects from './projects.json'
+import projects from './projects.json' with { type: 'json' }
 
 export const projectTypes = {
   powerbi: 'Power BI',

@@ -1,49 +1,12 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { siteConfig } from '../data/site'
 import { isSupabaseConfigured, removePortfolioAsset, supabase, uploadPortfolioAsset } from '../lib/supabase'
 import { validateSiteImport } from '../utils/validation'
+import { normalizeSiteConfig, readSiteCache, SITE_STORAGE_KEY } from '../utils/compatibility'
 
-const STORAGE_KEY = 'jd-portfolio-site-v1'
 const SAVE_DELAY = 700
 
-const normalizeDisplayModels = (models) => {
-  const saved = Array.isArray(models) ? models : []
-  const builtInIds = new Set(siteConfig.displayModels.map((model) => model.id))
-  const custom = saved.filter((model) => !builtInIds.has(model.id) && model.builtIn !== true)
-  return [...siteConfig.displayModels, ...custom]
-}
-
-const normalizeSite = (value = {}) => {
-  const restoreOriginalLayout = value.classificationLayoutVersion !== siteConfig.classificationLayoutVersion
-  return {
-  ...siteConfig,
-  ...value,
-  classificationLayoutVersion: siteConfig.classificationLayoutVersion,
-  siteClassificationId: restoreOriginalLayout ? siteConfig.siteClassificationId : (value.siteClassificationId || siteConfig.siteClassificationId),
-  siteClassification: restoreOriginalLayout ? siteConfig.siteClassification : (value.siteClassification || siteConfig.siteClassification),
-  siteClassificationDescription: restoreOriginalLayout ? siteConfig.siteClassificationDescription : (value.siteClassificationDescription || siteConfig.siteClassificationDescription),
-  techItems: Array.isArray(value.techItems) && value.techItems.length
-    ? value.techItems
-    : siteConfig.techItems,
-  metrics: Array.isArray(value.metrics) && value.metrics.length ? value.metrics : siteConfig.metrics,
-  stickerLibrary: Array.isArray(value.stickerLibrary) ? value.stickerLibrary : siteConfig.stickerLibrary,
-  displayModels: normalizeDisplayModels(value.displayModels),
-  specialties: Array.isArray(value.specialties) && value.specialties.length ? value.specialties : siteConfig.specialties,
-  sectionVisibility: { ...siteConfig.sectionVisibility, ...(value.sectionVisibility || {}) },
-  appearance: { ...siteConfig.appearance, ...(value.appearance || {}) },
-}}
-
-const readSite = () => {
-  try {
-    const saved = localStorage.getItem(STORAGE_KEY)
-    return saved ? normalizeSite(JSON.parse(saved)) : normalizeSite()
-  } catch {
-    return normalizeSite()
-  }
-}
-
 export function useSiteStore() {
-  const [site, setSite] = useState(readSite)
+  const [site, setSite] = useState(readSiteCache)
   const [loading, setLoading] = useState(isSupabaseConfigured)
   const [error, setError] = useState('')
   const [saveStatus, setSaveStatus] = useState('idle')
@@ -55,9 +18,9 @@ export function useSiteStore() {
     const { data, error: loadError } = await supabase.from('site_settings').select('data').eq('id', 'main').maybeSingle()
     if (loadError) setError('Não foi possível carregar as configurações online.')
     if (data?.data) {
-      const next = normalizeSite(data.data)
+      const next = normalizeSiteConfig(data.data)
       setSite(next)
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(next))
+      localStorage.setItem(SITE_STORAGE_KEY, JSON.stringify(next))
     }
     setLoading(false)
   }, [])
@@ -100,23 +63,23 @@ export function useSiteStore() {
   const updateSite = useCallback((changes) => {
     setSite((current) => {
       const next = { ...current, ...changes }
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(next))
+      localStorage.setItem(SITE_STORAGE_KEY, JSON.stringify(next))
       queueOnlineSave(next)
       return next
     })
   }, [queueOnlineSave])
 
   const importSite = useCallback((next) => {
-    const normalized = normalizeSite(validateSiteImport(next))
+    const normalized = normalizeSiteConfig(validateSiteImport(next))
     setSite(normalized)
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(normalized))
+    localStorage.setItem(SITE_STORAGE_KEY, JSON.stringify(normalized))
     queueOnlineSave(normalized)
   }, [queueOnlineSave])
 
   const resetSite = useCallback(() => {
-    const next = normalizeSite()
+    const next = normalizeSiteConfig()
     setSite(next)
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(next))
+    localStorage.setItem(SITE_STORAGE_KEY, JSON.stringify(next))
     queueOnlineSave(next)
   }, [queueOnlineSave])
 

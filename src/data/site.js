@@ -1,5 +1,5 @@
-import { defaultAppearance } from './appearance'
-import { defaultSiteClassification, siteClassifications } from './siteClassifications'
+import { defaultAppearance } from './appearance.js'
+import { defaultSiteClassification, siteClassifications } from './siteClassifications.js'
 
 export const siteConfig = {
   classificationLayoutVersion: 3,

@@ -13,6 +13,7 @@ import { useProjectStore } from './hooks/useProjectStore'
 import { useSiteStore } from './hooks/useSiteStore'
 import { useAdminAuth } from './hooks/useAdminAuth'
 import { applyAppearance } from './data/appearance'
+import { getPublicClassification, PUBLIC_SITE_CLASSIFICATION_ID, selectPublicProjects } from './utils/compatibility'
 
 const AdminPanel = lazy(() => import('./components/AdminPanel').then((module) => ({ default: module.AdminPanel })))
 const ContactModal = lazy(() => import('./components/ContactModal').then((module) => ({ default: module.ContactModal })))
@@ -30,6 +31,7 @@ function App() {
   const [selectedProject, setSelectedProject] = useState(null)
   const [adminOpen, setAdminOpen] = useState(false)
   const [contactOpen, setContactOpen] = useState(false)
+  const publicClassification = getPublicClassification()
 
   useEffect(() => {
     if (!adminAuth.user) return
@@ -39,16 +41,16 @@ function App() {
 
   useEffect(() => {
     applyAppearance(siteStore.site.appearance)
-    document.documentElement.dataset.siteClassification = siteStore.site.siteClassificationId || 'portfolio-app'
-  }, [siteStore.site.appearance, siteStore.site.siteClassificationId])
+    document.documentElement.dataset.siteClassification = PUBLIC_SITE_CLASSIFICATION_ID
+  }, [siteStore.site.appearance])
 
   useEffect(() => {
-    const description = siteStore.site.siteClassificationDescription || 'Portfólio profissional de Jever Dias.'
+    const description = publicClassification?.goal || 'Portfólio profissional de Jever Dias.'
     document.querySelector('meta[name="description"]')?.setAttribute('content', description)
-    document.querySelector('meta[name="category"]')?.setAttribute('content', siteStore.site.siteClassification || 'Portfolio Website')
+    document.querySelector('meta[name="category"]')?.setAttribute('content', publicClassification?.classification || 'Portfolio Website')
     document.querySelector('meta[property="og:description"]')?.setAttribute('content', description)
     document.querySelector('meta[name="twitter:description"]')?.setAttribute('content', description)
-  }, [siteStore.site.siteClassification, siteStore.site.siteClassificationDescription])
+  }, [publicClassification])
 
   useEffect(() => {
     const syncRoute = () => setRouteProjectId(projectIdFromPath())
@@ -90,9 +92,9 @@ function App() {
         <Header site={siteStore.site} visibility={visibility} onLogin={() => setAdminOpen(true)} />
         <main id="conteudo">
           {visibility.hero !== false && <Hero site={siteStore.site} onContact={() => setContactOpen(true)} />}
-          {siteStore.site.siteClassificationId === 'landing-conversion' && <LandingHighlights site={siteStore.site} />}
-          {visibility.specialties !== false && <Specialties items={siteStore.site.specialties} classificationId={siteStore.site.siteClassificationId} />}
-          {visibility.projects !== false && <Projects projects={projectStore.projects.filter((project) => project.featured)} classificationId={siteStore.site.siteClassificationId} onOpen={openProjectPage} />}
+          {PUBLIC_SITE_CLASSIFICATION_ID === 'landing-conversion' && <LandingHighlights site={siteStore.site} />}
+          {visibility.specialties !== false && <Specialties items={siteStore.site.specialties} classificationId={PUBLIC_SITE_CLASSIFICATION_ID} />}
+          {visibility.projects !== false && <Projects projects={selectPublicProjects(projectStore.projects)} classificationId={PUBLIC_SITE_CLASSIFICATION_ID} onOpen={openProjectPage} />}
           {visibility.about !== false && <About />}
           {visibility.credibility !== false && <Credibility site={siteStore.site} />}
           {visibility.resume !== false && <Resume site={siteStore.site} />}

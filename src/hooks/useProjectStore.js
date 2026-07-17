@@ -1,63 +1,17 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { defaultProjects, projectTypes } from '../data/projects'
 import { isSupabaseConfigured, removePortfolioAsset, supabase, uploadPortfolioAsset } from '../lib/supabase'
 import { validateProjectsImport } from '../utils/validation'
+import {
+  cloneDefaultProjects,
+  normalizeProjectData,
+  PROJECTS_STORAGE_KEY,
+  readProjectsCache,
+} from '../utils/compatibility'
 
-const STORAGE_KEY = 'jd-portfolio-projects-v1'
-const AI_MIGRATION_KEY = 'jd-portfolio-ai-category-v1'
 const SAVE_DELAY = 700
 
-const normalizeProject = (project) => {
-  const categoryLooksLikeStatus = /^(em andamento|conclu[ií]do|em prepara[cç][aã]o|planejado|pausado|rascunho)$/i.test(project.category?.trim() || '')
-  const normalized = {
-    theme: '',
-    contentFormat: '',
-    audience: '',
-    challenge: '',
-    solution: '',
-    results: '',
-    duration: '',
-    contribution: '',
-    typeLabel: projectTypes[project.type] || 'Projeto',
-    displayModelId: project.type || 'website',
-    presentation: project.type === 'powerbi' ? 'embed' : project.type === 'website' ? 'live' : project.type === 'ai' ? 'assistant' : 'gallery',
-    status: categoryLooksLikeStatus ? project.category : 'Concluído',
-    ...project,
-    category: categoryLooksLikeStatus ? 'Projetos' : (project.category || 'Projetos'),
-  }
-  return {
-    ...normalized,
-    tags: Array.isArray(project.tags) ? [...project.tags] : [],
-    gallery: Array.isArray(project.gallery) ? [...project.gallery] : [],
-  }
-}
-
-const cloneDefaults = () => defaultProjects.map(normalizeProject)
-
-const readProjects = () => {
-  try {
-    const saved = localStorage.getItem(STORAGE_KEY)
-    if (!saved) {
-      localStorage.setItem(AI_MIGRATION_KEY, '1')
-      return cloneDefaults()
-    }
-    const parsed = JSON.parse(saved)
-    if (!Array.isArray(parsed) || !parsed.length) return cloneDefaults()
-    const normalized = parsed.map(normalizeProject)
-    if (localStorage.getItem(AI_MIGRATION_KEY) !== '1') {
-      const aiTemplate = defaultProjects.find((project) => project.type === 'ai')
-      if (aiTemplate && !normalized.some((project) => project.type === 'ai')) normalized.push(normalizeProject(aiTemplate))
-      localStorage.setItem(AI_MIGRATION_KEY, '1')
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(normalized))
-    }
-    return normalized
-  } catch {
-    return cloneDefaults()
-  }
-}
-
 export function useProjectStore() {
-  const [projects, setProjects] = useState(readProjects)
+  const [projects, setProjects] = useState(readProjectsCache)
   const [loading, setLoading] = useState(isSupabaseConfigured)
   const [error, setError] = useState('')
   const [saveStatus, setSaveStatus] = useState('idle')
@@ -69,9 +23,9 @@ export function useProjectStore() {
     const { data, error: loadError } = await supabase.from('portfolio_projects').select('id, data, featured, position').order('position')
     if (loadError) setError('Não foi possível carregar os projetos online.')
     if (data?.length) {
-      const next = data.map((row) => normalizeProject({ ...row.data, id: row.id, featured: row.featured }))
+      const next = data.map((row) => normalizeProjectData({ ...row.data, id: row.id, featured: row.featured }))
       setProjects(next)
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(next))
+      localStorage.setItem(PROJECTS_STORAGE_KEY, JSON.stringify(next))
     }
     setLoading(false)
   }, [])
@@ -123,7 +77,7 @@ export function useProjectStore() {
 
   const persist = useCallback((next, changedIds) => {
     setProjects(next)
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(next))
+    localStorage.setItem(PROJECTS_STORAGE_KEY, JSON.stringify(next))
     queueOnlineRows(next, changedIds)
   }, [queueOnlineRows])
 
@@ -205,10 +159,10 @@ export function useProjectStore() {
   }, [persist, projects])
 
   const importProjects = useCallback((payload) => {
-    persist(validateProjectsImport(payload).map(normalizeProject))
+    persist(validateProjectsImport(payload).map(normalizeProjectData))
   }, [persist])
 
-  const resetProjects = useCallback(() => persist(cloneDefaults()), [persist])
+  const resetProjects = useCallback(() => persist(cloneDefaultProjects()), [persist])
 
   const uploadImage = useCallback((file, projectId, purpose = 'galeria') => (
     uploadPortfolioAsset(file, `projetos/${projectId}/${purpose}`)
