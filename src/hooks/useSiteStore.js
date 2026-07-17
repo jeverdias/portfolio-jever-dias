@@ -1,87 +1,102 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { isSupabaseConfigured, removePortfolioAsset, supabase, uploadPortfolioAsset } from '../lib/supabase'
-import { validateSiteImport } from '../utils/validation'
-import { normalizeSiteConfig, readSiteCache, SITE_STORAGE_KEY } from '../utils/compatibility'
+import { isSupabaseConfigured, removePortfolioAsset, supabase, uploadPortfolioAsset } from '../lib/supabase.js'
+import { validateSiteImport } from '../utils/validation.js'
+import { normalizeSiteConfig, readSiteCache, SITE_STORAGE_KEY } from '../utils/compatibility.js'
+import { localStorageAdapter } from '../core/persistence/localStorageAdapter.js'
+import { createPersistenceQueue } from '../core/persistence/persistenceQueue.js'
+import { PERSISTENCE_STATUS } from '../core/persistence/persistenceStatus.js'
+import { createSupabaseAdapter, isTransientPersistenceError } from '../core/persistence/supabaseAdapter.js'
 
 const SAVE_DELAY = 700
+const remotePersistence = createSupabaseAdapter(supabase)
 
 export function useSiteStore() {
   const [site, setSite] = useState(readSiteCache)
   const [loading, setLoading] = useState(isSupabaseConfigured)
   const [error, setError] = useState('')
-  const [saveStatus, setSaveStatus] = useState('idle')
-  const saveTimerRef = useRef(null)
-  const saveSequenceRef = useRef(0)
+  const [saveStatus, setSaveStatus] = useState(PERSISTENCE_STATUS.IDLE)
+  const queueRef = useRef(null)
 
-  const refresh = useCallback(async () => {
-    if (!supabase) return
-    const { data, error: loadError } = await supabase.from('site_settings').select('data').eq('id', 'main').maybeSingle()
-    if (loadError) setError('Não foi possível carregar as configurações online.')
-    if (data?.data) {
-      const next = normalizeSiteConfig(data.data)
-      setSite(next)
-      localStorage.setItem(SITE_STORAGE_KEY, JSON.stringify(next))
+  const createQueue = useCallback(() => createPersistenceQueue({
+    delay: SAVE_DELAY,
+    save: (next) => remotePersistence.saveSiteConfig(next),
+    isRetryable: isTransientPersistenceError,
+    onStatus: (status) => {
+      setSaveStatus(status)
+      if (status === PERSISTENCE_STATUS.ERROR) setError('A alteração ficou local, mas ainda não foi salva no Supabase.')
+      if (status === PERSISTENCE_STATUS.SAVED) setError('')
+    },
+  }), [])
+
+  const ensureQueue = useCallback(() => {
+    if (!supabase) return null
+    if (!queueRef.current || queueRef.current.isDisposed()) queueRef.current = createQueue()
+    return queueRef.current
+  }, [createQueue])
+
+  useEffect(() => {
+    ensureQueue()
+    return () => {
+      queueRef.current?.dispose()
+      queueRef.current = null
     }
-    setLoading(false)
+  }, [ensureQueue])
+
+  const writeCache = useCallback((next) => {
+    const result = localStorageAdapter.writeJson(SITE_STORAGE_KEY, next)
+    if (!result.ok) setError('A alteração está nesta sessão, mas não pôde ser armazenada neste navegador.')
+    return result.ok
   }, [])
 
-  // A leitura é assíncrona; não há atualização síncrona de estado dentro do efeito.
+  const refresh = useCallback(async () => {
+    if (!supabase) {
+      setLoading(false)
+      return
+    }
+    try {
+      const data = await remotePersistence.loadSiteConfig()
+      if (data) {
+        const next = normalizeSiteConfig(data)
+        setSite(next)
+        writeCache(next)
+      }
+    } catch {
+      setError('Não foi possível carregar as configurações online.')
+    } finally {
+      setLoading(false)
+    }
+  }, [writeCache])
+
+  // A hidratação apenas lê e normaliza; ela não entra na fila de salvamento.
   // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => { void refresh() }, [refresh])
 
-  const persistOnline = useCallback(async (next, sequence) => {
-    if (!supabase) return true
-    setSaveStatus('saving')
-    let saveError = null
-    for (let attempt = 0; attempt < 3; attempt += 1) {
-      if (sequence !== saveSequenceRef.current) return false
-      const response = await supabase.from('site_settings').upsert({
-        id: 'main',
-        data: next,
-        updated_at: new Date().toISOString(),
-      })
-      saveError = response.error
-      if (!saveError) break
-      if (attempt < 2) await new Promise((resolve) => window.setTimeout(resolve, 2000 * (attempt + 1)))
-    }
-    if (sequence !== saveSequenceRef.current) return !saveError
-    setError(saveError ? 'A alteração ficou local, mas ainda não foi salva no Supabase.' : '')
-    setSaveStatus(saveError ? 'error' : 'saved')
-    return !saveError
-  }, [])
-
   const queueOnlineSave = useCallback((next) => {
-    if (!supabase) return
-    const sequence = ++saveSequenceRef.current
-    window.clearTimeout(saveTimerRef.current)
-    setSaveStatus('pending')
-    saveTimerRef.current = window.setTimeout(() => { void persistOnline(next, sequence) }, SAVE_DELAY)
-  }, [persistOnline])
-
-  useEffect(() => () => window.clearTimeout(saveTimerRef.current), [])
+    void ensureQueue()?.enqueue(next)
+  }, [ensureQueue])
 
   const updateSite = useCallback((changes) => {
     setSite((current) => {
       const next = { ...current, ...changes }
-      localStorage.setItem(SITE_STORAGE_KEY, JSON.stringify(next))
+      writeCache(next)
       queueOnlineSave(next)
       return next
     })
-  }, [queueOnlineSave])
+  }, [queueOnlineSave, writeCache])
 
   const importSite = useCallback((next) => {
     const normalized = normalizeSiteConfig(validateSiteImport(next))
     setSite(normalized)
-    localStorage.setItem(SITE_STORAGE_KEY, JSON.stringify(normalized))
+    writeCache(normalized)
     queueOnlineSave(normalized)
-  }, [queueOnlineSave])
+  }, [queueOnlineSave, writeCache])
 
   const resetSite = useCallback(() => {
     const next = normalizeSiteConfig()
     setSite(next)
-    localStorage.setItem(SITE_STORAGE_KEY, JSON.stringify(next))
+    writeCache(next)
     queueOnlineSave(next)
-  }, [queueOnlineSave])
+  }, [queueOnlineSave, writeCache])
 
   const uploadResume = useCallback(async (file) => {
     const previousUrl = site.resumeUrl

@@ -1,85 +1,118 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { isSupabaseConfigured, removePortfolioAsset, supabase, uploadPortfolioAsset } from '../lib/supabase'
-import { validateProjectsImport } from '../utils/validation'
+import { isSupabaseConfigured, removePortfolioAsset, supabase, uploadPortfolioAsset } from '../lib/supabase.js'
+import { validateProjectsImport } from '../utils/validation.js'
 import {
   cloneDefaultProjects,
   normalizeProjectData,
   PROJECTS_STORAGE_KEY,
   readProjectsCache,
-} from '../utils/compatibility'
+} from '../utils/compatibility.js'
+import { localStorageAdapter } from '../core/persistence/localStorageAdapter.js'
+import { createPersistenceQueue } from '../core/persistence/persistenceQueue.js'
+import { PERSISTENCE_STATUS } from '../core/persistence/persistenceStatus.js'
+import { createSupabaseAdapter, isTransientPersistenceError } from '../core/persistence/supabaseAdapter.js'
 
 const SAVE_DELAY = 700
+const remotePersistence = createSupabaseAdapter(supabase)
+
+export const coalesceProjectOperations = (current = [], incoming = []) => {
+  const operations = new Map(current.map((operation) => [operation.id, operation]))
+  incoming.forEach((operation) => operations.set(operation.id, operation))
+  return [...operations.values()]
+}
 
 export function useProjectStore() {
   const [projects, setProjects] = useState(readProjectsCache)
   const [loading, setLoading] = useState(isSupabaseConfigured)
   const [error, setError] = useState('')
-  const [saveStatus, setSaveStatus] = useState('idle')
-  const saveTimerRef = useRef(null)
-  const pendingRowsRef = useRef(new Map())
+  const [saveStatus, setSaveStatus] = useState(PERSISTENCE_STATUS.IDLE)
+  const queueRef = useRef(null)
 
-  const refresh = useCallback(async () => {
-    if (!supabase) return
-    const { data, error: loadError } = await supabase.from('portfolio_projects').select('id, data, featured, position').order('position')
-    if (loadError) setError('Não foi possível carregar os projetos online.')
-    if (data?.length) {
-      const next = data.map((row) => normalizeProjectData({ ...row.data, id: row.id, featured: row.featured }))
-      setProjects(next)
-      localStorage.setItem(PROJECTS_STORAGE_KEY, JSON.stringify(next))
+  const createQueue = useCallback(() => createPersistenceQueue({
+    delay: SAVE_DELAY,
+    coalesce: coalesceProjectOperations,
+    isRetryable: isTransientPersistenceError,
+    save: async (operations) => {
+      const rows = operations.filter((item) => item.kind === 'upsert').map((item) => item.row)
+      const removals = operations.filter((item) => item.kind === 'delete')
+      if (rows.length) await remotePersistence.saveProjects(rows)
+      for (const removal of removals) {
+        await remotePersistence.deleteProject(removal.id)
+        await Promise.allSettled((removal.assets || []).map((url) => removePortfolioAsset(url)))
+      }
+    },
+    onStatus: (status) => {
+      setSaveStatus(status)
+      if (status === PERSISTENCE_STATUS.ERROR) setError('A alteração ficou local, mas ainda não foi salva no Supabase.')
+      if (status === PERSISTENCE_STATUS.SAVED) setError('')
+    },
+  }), [])
+
+  const ensureQueue = useCallback(() => {
+    if (!supabase) return null
+    if (!queueRef.current || queueRef.current.isDisposed()) queueRef.current = createQueue()
+    return queueRef.current
+  }, [createQueue])
+
+  useEffect(() => {
+    ensureQueue()
+    return () => {
+      queueRef.current?.dispose()
+      queueRef.current = null
     }
-    setLoading(false)
+  }, [ensureQueue])
+
+  const writeCache = useCallback((next) => {
+    const result = localStorageAdapter.writeJson(PROJECTS_STORAGE_KEY, next)
+    if (!result.ok) setError('As alterações estão nesta sessão, mas não puderam ser armazenadas neste navegador.')
+    return result.ok
   }, [])
 
-  // A leitura é assíncrona; não há atualização síncrona de estado dentro do efeito.
+  const refresh = useCallback(async () => {
+    if (!supabase) {
+      setLoading(false)
+      return
+    }
+    try {
+      const data = await remotePersistence.loadProjects()
+      if (data.length) {
+        const next = data.map((row) => normalizeProjectData({ ...row.data, id: row.id, featured: row.featured }))
+        setProjects(next)
+        writeCache(next)
+      }
+    } catch {
+      setError('Não foi possível carregar os projetos online.')
+    } finally {
+      setLoading(false)
+    }
+  }, [writeCache])
+
+  // A hidratação apenas lê e normaliza; ela não entra na fila de salvamento.
   // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => { void refresh() }, [refresh])
 
-  const flushOnline = useCallback(async () => {
-    if (!supabase || !pendingRowsRef.current.size) return
-    const rows = [...pendingRowsRef.current.values()]
-    pendingRowsRef.current.clear()
-    setSaveStatus('saving')
-    let saveError = null
-    for (let attempt = 0; attempt < 3; attempt += 1) {
-      const response = await supabase.from('portfolio_projects').upsert(rows)
-      saveError = response.error
-      if (!saveError) break
-      if (attempt < 2) await new Promise((resolve) => window.setTimeout(resolve, 2000 * (attempt + 1)))
-    }
-    if (saveError) {
-      rows.forEach((row) => {
-        if (!pendingRowsRef.current.has(row.id)) pendingRowsRef.current.set(row.id, row)
-      })
-    }
-    setError(saveError ? 'A alteração ficou local, mas ainda não foi salva no Supabase.' : '')
-    setSaveStatus(saveError ? 'error' : pendingRowsRef.current.size ? 'pending' : 'saved')
-  }, [])
+  const queueOperations = useCallback((operations, options) => {
+    if (!operations.length) return
+    void ensureQueue()?.enqueue(operations, options)
+  }, [ensureQueue])
 
-  const queueOnlineRows = useCallback((next, changedIds = next.map((project) => project.id)) => {
-    if (!supabase || !changedIds.length) return
+  const persist = useCallback((next, changedIds = next.map((project) => project.id)) => {
+    setProjects(next)
+    writeCache(next)
     const changed = new Set(changedIds)
-    next.forEach((project, position) => {
-      if (!changed.has(project.id)) return
-      pendingRowsRef.current.set(project.id, {
+    const operations = next.flatMap((project, position) => changed.has(project.id) ? [{
+      kind: 'upsert',
+      id: project.id,
+      row: {
         id: project.id,
         data: project,
         featured: Boolean(project.featured),
         position,
         updated_at: new Date().toISOString(),
-      })
-    })
-    window.clearTimeout(saveTimerRef.current)
-    setSaveStatus('pending')
-    saveTimerRef.current = window.setTimeout(() => { void flushOnline() }, SAVE_DELAY)
-  }, [flushOnline])
-
-  useEffect(() => () => window.clearTimeout(saveTimerRef.current), [])
-
-  const persist = useCallback((next, changedIds) => {
-    setProjects(next)
-    localStorage.setItem(PROJECTS_STORAGE_KEY, JSON.stringify(next))
-    queueOnlineRows(next, changedIds)
-  }, [queueOnlineRows])
+      },
+    }] : [])
+    queueOperations(operations)
+  }, [queueOperations, writeCache])
 
   const addProject = useCallback(() => {
     const id = `projeto-${Date.now()}`
@@ -122,20 +155,15 @@ export function useProjectStore() {
 
   const removeProject = useCallback((id) => {
     const removed = projects.find((project) => project.id === id)
-    pendingRowsRef.current.delete(id)
-    persist(projects.filter((project) => project.id !== id), [])
-    if (supabase) {
-      setSaveStatus('saving')
-      void supabase.from('portfolio_projects').delete().eq('id', id).then(({ error: deleteError }) => {
-        setError(deleteError ? 'O projeto foi removido localmente, mas não foi excluído do Supabase.' : '')
-        setSaveStatus(deleteError ? 'error' : pendingRowsRef.current.size ? 'pending' : 'saved')
-        if (!deleteError) {
-          const assets = [removed?.image, ...(removed?.gallery || [])].filter(Boolean)
-          void Promise.allSettled(assets.map((url) => removePortfolioAsset(url)))
-        }
-      })
-    }
-  }, [persist, projects])
+    const next = projects.filter((project) => project.id !== id)
+    setProjects(next)
+    writeCache(next)
+    queueOperations([{
+      kind: 'delete',
+      id,
+      assets: [removed?.image, ...(removed?.gallery || [])].filter(Boolean),
+    }], { immediate: true })
+  }, [projects, queueOperations, writeCache])
 
   const moveProject = useCallback((id, direction) => {
     const index = projects.findIndex((project) => project.id === id)

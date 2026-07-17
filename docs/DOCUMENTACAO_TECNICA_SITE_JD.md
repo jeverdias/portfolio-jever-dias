@@ -534,3 +534,9 @@ Este documento descreve a arquitetura conhecida na versão 1.8.1. Antes de aplic
 A versão 1.8.1 deste documento e o PDF correspondente continuam sendo o baseline visual e funcional capturado antes da refatoração. A versão 1.8.2 acrescentou a proteção automatizada de compatibilidade. A versão 1.8.3 centralizou os defaults, o schema conceitual, a normalização e as migrations somente em memória, sem alterar o formato persistido ou o visual.
 
 O contrato e as regras atuais dessa camada estão documentados em [`ARQUITETURA_CONFIGURACAO.md`](ARQUITETURA_CONFIGURACAO.md).
+
+## Atualização arquitetural da versão 1.8.4
+
+A persistência local e remota passou a usar adaptadores testáveis e uma fila compartilhada de salvamento. Os hooks `useSiteStore` e `useProjectStore` continuam especializados e preservam suas APIs públicas. A arquitetura, os fluxos de hidratação, debounce, retry e fallback estão descritos em [`architecture/PERSISTENCIA.md`](architecture/PERSISTENCIA.md).
+
+Nenhuma migration ou alteração de banco faz parte dessa atualização.

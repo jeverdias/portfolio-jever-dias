@@ -1,9 +1,10 @@
 import { createClient } from '@supabase/supabase-js'
-import { validateContactPayload } from '../utils/validation'
+import { validateContactPayload } from '../utils/validation.js'
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY
-const forceLocalAdmin = import.meta.env.DEV && import.meta.env.VITE_FORCE_LOCAL_ADMIN === 'true'
+const runtimeEnv = import.meta.env || {}
+const supabaseUrl = runtimeEnv.VITE_SUPABASE_URL
+const supabaseAnonKey = runtimeEnv.VITE_SUPABASE_ANON_KEY
+const forceLocalAdmin = runtimeEnv.DEV && runtimeEnv.VITE_FORCE_LOCAL_ADMIN === 'true'
 
 export const isSupabaseConfigured = !forceLocalAdmin && Boolean(supabaseUrl && supabaseAnonKey)
 export const portfolioBucket = 'portfolio-assets'

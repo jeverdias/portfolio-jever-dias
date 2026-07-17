@@ -2,8 +2,8 @@ import { ArrowUpRight, CheckCircle2, Mail, Send } from 'lucide-react'
 import { useState } from 'react'
 import { getClassificationPresentation } from '../data/classificationPresentation'
 import { isSupabaseConfigured, submitContactMessage } from '../lib/supabase'
+import { CONTACT_STORAGE_KEY, localStorageAdapter } from '../core/persistence/localStorageAdapter'
 
-const CONTACT_COOLDOWN_KEY = 'jd-contact-last-submit'
 const CONTACT_COOLDOWN_MS = 60_000
 
 export function Contact({ site, onOpen }) {
@@ -19,7 +19,7 @@ export function Contact({ site, onOpen }) {
       setStatus('idle')
       return
     }
-    const lastSubmit = Number(localStorage.getItem(CONTACT_COOLDOWN_KEY) || 0)
+    const lastSubmit = Number(localStorageAdapter.readRaw(CONTACT_STORAGE_KEY, '0').value || 0)
     if (Date.now() - lastSubmit < CONTACT_COOLDOWN_MS) {
       setStatus('rate-limited')
       return
@@ -49,7 +49,7 @@ export function Contact({ site, onOpen }) {
         })
         if (!response.ok) throw new Error('Falha no envio')
       }
-      localStorage.setItem(CONTACT_COOLDOWN_KEY, String(Date.now()))
+      localStorageAdapter.writeRaw(CONTACT_STORAGE_KEY, Date.now())
       form.reset()
       setStatus((current) => current === 'success-no-email' ? current : 'success')
     } catch (submitError) {

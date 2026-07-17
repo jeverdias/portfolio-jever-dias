@@ -2,22 +2,26 @@ import { defaultProjects, projectTypes } from '../data/projects.js'
 import { defaultSiteClassification, siteClassifications } from '../data/siteClassifications.js'
 import { createDefaultSiteConfig } from '../core/config/defaultSiteConfig.js'
 import { normalizeSiteConfig } from '../core/config/normalizeSiteConfig.js'
+import {
+  CONTACT_STORAGE_KEY,
+  createLocalStorageAdapter,
+  localStorageAdapter,
+  PROJECTS_STORAGE_KEY,
+  SITE_STORAGE_KEY,
+} from '../core/persistence/localStorageAdapter.js'
 
 export { createDefaultSiteConfig, normalizeSiteConfig }
-
-export const SITE_STORAGE_KEY = 'jd-portfolio-site-v1'
-export const PROJECTS_STORAGE_KEY = 'jd-portfolio-projects-v1'
-export const CONTACT_STORAGE_KEY = 'jd-contact-last-submit'
+export { CONTACT_STORAGE_KEY, PROJECTS_STORAGE_KEY, SITE_STORAGE_KEY }
 export const AI_MIGRATION_KEY = 'jd-portfolio-ai-category-v1'
 export const PUBLIC_SITE_CLASSIFICATION_ID = defaultSiteClassification
 
-export const readSiteCache = (storage = globalThis.localStorage) => {
-  try {
-    const saved = storage?.getItem(SITE_STORAGE_KEY)
-    return saved ? normalizeSiteConfig(JSON.parse(saved)) : normalizeSiteConfig()
-  } catch {
-    return normalizeSiteConfig()
-  }
+const resolveStorageAdapter = (storage) => storage === undefined
+  ? localStorageAdapter
+  : createLocalStorageAdapter(storage)
+
+export const readSiteCache = (storage) => {
+  const result = resolveStorageAdapter(storage).readJson(SITE_STORAGE_KEY)
+  return result.ok && result.found ? normalizeSiteConfig(result.value) : normalizeSiteConfig()
 }
 
 export const normalizeProjectData = (project = {}) => {
@@ -48,26 +52,23 @@ export const normalizeProjectData = (project = {}) => {
 
 export const cloneDefaultProjects = () => defaultProjects.map(normalizeProjectData)
 
-export const readProjectsCache = (storage = globalThis.localStorage) => {
-  try {
-    const saved = storage?.getItem(PROJECTS_STORAGE_KEY)
-    if (!saved) {
-      storage?.setItem(AI_MIGRATION_KEY, '1')
-      return cloneDefaultProjects()
-    }
-    const parsed = JSON.parse(saved)
-    if (!Array.isArray(parsed) || !parsed.length) return cloneDefaultProjects()
-    const normalized = parsed.map(normalizeProjectData)
-    if (storage?.getItem(AI_MIGRATION_KEY) !== '1') {
-      const aiTemplate = defaultProjects.find((project) => project.type === 'ai')
-      if (aiTemplate && !normalized.some((project) => project.type === 'ai')) normalized.push(normalizeProjectData(aiTemplate))
-      storage?.setItem(AI_MIGRATION_KEY, '1')
-      storage?.setItem(PROJECTS_STORAGE_KEY, JSON.stringify(normalized))
-    }
-    return normalized
-  } catch {
+export const readProjectsCache = (storage) => {
+  const adapter = resolveStorageAdapter(storage)
+  const cached = adapter.readJson(PROJECTS_STORAGE_KEY)
+  if (!cached.ok) return cloneDefaultProjects()
+  if (!cached.found) {
+    adapter.writeRaw(AI_MIGRATION_KEY, '1')
     return cloneDefaultProjects()
   }
+  if (!Array.isArray(cached.value) || !cached.value.length) return cloneDefaultProjects()
+  const normalized = cached.value.map(normalizeProjectData)
+  if (adapter.readRaw(AI_MIGRATION_KEY).value !== '1') {
+    const aiTemplate = defaultProjects.find((project) => project.type === 'ai')
+    if (aiTemplate && !normalized.some((project) => project.type === 'ai')) normalized.push(normalizeProjectData(aiTemplate))
+    adapter.writeRaw(AI_MIGRATION_KEY, '1')
+    adapter.writeJson(PROJECTS_STORAGE_KEY, normalized)
+  }
+  return normalized
 }
 
 export const selectPublicProjects = (projects = []) => (
