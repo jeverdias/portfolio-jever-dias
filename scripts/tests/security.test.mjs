@@ -29,9 +29,9 @@ test('mensagens públicas usam RPC com limite e sem INSERT direto', () => {
 })
 
 test('PIN local não possui valor padrão de produção', () => {
-  const admin = read('src/components/AdminPanel.jsx')
-  assert.match(admin, /import\.meta\.env\.DEV/)
-  assert.doesNotMatch(admin, /VITE_ADMIN_PIN \|\| ['"][^'"]+['"]/)
+  const login = read('src/admin/AdminLogin.jsx')
+  assert.match(login, /import\.meta\.env\.DEV/)
+  assert.doesNotMatch(login, /VITE_ADMIN_PIN \|\| ['"][^'"]+['"]/)
 })
 
 test('chaves administrativas não estão presentes no frontend', () => {

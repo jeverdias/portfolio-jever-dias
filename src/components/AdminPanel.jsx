@@ -4,7 +4,6 @@ import {
   ArrowUp,
   BarChart3,
   Bot,
-  BookOpenCheck,
   CheckCircle2,
   Database,
   Download,
@@ -14,23 +13,20 @@ import {
   GalleryHorizontal,
   Globe2,
   ImagePlus,
-  LayoutDashboard,
   Link2,
-  LogOut,
-  Mail,
   Plus,
-  Palette,
   Pencil,
   RotateCcw,
   Settings,
-  ShieldCheck,
   Sparkles,
-  Tags,
   Trash2,
   Upload,
   X,
 } from 'lucide-react'
 import { useMemo, useRef, useState } from 'react'
+import { AdminLogin } from '../admin/AdminLogin'
+import { AdminShell } from '../admin/AdminShell'
+import { resolveAdminViewId } from '../admin/adminNavigation'
 import { getProjectTypeLabel, projectTypes } from '../data/projects'
 import { optimizeImage } from '../utils/optimizeImage'
 import { AdminTechLibrary } from './AdminTechLibrary'
@@ -42,12 +38,10 @@ import { DisplayModelPreview } from './DisplayModelPreview'
 import { AdminProjectPreview } from './AdminProjectPreview'
 import { AdminSiteClassification } from './AdminSiteClassification'
 import { AdminMessages } from './AdminMessages'
-import { getInitials } from '../utils/getInitials'
 import { isHttpUrl } from '../utils/validation'
 import { AdminSaveStatus } from './admin/AdminSaveStatus'
 import { useModalA11y } from '../hooks/useModalA11y'
 
-const ADMIN_PIN = import.meta.env.DEV ? (import.meta.env.VITE_ADMIN_PIN || '') : ''
 const validHttpUrl = isHttpUrl
 const publicSections = [
   ['hero', 'Apresentação inicial'], ['specialties', 'Especialidades'], ['projects', 'Portfólio'], ['about', 'Sobre'],
@@ -64,8 +58,6 @@ const readAsDataUrl = (file) => new Promise((resolve, reject) => {
 
 export function AdminPanel({ open, onClose, projectStore, siteStore, adminAuth }) {
   const [localAuthenticated, setLocalAuthenticated] = useState(false)
-  const [email, setEmail] = useState('')
-  const [pin, setPin] = useState('')
   const [error, setError] = useState('')
   const [view, setView] = useState('overview')
   const [selectedId, setSelectedId] = useState(projectStore.projects[0]?.id || '')
@@ -85,7 +77,7 @@ export function AdminPanel({ open, onClose, projectStore, siteStore, adminAuth }
   const panelRef = useRef(null)
   const closeRef = useRef(null)
   const authenticated = adminAuth.configured ? Boolean(adminAuth.user) : localAuthenticated
-  const localLoginAllowed = !adminAuth.configured && import.meta.env.DEV && Boolean(ADMIN_PIN)
+  const activeView = resolveAdminViewId(view, { adminAuth })
   useModalA11y({ active: open, containerRef: panelRef, initialFocusRef: closeRef, onClose })
 
   const selected = useMemo(
@@ -122,25 +114,6 @@ export function AdminPanel({ open, onClose, projectStore, siteStore, adminAuth }
   )
 
   if (!open) return null
-
-  const login = async (event) => {
-    event.preventDefault()
-    if (adminAuth.configured) {
-      const success = await adminAuth.login(email, pin)
-      if (success) {
-        setPin('')
-        setError('')
-      }
-      return
-    }
-    if (pin === ADMIN_PIN) {
-      setLocalAuthenticated(true)
-      setPin('')
-      setError('')
-    } else {
-      setError('PIN incorreto. Confira o arquivo .env do projeto.')
-    }
-  }
 
   const updateProject = (field, value) => selected && projectStore.updateProject(selected.id, { [field]: value })
   const displayModels = siteStore.site.displayModels || []
@@ -560,67 +533,36 @@ export function AdminPanel({ open, onClose, projectStore, siteStore, adminAuth }
     </div>
   )
 
+  const navigate = (nextView) => setView(resolveAdminViewId(nextView, { adminAuth }))
+  const logout = () => {
+    if (adminAuth.configured) {
+      void adminAuth.logout()
+      return
+    }
+    setLocalAuthenticated(false)
+  }
+
   return (
     <div className="admin-backdrop">
       <section ref={panelRef} className="admin-panel admin-panel--console" role="dialog" aria-modal="true" aria-labelledby="admin-title">
         <button ref={closeRef} className="modal-close" type="button" onClick={onClose} aria-label="Fechar administração"><X size={21} /></button>
 
         {!authenticated ? (
-          <div className="admin-login">
-            <div className="admin-login__mark">{getInitials(siteStore.site.name)}</div>
-            <span>Área administrativa</span>
-            <h2 id="admin-title">Login</h2>
-            <p>Entre para configurar o site e gerenciar seus repositórios.</p>
-            {(adminAuth.configured || localLoginAllowed) ? <form onSubmit={login}>
-              {adminAuth.configured && <><label htmlFor="admin-email">Email</label><input id="admin-email" type="email" value={email} onChange={(event) => setEmail(event.target.value)} autoComplete="username" autoFocus required /></>}
-              <label htmlFor="admin-pin">{adminAuth.configured ? 'Senha' : 'PIN local de desenvolvimento'}</label>
-              <input id="admin-pin" type="password" value={pin} onChange={(event) => setPin(event.target.value)} onKeyDown={(event) => {
-                if (event.key === 'Enter') {
-                  event.preventDefault()
-                  event.currentTarget.form?.requestSubmit()
-                }
-              }} autoComplete={adminAuth.configured ? 'current-password' : 'off'} autoFocus={!adminAuth.configured} required />
-              {(error || adminAuth.error) && <div className="form-error">{error || adminAuth.error}</div>}
-              <button className="button button--primary" type="submit" disabled={adminAuth.loading}>{adminAuth.loading ? 'Entrando...' : 'Entrar no painel'}</button>
-              <span className="admin-login__enter-hint">Pressione Enter ou clique no botão para entrar.</span>
-            </form> : <div className="admin-login__setup"><ShieldCheck size={20} /><strong>Painel protegido</strong><p>Configure as variáveis do projeto Supabase exclusivo no Netlify para habilitar o acesso administrativo seguro.</p></div>}
-            <small>{adminAuth.configured ? 'Acesso protegido pelo Supabase Auth. Somente usuários autorizados pelas políticas do portfólio podem editar.' : localLoginAllowed ? 'Modo local temporário: use o PIN de desenvolvimento. No site publicado, o painel permanece bloqueado sem Supabase.' : 'O PIN local nunca é aceito no site publicado.'}</small>
-          </div>
+          <AdminLogin adminAuth={adminAuth} siteName={siteStore.site.name} onLocalAuthenticated={() => setLocalAuthenticated(true)} />
         ) : (
-          <div className="admin-console">
-            <aside className="admin-console__nav">
-              <div className="admin-console__brand"><div>{getInitials(siteStore.site.name)}</div><span><strong>{siteStore.site.name}</strong><small>{siteStore.site.siteClassification}</small></span></div>
-              <nav aria-label="Navegação administrativa">
-                <button className={view === 'classification' ? 'is-active' : ''} type="button" onClick={() => setView('classification')}><Tags size={17} /> Classificação do site</button>
-                <button className={view === 'overview' ? 'is-active' : ''} type="button" onClick={() => setView('overview')}><LayoutDashboard size={17} /> Visão geral</button>
-                <button className={view === 'settings' ? 'is-active' : ''} type="button" onClick={() => setView('settings')}><Settings size={17} /> Configurações</button>
-                <button className={view === 'appearance' ? 'is-active' : ''} type="button" onClick={() => setView('appearance')}><Palette size={17} /> Aparência</button>
-                <button className={view === 'professional' ? 'is-active' : ''} type="button" onClick={() => setView('professional')}><CheckCircle2 size={17} /> Trajetória</button>
-                <button className={view === 'repositories' ? 'is-active' : ''} type="button" onClick={() => setView('repositories')}><FolderKanban size={17} /> Repositórios</button>
-                <button className={view === 'library' ? 'is-active' : ''} type="button" onClick={() => setView('library')}><ImagePlus size={17} /> Box/figurinhas</button>
-                <button className={view === 'specialties' ? 'is-active' : ''} type="button" onClick={() => setView('specialties')}><Sparkles size={17} /> Especialidades</button>
-                {adminAuth.configured && <button className={view === 'messages' ? 'is-active' : ''} type="button" onClick={() => setView('messages')}><Mail size={17} /> Mensagens</button>}
-                <button className={view === 'guide' ? 'is-active' : ''} type="button" onClick={() => setView('guide')}><BookOpenCheck size={17} /> Guia do site</button>
-              </nav>
-              <div className="admin-console__security"><ShieldCheck size={16} /><span><strong>{adminAuth.configured ? 'Sessão protegida' : 'Sessão local'}</strong><small>{adminAuth.configured ? adminAuth.user?.email : 'Dados neste dispositivo'}</small></span></div>
-              <button className="admin-console__logout" type="button" onClick={() => adminAuth.configured ? adminAuth.logout() : setLocalAuthenticated(false)}><LogOut size={16} /> Sair</button>
-            </aside>
-
-            <main className="admin-console__main">
-              <header className="admin-console__topbar"><div><span>Painel administrativo</span><strong id="admin-title">{view === 'overview' ? 'Visão geral' : view === 'settings' ? 'Configurações' : view === 'appearance' ? 'Aparência' : view === 'classification' ? 'Classificação do site' : view === 'professional' ? 'Trajetória e métricas' : view === 'library' ? 'Box/figurinhas' : view === 'specialties' ? 'Especialidades' : view === 'messages' ? 'Mensagens recebidas' : view === 'guide' ? 'Guia do site' : 'Repositórios'}</strong></div>{siteStore.mode === 'supabase' ? <AdminSaveStatus status={view === 'repositories' ? projectStore.saveStatus : siteStore.saveStatus} /> : <div><span className="admin-status-dot" /> Alterações locais</div>}</header>
-              {error && view !== 'repositories' && <div className="form-error form-error--block admin-global-error">{error}</div>}
-              {view === 'overview' && renderOverview()}
-              {view === 'settings' && renderSettings()}
-              {view === 'appearance' && <div className="admin-page"><AdminAppearance siteStore={siteStore} /></div>}
-              {view === 'classification' && <div className="admin-page"><AdminSiteClassification siteStore={siteStore} /></div>}
-              {view === 'professional' && <div className="admin-page"><AdminProfessionalContent siteStore={siteStore} onOpenLibrary={() => setView('library')} /></div>}
-              {view === 'repositories' && renderRepositories()}
-              {view === 'library' && <div className="admin-page"><AdminTechLibrary siteStore={siteStore} /></div>}
-              {view === 'specialties' && <div className="admin-page"><AdminSpecialties siteStore={siteStore} /></div>}
-              {view === 'messages' && adminAuth.configured && <div className="admin-page"><AdminMessages /></div>}
-              {view === 'guide' && <div className="admin-page"><AdminGuide /></div>}
-            </main>
-          </div>
+          <AdminShell activeView={activeView} adminAuth={adminAuth} projectStore={projectStore} siteStore={siteStore} onNavigate={navigate} onLogout={logout}>
+            {error && activeView !== 'repositories' && <div className="form-error form-error--block admin-global-error">{error}</div>}
+            {activeView === 'overview' && renderOverview()}
+            {activeView === 'settings' && renderSettings()}
+            {activeView === 'appearance' && <div className="admin-page"><AdminAppearance siteStore={siteStore} /></div>}
+            {activeView === 'classification' && <div className="admin-page"><AdminSiteClassification siteStore={siteStore} /></div>}
+            {activeView === 'professional' && <div className="admin-page"><AdminProfessionalContent siteStore={siteStore} onOpenLibrary={() => navigate('library')} /></div>}
+            {activeView === 'repositories' && renderRepositories()}
+            {activeView === 'library' && <div className="admin-page"><AdminTechLibrary siteStore={siteStore} /></div>}
+            {activeView === 'specialties' && <div className="admin-page"><AdminSpecialties siteStore={siteStore} /></div>}
+            {activeView === 'messages' && adminAuth.configured && <div className="admin-page"><AdminMessages /></div>}
+            {activeView === 'guide' && <div className="admin-page"><AdminGuide /></div>}
+          </AdminShell>
         )}
       </section>
     </div>
