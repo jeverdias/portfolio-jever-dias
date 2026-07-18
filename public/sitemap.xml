@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://jeverdias.netlify.app/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>1.0</priority>
+</url>
+<url><loc>https://jeverdias.netlify.app/portfolio/dashboard-htlv</loc></url>
+<url><loc>https://jeverdias.netlify.app/portfolio/sistema-os</loc></url>
+<url><loc>https://jeverdias.netlify.app/portfolio/cartilha-digital</loc></url>
+<url><loc>https://jeverdias.netlify.app/portfolio/gpts-agentes-ia</loc></url>
+</urlset>

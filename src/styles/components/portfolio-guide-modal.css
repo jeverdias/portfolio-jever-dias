@@ -1,0 +1,8 @@
+.portfolio-guide-modal { position: relative; width: min(820px, 100%); max-height: min(88vh, 760px); padding: 38px; border: 1px solid rgba(132, 119, 255, .38); border-radius: 22px; overflow-y: auto; background: radial-gradient(circle at 85% 0, rgba(137, 68, 255, .16), transparent 34%), #090e1b; box-shadow: 0 40px 130px rgba(0, 0, 0, .65), 0 0 70px rgba(87, 65, 210, .16); animation: modal-up .25s ease; }
+.portfolio-guide-modal h2 { margin: 10px 45px 9px 0; font-family: 'Manrope', sans-serif; font-size: clamp(28px, 4vw, 40px); letter-spacing: -1.8px; }
+.portfolio-guide-modal > p { max-width: 650px; margin: 0; color: #8f9bb2; font-size: 14px; line-height: 1.65; }
+.portfolio-guide-modal__steps { display: grid; grid-template-columns: 1fr 1fr; gap: 11px; margin-top: 27px; }
+.portfolio-guide-modal__steps article { display: grid; grid-template-columns: auto 1fr; gap: 13px; padding: 18px; border: 1px solid rgba(132, 151, 202, .13); border-radius: 13px; background: rgba(11, 18, 35, .68); animation: specialty-card-in .42s ease both; }
+.portfolio-guide-modal__steps article > span { width: 34px; height: 34px; display: grid; place-items: center; border-radius: 10px; color: #8ed4ff; background: linear-gradient(145deg, rgba(42, 110, 230, .38), rgba(100, 52, 190, .42)); font: 700 10px 'Manrope'; }
+.portfolio-guide-modal__steps h3 { margin: 1px 0 6px; font-size: 14px; }
+.portfolio-guide-modal__steps p { margin: 0; color: #8592aa; font-size: 11px; line-height: 1.6; }

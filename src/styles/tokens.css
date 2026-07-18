@@ -1,0 +1,26 @@
+:root {
+  color-scheme: dark;
+  font-family: var(--body-font, 'DM Sans', 'Segoe UI', sans-serif);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  --bg: #050814;
+  --bg-deep: #02040b;
+  --surface: rgba(12, 18, 35, 0.72);
+  --surface-strong: #0c1223;
+  --line: rgba(151, 174, 230, 0.13);
+  --line-strong: rgba(139, 120, 255, 0.34);
+  --text: #f7f8ff;
+  --muted: #9ea9c2;
+  --blue: #55b8ff;
+  --purple: #9b5cff;
+  --green: #4de0ad;
+  --gradient: linear-gradient(110deg, #5aaeff 8%, #8b6cff 51%, #bd55f6 96%);
+  --shadow: 0 28px 80px rgba(0, 0, 0, 0.36);
+  --header-bg: rgba(5, 8, 20, 0.72);
+  --glow-one: rgba(102, 65, 239, .22);
+  --glow-two: rgba(67, 130, 255, .16);
+  --card-radius: 18px;
+  --heading-font: 'Manrope', sans-serif;
+  --body-font: 'DM Sans', 'Segoe UI', sans-serif;
+  --card-shadow: var(--shadow);
+}

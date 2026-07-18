@@ -1,0 +1,89 @@
+{
+  "currentDefault": {
+    "classificationLayoutVersion": 3,
+    "siteClassificationId": "portfolio-app",
+    "siteClassification": "Portfolio Website",
+    "siteClassificationDescription": "Apresentar experiência, projetos, resultados e contato.",
+    "name": "Profissional Exemplo",
+    "role": "Dados | Analytics | Sistemas Web",
+    "intro": "Apresentação pública anonimizada para os testes.",
+    "email": "",
+    "emailSecondary": "",
+    "linkedin": "https://example.com/perfil",
+    "github": "",
+    "instagram": "",
+    "x": "",
+    "facebook": "",
+    "whatsapp": "",
+    "lattes": "",
+    "resumeUrl": "",
+    "metrics": [
+      { "id": "entregas", "value": "+10", "label": "Entregas", "icon": "chart", "visible": true }
+    ],
+    "techItems": [
+      { "id": "ferramenta-exemplo", "name": "Ferramenta exemplo", "icon": "code", "description": "Descrição anonimizada.", "image": "" }
+    ],
+    "stickerLibrary": [],
+    "displayModels": [
+      { "id": "modelo-personalizado", "name": "Modelo personalizado", "behavior": "website", "presentation": "live", "builtIn": false }
+    ],
+    "specialties": [
+      { "id": "especialidade-exemplo", "title": "Especialidade exemplo", "text": "Texto de exemplo.", "visible": true }
+    ],
+    "sectionVisibility": {
+      "hero": true,
+      "specialties": true,
+      "projects": true,
+      "about": true,
+      "credibility": true,
+      "resume": true,
+      "contact": true,
+      "footer": true
+    },
+    "appearance": {
+      "presetId": "technology",
+      "paletteId": "jd-original",
+      "designId": "jd-modern",
+      "fontId": "dm-manrope"
+    }
+  },
+  "legacyIncomplete": {
+    "classificationLayoutVersion": 1,
+    "siteClassificationId": "institutional",
+    "name": "Organização Exemplo",
+    "metrics": [
+      { "id": "legado-1", "value": "1", "label": "Indicador legado" }
+    ],
+    "sectionVisibility": { "contact": false }
+  },
+  "localStorage": {
+    "key": "jd-portfolio-site-v1",
+    "value": {
+      "name": "Cache Local Exemplo",
+      "siteClassificationId": "portfolio-app",
+      "appearance": { "paletteId": "ocean-professional" }
+    }
+  },
+  "supabaseRow": {
+    "id": "main",
+    "data": {
+      "name": "Registro Supabase Exemplo",
+      "siteClassificationId": "portfolio-app",
+      "sectionVisibility": { "resume": false }
+    }
+  },
+  "withoutAppearance": {
+    "name": "Sem aparência",
+    "siteClassificationId": "portfolio-app"
+  },
+  "withoutClassification": {
+    "name": "Sem classificação",
+    "appearance": { "fontId": "inter" }
+  },
+  "invalidClassification": {
+    "name": "Classificação futura não publicada",
+    "siteClassificationId": "future-unreleased",
+    "siteClassification": "Future Website",
+    "siteClassificationDescription": "Não pode chegar ao público automaticamente."
+  }
+}

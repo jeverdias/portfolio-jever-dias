@@ -1,0 +1,67 @@
+import { Check, Eye, Layers3, RotateCcw, X } from 'lucide-react'
+import { useState } from 'react'
+import { colorPalettes, defaultAppearance, fontOptions } from '../data/appearance'
+import { defaultSiteClassification, siteClassifications } from '../data/siteClassifications'
+import { getCanonicalTemplateId, getTemplateDefinition, listTemplates } from '../core/site-engine/templateRegistry'
+import { resolveTemplate, TEMPLATE_CONTEXT } from '../core/site-engine/resolveTemplate'
+
+const formatCapability = (capability) => ({
+  projects: 'Projetos', projectFilters: 'Filtros de projeto', caseStudies: 'Estudos de caso', testimonials: 'Depoimentos', resume: 'Currículo', timeline: 'Trajetória', metrics: 'Métricas', specialties: 'Especialidades', services: 'Serviços', team: 'Equipe', clients: 'Clientes', faq: 'Perguntas frequentes', leadCapture: 'Captação de contato', contact: 'Contato', externalDemo: 'Demonstração externa', powerBiEmbed: 'Power BI incorporado',
+}[capability] || capability)
+
+function MiniHeader({ label = 'NOME / MARCA', action = 'Contato' }) {
+  return <div className="structure-preview__header"><b>{label}</b><span>Início</span><span>Serviços</span><span>Sobre</span><i>{action}</i></div>
+}
+
+function StructurePreview({ item }) {
+  if (item.id === 'landing-conversion') return <div className="structure-preview structure-preview--landing"><MiniHeader action="Quero participar" /><div className="structure-preview__center"><small>UMA OFERTA · UMA AÇÃO</small><h4>Título direto da oferta</h4><p>Benefício principal explicado em poucas palavras.</p><b>Quero esta solução</b></div><div className="structure-preview__benefits"><span>Benefício 01</span><span>Benefício 02</span><span>Benefício 03</span></div><div className="structure-preview__proof">Resultados · confiança · chamada final</div></div>
+
+  if (item.id === 'institutional') return <div className="structure-preview structure-preview--institutional"><MiniHeader label="EMPRESA" action="Fale conosco" /><div className="structure-preview__banner"><small>EMPRESA E PROPÓSITO</small><h4>Soluções para empresas</h4><p>Apresentação oficial e posicionamento.</p></div><div className="structure-preview__rows"><span><b>01</b> Área de atuação</span><span><b>02</b> Área de atuação</span><span><b>03</b> Área de atuação</span></div><div className="structure-preview__results"><b>+12 anos</b><b>+80 clientes</b><b>3 unidades</b></div></div>
+
+  if (item.id === 'professional-services') return <div className="structure-preview structure-preview--services"><MiniHeader label="NOME PROFISSIONAL" action="Agendar" /><div className="structure-preview__profile"><div><small>ATENDIMENTO ESPECIALIZADO</small><h4>Experiência que gera confiança</h4><p>Especialidades, método e forma de atendimento.</p><b>Agendar atendimento</b></div><i>FOTO / PERFIL</i></div><div className="structure-preview__service-list"><span>Especialidade 01</span><span>Especialidade 02</span></div><div className="structure-preview__trust">Experiência comprovada · depoimentos · contato</div></div>
+
+  if (item.id === 'local-business') return <div className="structure-preview structure-preview--local"><MiniHeader label="NEGÓCIO LOCAL" action="WhatsApp" /><div className="structure-preview__local-hero"><div><small>ABERTO HOJE</small><h4>Atendimento perto de você</h4><p>Serviços, horário e contato rápido.</p><b>Chamar no WhatsApp</b></div><aside><strong>Localização</strong><span>Rua e número</span><strong>Horário</strong><span>Seg–Sex, 8h–18h</span></aside></div><div className="structure-preview__local-services"><span>Serviço 01</span><span>Serviço 02</span><span>Serviço 03</span></div></div>
+
+  if (item.id === 'catalog') return <div className="structure-preview structure-preview--catalog"><MiniHeader label="CATÁLOGO" action="Pedir orçamento" /><div className="structure-preview__catalog-title"><div><small>VITRINE DE ITENS</small><h4>Conheça o catálogo</h4></div><span>Todos</span><span>Categoria A</span><span>Categoria B</span></div><div className="structure-preview__products">{['Produto 01', 'Produto 02', 'Produto 03'].map((name) => <article key={name}><i>IMAGEM</i><b>{name}</b><small>Ver detalhes</small></article>)}</div></div>
+
+  if (item.id === 'blog-editorial') return <div className="structure-preview structure-preview--blog"><MiniHeader label="BLOG / AUTOR" action="Assinar" /><div className="structure-preview__featured"><small>ARTIGO EM DESTAQUE</small><h4>Um título editorial importante</h4><p>Resumo do conteúdo mais recente.</p></div><div className="structure-preview__articles"><span><b>Categoria</b> Título do artigo mais recente</span><span><b>Categoria</b> Outro conteúdo publicado</span></div></div>
+
+  if (item.id === 'event') return <div className="structure-preview structure-preview--event"><MiniHeader label="NOME DO EVENTO" action="Inscrição" /><div className="structure-preview__event-hero"><small>12 · OUTUBRO · SALVADOR</small><h4>Um encontro para aprender e conectar</h4><b>Garantir inscrição</b></div><div className="structure-preview__schedule"><span>09h · Abertura</span><span>10h · Palestra</span><span>14h · Workshop</span></div></div>
+
+  return <div className="structure-preview structure-preview--portfolio"><MiniHeader label="INICIAIS" action="Contato" /><div className="structure-preview__split"><div><small>PORTFÓLIO PROFISSIONAL</small><h4>Nome e especialidade</h4><p>Apresentação, experiência e objetivos.</p><b>Ver portfólio</b></div><aside><strong>+12</strong><span>Projetos entregues</span><strong>+5</strong><span>Anos de experiência</span></aside></div><div className="structure-preview__cards"><span>Projeto 01</span><span>Projeto 02</span><span>Projeto 03</span></div></div>
+}
+
+function ClassificationPreview({ item, appearance, onClose }) {
+  if (!item) return null
+  const palette = colorPalettes.find((entry) => entry.id === appearance?.paletteId) || colorPalettes[0]
+  const font = fontOptions.find((entry) => entry.id === appearance?.fontId) || fontOptions[0]
+  const registeredTemplate = getTemplateDefinition(item.id)
+  const template = resolveTemplate({ requestedTemplateId: item.id, context: TEMPLATE_CONTEXT.ADMIN_PREVIEW })
+  const isExactTemplate = Boolean(registeredTemplate)
+  const enabledCapabilities = Object.entries(template.capabilities).filter(([, enabled]) => enabled).map(([capability]) => formatCapability(capability))
+  return <div className="admin-submodal" role="dialog" aria-modal="true" aria-label={`Prévia: ${item.name}`} onMouseDown={(event) => event.target === event.currentTarget && onClose()}><div className="admin-submodal__panel classification-preview" data-classification-preview={item.id} style={{ ...palette.vars, '--body-font': font.body, '--heading-font': font.heading }}>
+    <header><div><span>PRÉVIA ADMINISTRATIVA · NÃO PUBLICADA · CORES PRESERVADAS</span><h3>{item.name}</h3></div><button type="button" onClick={onClose} aria-label="Fechar prévia"><X size={19} /></button></header>
+    <main><div className="classification-preview__intro"><div><small>{item.classification}</small><h2>{item.name}</h2><p>{item.purpose}</p></div><aside><strong>{isExactTemplate ? template.label : 'Classificação legada'}</strong><span>{isExactTemplate ? template.description : `Sem template próprio nesta etapa. Preview usa o fallback seguro ${template.label}.`}</span></aside></div><StructurePreview item={item} /><footer><strong>Para quem serve</strong><span>{item.audience}.</span></footer><footer><strong>Seções do template</strong><span>{template.sections.join(' · ')}</span></footer><footer><strong>Capacidades</strong><span>{enabledCapabilities.join(' · ')}</span></footer><footer><strong>Status</strong><span>{template.status === 'stable' ? 'Estável e público' : 'Preview interno — não publicado'}</span></footer></main>
+  </div></div>
+}
+
+export function AdminSiteClassification({ siteStore }) {
+  const currentId = siteStore.site.siteClassificationId || defaultSiteClassification
+  const [group, setGroup] = useState('Todos')
+  const [preview, setPreview] = useState(null)
+  const previewTemplates = listTemplates({ previewOnly: true })
+  const groups = ['Todos', ...new Set(siteClassifications.map((item) => item.group))]
+  const visible = group === 'Todos' ? siteClassifications : siteClassifications.filter((item) => item.group === group)
+  const apply = (item) => siteStore.updateSite({ siteClassificationId: item.id, siteClassification: item.classification, siteClassificationDescription: item.goal })
+  const restorePortfolio = () => { const item = siteClassifications.find((entry) => entry.id === defaultSiteClassification); apply(item) }
+
+  return <div className="admin-classification"><div className="admin-page__heading"><span>Classificação do site</span><h3>Escolha uma estrutura simples</h3><p>A seleção prepara conteúdo e preview administrativo. O site público permanece protegido como Portfólio profissional; cores, fontes e estilo continuam somente em Aparência.</p></div>
+    <div className="classification-current"><Layers3 size={20} /><span><strong>Classificação atual</strong><small>{siteClassifications.find((item) => item.id === currentId)?.name || siteStore.site.siteClassification}</small></span><button type="button" onClick={restorePortfolio}><RotateCcw size={14} /> Restaurar portfólio</button></div>
+    <div className="classification-groups" role="group" aria-label="Filtrar classificações">{groups.map((name) => <button className={group === name ? 'is-active' : ''} type="button" key={name} onClick={() => setGroup(name)}>{name}</button>)}</div>
+    <div className="classification-grid">{visible.map((item) => <article className={currentId === item.id ? 'is-active' : ''} key={item.id}><header><span>{item.group}</span><div className="classification-card__status">{currentId === item.id && <Check className="classification-card__check" size={16} aria-label="Estrutura aplicada" />}<span className="classification-card__info"><button type="button" aria-label={`Para que serve ${item.name}`} aria-describedby={`classification-help-${item.id}`}>!</button><span id={`classification-help-${item.id}`} role="tooltip"><strong>Para que serve?</strong>{item.purpose}<small>Indicado para: {item.audience}.</small></span></span></div></header><h4>{item.name}</h4><small>{item.classification}</small><p>{item.goal}</p><div className="classification-layout-note"><strong>O que muda no preview</strong><span>{item.layout}</span></div><div className="classification-tags">{item.features.map((feature) => <span key={feature}>{feature}</span>)}</div><footer><button type="button" onClick={() => setPreview(item)}><Eye size={14} /> Visualizar</button><button type="button" onClick={() => apply(item)}>Selecionar preview</button></footer></article>)}</div>
+    {currentId === 'landing-conversion' && <section className="landing-admin-fields"><div className="appearance-section__heading"><span>Conteúdo da landing page</span><h4>Oferta e conversão</h4><p>Estes campos aparecem somente quando a estrutura Landing Page estiver ativa.</p></div><div className="admin-form"><label className="field">Etiqueta da oferta<input value={siteStore.site.landingLabel || ''} onChange={(event) => siteStore.updateSite({ landingLabel: event.target.value })} /></label><label className="field">Texto do botão<input value={siteStore.site.landingCta || ''} onChange={(event) => siteStore.updateSite({ landingCta: event.target.value })} /></label><label className="field field--wide">Título principal<input value={siteStore.site.landingHeadline || ''} onChange={(event) => siteStore.updateSite({ landingHeadline: event.target.value })} /></label><label className="field field--wide">Explicação da oferta<textarea rows="3" value={siteStore.site.landingText || ''} onChange={(event) => siteStore.updateSite({ landingText: event.target.value })} /></label><label className="field field--wide">Benefícios <small>Um por linha: Título | explicação</small><textarea rows="5" value={siteStore.site.landingBenefitsText || ''} onChange={(event) => siteStore.updateSite({ landingBenefitsText: event.target.value })} /></label></div></section>}
+    <aside className="classification-research"><strong>Motor interno de templates</strong><p>{previewTemplates.map((template) => `${template.label} (${template.status === 'stable' ? 'público' : 'somente preview'})`).join(' · ')}.</p><div><span>Alias compatível: landing-conversion → {getCanonicalTemplateId('landing-conversion')}</span></div></aside>
+    <aside className="classification-research"><strong>Referências usadas</strong><p>Os modelos básicos seguem estruturas recorrentes para sites empresariais, portfólios, landing pages, blogs, catálogos e eventos.</p><div><a href="https://webflow.com/blog/types-of-websites" target="_blank" rel="noreferrer">Webflow: tipos populares</a><a href="https://www.wix.com/blog/types-of-websites" target="_blank" rel="noreferrer">Wix: tipos de sites</a><a href="https://www.wix.com/blog/website-vs-landing-page" target="_blank" rel="noreferrer">Wix: site x landing page</a></div></aside>
+    <ClassificationPreview item={preview} appearance={{ ...defaultAppearance, ...(siteStore.site.appearance || {}) }} onClose={() => setPreview(null)} />
+  </div>
+}

@@ -1,0 +1,75 @@
+{
+  "completeCurrent": {
+    "id": "projeto-completo-exemplo",
+    "title": "Projeto completo de exemplo",
+    "theme": "Contexto anonimizado",
+    "category": "Tecnologia",
+    "type": "website",
+    "typeLabel": "Sistema Web",
+    "displayModelId": "website",
+    "presentation": "live",
+    "status": "Concluído",
+    "description": "Resumo público de exemplo.",
+    "details": "Detalhes anonimizados do projeto.",
+    "challenge": "Desafio de exemplo.",
+    "solution": "Solução de exemplo.",
+    "results": "Resultado de exemplo.",
+    "duration": "4 semanas",
+    "contribution": "Planejamento e desenvolvimento.",
+    "contentFormat": "Aplicação web",
+    "audience": "Público de exemplo",
+    "tags": ["React", "Vite"],
+    "image": "https://example.com/capa.webp",
+    "gallery": ["https://example.com/print-1.webp"],
+    "embedUrl": "",
+    "externalUrl": "https://example.com/demonstracao",
+    "videoUrl": "",
+    "featured": true,
+    "accent": "#6f7cff"
+  },
+  "legacyMinimal": {
+    "id": "projeto-legado-exemplo",
+    "title": "Projeto legado",
+    "type": "content",
+    "category": "Em andamento"
+  },
+  "withImages": {
+    "id": "projeto-com-imagens",
+    "title": "Projeto com imagens",
+    "type": "powerbi",
+    "image": "https://example.com/dashboard.webp",
+    "gallery": [
+      "https://example.com/dashboard-1.webp",
+      "https://example.com/dashboard-2.webp"
+    ],
+    "embedUrl": "https://example.com/embed/dashboard",
+    "featured": true
+  },
+  "withoutImages": {
+    "id": "projeto-sem-imagens",
+    "title": "Projeto sem imagens",
+    "type": "content",
+    "image": "",
+    "gallery": [],
+    "featured": true
+  },
+  "hidden": {
+    "id": "projeto-oculto",
+    "title": "Projeto oculto",
+    "type": "website",
+    "featured": false
+  },
+  "featured": {
+    "id": "projeto-destacado",
+    "title": "Projeto destacado",
+    "type": "ai",
+    "featured": true
+  },
+  "byType": [
+    { "id": "tipo-powerbi", "title": "Tipo Power BI", "type": "powerbi", "featured": true },
+    { "id": "tipo-website", "title": "Tipo Website", "type": "website", "featured": true },
+    { "id": "tipo-content", "title": "Tipo Conteúdo", "type": "content", "featured": true },
+    { "id": "tipo-ai", "title": "Tipo IA", "type": "ai", "featured": true }
+  ],
+  "emptyList": []
+}

@@ -1,74 +1,50 @@
 # Plano do painel administrativo online
 
-## Recomendação
+## Arquitetura adotada
 
-Manter o portfólio público no Netlify e conectar o painel ao Supabase. Isso evita criar um servidor próprio e resolve Login, dados persistentes e armazenamento das imagens.
-
-## Serviços
+O portfólio público permanece no Netlify e o painel se conecta a um projeto Supabase exclusivo. Não existe servidor próprio para manter.
 
 - **Supabase Auth:** acesso exclusivo do administrador.
-- **Postgres:** dados do site e dos projetos.
-- **Supabase Storage:** capas, prints e futuros vídeos demonstrativos.
+- **Postgres:** configurações, projetos e mensagens recebidas.
+- **Supabase Storage:** capas, prints, figurinhas e futuros vídeos demonstrativos.
 - **Netlify:** hospedagem e publicação do frontend Vite.
 
-## Estrutura sugerida
+## Estrutura implementada
 
-### `site_settings`
+- `site_settings`: conteúdo e aparência do site.
+- `portfolio_projects`: projetos, estudos de caso, links, capas e galeria.
+- `portfolio_admins`: lista dos usuários autorizados a administrar.
+- `contact_messages`: contatos enviados pelo site.
+- bucket `portfolio-assets`: arquivos públicos do portfólio.
 
-- `id`
-- `name`
-- `role`
-- `eyebrow`
-- `intro`
-- `email`
-- `linkedin`
-- `github`
-- `location`
-- contadores e legendas
-- `updated_at`
-
-### `projects`
-
-- `id`
-- `title`
-- `theme`
-- `type`: `powerbi`, `website` ou `content`
-- `category`
-- `description`
-- `details`
-- `content_format`
-- `audience`
-- `tags`
-- `cover_url`
-- `embed_url`
-- `external_url`
-- `accent`
-- `featured`
-- `position`
-- `updated_at`
-
-### `project_images`
-
-- `id`
-- `project_id`
-- `image_url`
-- `alt_text`
-- `position`
+O schema completo e as políticas estão em `supabase/schema.sql` e na migration de `supabase/migrations/`.
 
 ## Segurança
 
-- Permitir leitura pública apenas dos projetos publicados.
-- Permitir criação, alteração e exclusão somente ao usuário administrador autenticado.
-- Manter políticas RLS ativas.
-- Guardar fotos no Storage; o banco recebe apenas as URLs.
-- O link incorporado do Power BI pode ser escondido visualmente, mas um link público ainda pode ser encontrado por um usuário técnico no navegador. Para proteção real, usar Power BI com autenticação ou incorporação segura por token.
+- Leitura pública somente do conteúdo publicado.
+- Escrita administrativa somente para usuários autenticados presentes em `portfolio_admins`.
+- Inserção pública de contato limitada aos campos e tamanhos previstos no schema.
+- RLS ativa em todas as tabelas.
+- Arquivos no Storage; o banco guarda apenas os endereços.
+- Chave `service_role` nunca utilizada no navegador, Netlify ou workflow.
+- O link público incorporado do Power BI pode ser ocultado visualmente, mas não fica tecnicamente secreto. Proteção real exige Power BI autenticado ou incorporação segura por token.
 
-## Etapas futuras
+## Situação em 15/07/2026
 
-1. Criar o projeto Supabase.
-2. Criar tabelas e bucket de imagens.
-3. Configurar o usuário administrador.
-4. Ativar políticas de segurança.
-5. Trocar o armazenamento local pelas consultas do Supabase.
-6. Migrar os projetos atuais.
-7. Testar Login, edição, upload e publicação no Netlify.
+- Projeto separado `site-jd` criado na região de São Paulo.
+- `sistema-campo-homologacao` pausado; `sistema-campo-vita` preservado.
+- Schema e Storage aplicados no projeto novo.
+- Integração do frontend, mensagens e upload implementados.
+- Login local com Supabase Auth testado com sucesso pelo administrador.
+- Troca temporária de senha e novo Login validados sem alteração do UUID administrativo.
+- Senha técnica redefinida pelo painel oficial com valor aleatório forte, sem apagar o projeto ou o schema.
+- Administrador `jever_dias@hotmail.com` criado e autorizado em `portfolio_admins`.
+- Variáveis públicas de produção cadastradas no Netlify para todos os contextos.
+- Secrets do GitHub configurados; o workflow de pulso depende apenas de publicação autorizada na `main` e teste manual.
+
+## Próximas ações
+
+1. Publicar a v1.6.0 somente após autorização explícita de commit e push.
+2. Testar login, gravação, mensagens e upload no deploy atualizado.
+3. Importar o backup atual, se desejado.
+4. Somente com autorização futura, ativar o workflow na branch `main`.

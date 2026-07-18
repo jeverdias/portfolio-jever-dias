@@ -1,0 +1,73 @@
+.about__grid { display: grid; grid-template-columns: 1fr .86fr; gap: 90px; align-items: center; }
+.about .section-heading { margin-bottom: 28px; }
+.about__checks { display: grid; gap: 13px; }
+.about__checks span { display: flex; align-items: center; gap: 10px; color: #acb6ca; font-size: 14px; }
+.about__checks svg { color: #60d7b1; }
+.process-card { padding: 30px; border: 1px solid rgba(136, 155, 204, .14); border-radius: 21px; background: linear-gradient(150deg, rgba(15, 23, 43, .78), rgba(7, 12, 24, .62)); box-shadow: var(--shadow); }
+.process-card__label { color: #6fc5ff; font-size: 11px; text-transform: uppercase; letter-spacing: .16em; }
+.process-step { display: grid; grid-template-columns: 48px 1fr; gap: 14px; padding: 25px 0; border-bottom: 1px solid rgba(133, 153, 202, .1); }
+.process-step:last-child { padding-bottom: 4px; border: 0; }
+.process-step > span { width: 38px; height: 38px; display: grid; place-items: center; border-radius: 11px; color: #b9a6ff; background: rgba(112, 76, 216, .14); border: 1px solid rgba(126, 96, 226, .21); font-size: 11px; font-weight: 700; }
+.process-step h3 { margin: 0 0 7px; font-size: 16px; }
+.process-step p { margin: 0; color: #8995ad; font-size: 13px; line-height: 1.55; }
+
+.contact-section { padding: 20px 0 110px; }
+.contact-card { position: relative; display: flex; align-items: center; justify-content: space-between; gap: 50px; padding: 48px 55px; border-radius: 25px; overflow: hidden; background: linear-gradient(112deg, #2c64c4, #6746ca 55%, #9a42cb); box-shadow: 0 30px 100px rgba(73, 46, 179, .3); }
+.contact-card::before { content: ''; position: absolute; inset: 1px; border-radius: 24px; background: linear-gradient(100deg, rgba(4, 15, 36, .22), rgba(19, 10, 44, .08)); }
+.contact-card__orb { position: absolute; width: 300px; height: 300px; border-radius: 50%; right: 8%; top: -180px; background: rgba(255, 255, 255, .13); filter: blur(5px); }
+.contact-card > * { position: relative; z-index: 1; }
+.contact-card__eyebrow { font-size: 11px; text-transform: uppercase; letter-spacing: .15em; font-weight: 700; opacity: .8; }
+.contact-card h2 { max-width: 670px; margin: 11px 0 9px; font-family: 'Manrope'; font-size: clamp(30px, 3.5vw, 45px); line-height: 1.13; letter-spacing: -2px; }
+.contact-card p { max-width: 640px; margin: 0; color: rgba(255, 255, 255, .73); font-size: 14px; line-height: 1.6; }
+.contact-card .button { flex-shrink: 0; }
+.contact-form-card { display: grid; grid-template-columns: .78fr 1.22fr; gap: 60px; margin-top: 22px; padding: 42px; border: 1px solid var(--line); border-radius: 23px; background: radial-gradient(circle at 0 0, rgba(54, 112, 220, .12), transparent 37%), rgba(9, 14, 27, .76); }
+.contact-form-card__intro h2 { margin: 15px 0 11px; font: 700 clamp(28px, 3vw, 38px)/1.16 'Manrope'; letter-spacing: -1.5px; }
+.contact-form-card__intro p { margin: 0; color: #8794aa; font-size: 13px; line-height: 1.7; }
+.contact-form-card__intro button { display: flex; align-items: center; gap: 6px; margin-top: 22px; padding: 0; border: 0; color: #7fc9fb; background: none; cursor: pointer; font-size: 11px; }
+.contact-form-card form { position: relative; display: grid; grid-template-columns: 1fr 1fr; gap: 13px; }
+.contact-form-card form > label { display: grid; gap: 7px; color: #aeb7c9; font-size: 10px; font-weight: 600; letter-spacing: .05em; text-transform: uppercase; }
+.contact-form-card input, .contact-form-card textarea { width: 100%; border: 1px solid rgba(130, 150, 199, .16); border-radius: 9px; outline: 0; color: white; background: rgba(4, 8, 17, .7); font: inherit; transition: border-color .2s, box-shadow .2s; }
+.contact-form-card input { height: 44px; padding: 0 12px; }
+.contact-form-card textarea { min-height: 118px; padding: 12px; resize: vertical; }
+.contact-form-card input:focus, .contact-form-card textarea:focus { border-color: rgba(117, 99, 255, .65); box-shadow: 0 0 0 3px rgba(104, 82, 232, .1); }
+.contact-form-card form .button { width: fit-content; }
+.honeypot { position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden; }
+.contact-form-status { display: flex; align-items: center; gap: 7px; margin: 0; align-self: center; font-size: 11px; }
+.contact-form-status.is-success { color: #66ddb3; }
+.contact-form-status.is-error { color: #ff9999; }
+
+.credibility-section { background: linear-gradient(180deg, rgba(4, 7, 16, .12), rgba(13, 18, 35, .58)); border-top: 1px solid rgba(140, 162, 215, .07); }
+.credibility-metrics { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 13px; }
+.credibility-metrics article { min-height: 140px; padding: 22px; border: 1px solid var(--line); border-radius: 16px; background: rgba(10, 16, 30, .68); }
+.credibility-metrics article:not(.credibility-tech) { display: grid; grid-template-columns: 1fr auto; align-content: space-between; }
+.credibility-metrics svg { color: #80c9ff; }
+.credibility-metrics strong { grid-column: 1 / -1; font: 700 31px 'Manrope'; }
+.credibility-metrics article > span { grid-column: 1 / -1; color: #8190a8; font-size: 11px; }
+.credibility-tech > span { color: #70c4fb; font-size: 10px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
+.credibility-tech { grid-column: 1 / -1; min-height: auto !important; }
+.credibility-tech > div { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 25px; }
+.credibility-tech i { padding: 8px 10px; border: 1px solid rgba(128, 150, 205, .13); border-radius: 8px; color: #a5b2c9; background: rgba(17, 24, 44, .75); font-size: 11px; font-style: normal; }
+.credibility-block { margin-top: 38px; }
+.credibility-block__title { display: flex; align-items: center; gap: 9px; margin-bottom: 16px; color: #8acbfa; }
+.credibility-block__title h3 { margin: 0; font: 700 19px 'Manrope'; color: #e9edf7; }
+.career-timeline { position: relative; display: grid; gap: 11px; }
+.career-timeline::before { content: ''; position: absolute; top: 10px; bottom: 10px; left: 76px; width: 1px; background: linear-gradient(#5a9eff, #9a55ef); opacity: .38; }
+.career-timeline article { position: relative; display: grid; grid-template-columns: 62px 1fr; gap: 30px; padding: 18px; border: 1px solid rgba(129, 149, 197, .1); border-radius: 13px; background: rgba(9, 15, 29, .58); }
+.career-timeline article > span { color: #77c6ff; font-size: 10px; font-weight: 700; }
+.career-timeline article > div::before { content: ''; position: absolute; left: 72px; top: 21px; width: 9px; height: 9px; border: 2px solid #76a8ff; border-radius: 50%; background: #090e1a; }
+.career-timeline h4 { margin: 0 0 6px; font-size: 14px; }
+.career-timeline p { margin: 0; color: #8390a7; font-size: 12px; line-height: 1.65; }
+.testimonials-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+.testimonials-grid blockquote { margin: 0; padding: 22px; border: 1px solid rgba(129, 149, 197, .11); border-radius: 15px; background: rgba(10, 16, 30, .64); }
+.testimonials-grid blockquote > svg { color: #9b7eff; }
+.testimonials-grid blockquote > p { min-height: 62px; margin: 14px 0 18px; color: #a0acc1; font-size: 13px; line-height: 1.7; }
+.testimonials-grid footer strong, .testimonials-grid footer span { display: block; }
+.testimonials-grid footer strong { font-size: 12px; }
+.testimonials-grid footer span { margin-top: 3px; color: #69768e; font-size: 10px; }
+
+.resume-section { padding-top: 30px; }
+.resume-card { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 24px; padding: 35px; border: 1px solid rgba(116, 130, 255, .24); border-radius: 21px; background: radial-gradient(circle at 100% 0, rgba(147, 67, 232, .17), transparent 38%), linear-gradient(135deg, rgba(18, 31, 59, .9), rgba(13, 15, 35, .88)); }
+.resume-card__icon { width: 64px; height: 64px; display: grid; place-items: center; border-radius: 18px; color: #94d4ff; background: linear-gradient(145deg, rgba(42, 110, 230, .45), rgba(116, 58, 196, .5)); }
+.resume-card h2 { margin: 12px 0 7px; font: 700 clamp(27px, 3vw, 36px)/1.15 'Manrope'; letter-spacing: -1.4px; }
+.resume-card p { max-width: 650px; margin: 0; color: #8c9ab1; font-size: 13px; line-height: 1.65; }
+.resume-card__actions { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px; max-width: 440px; }

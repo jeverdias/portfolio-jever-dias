@@ -1,0 +1,21 @@
+.specialties-modal { position: relative; width: min(900px, 100%); max-height: min(88vh, 760px); padding: 38px; border: 1px solid rgba(132, 119, 255, .38); border-radius: 22px; overflow-y: auto; background: radial-gradient(circle at 85% 0, rgba(137, 68, 255, .16), transparent 34%), #090e1b; box-shadow: 0 40px 130px rgba(0, 0, 0, .65), 0 0 70px rgba(87, 65, 210, .16); animation: modal-up .25s ease; }
+.specialties-modal > h2 { margin: 10px 45px 9px 0; font-family: 'Manrope', sans-serif; font-size: clamp(27px, 4vw, 39px); letter-spacing: -1.7px; }
+.specialties-modal > p { margin: 0; color: #8f9bb2; font-size: 14px; }
+.specialties-assistant { display: flex; align-items: flex-end; gap: 10px; margin: 23px 0 17px; }
+.specialties-assistant__robot { width: 48px; height: 48px; display: grid; place-items: center; flex: 0 0 48px; border: 1px solid rgba(118, 145, 255, .3); border-radius: 15px; background: linear-gradient(145deg, rgba(43, 108, 219, .22), rgba(116, 58, 196, .25)); box-shadow: 0 0 22px rgba(73, 105, 231, .16); font-size: 27px; animation: assistant-float 2.4s ease-in-out infinite; }
+.specialties-assistant__speech { position: relative; max-width: 360px; padding: 11px 14px; border: 1px solid rgba(127, 156, 224, .18); border-radius: 14px 14px 14px 4px; color: #b9cae7; background: rgba(14, 23, 43, .84); font-size: 11px; animation: speech-pop .36s ease; }
+.specialties-assistant__speech > span { display: inline-flex; gap: 3px; margin-left: 7px; }
+.specialties-assistant__speech i { width: 4px; height: 4px; border-radius: 50%; background: #77c6ff; animation: speaking-dot 1.15s ease-in-out infinite; }
+.specialties-assistant__speech i:nth-child(2) { animation-delay: .14s; }
+.specialties-assistant__speech i:nth-child(3) { animation-delay: .28s; }
+.specialties-modal__single { display: flex; align-items: center; gap: 17px; margin-top: 25px; padding: 21px; border: 1px solid rgba(132, 151, 202, .15); border-radius: 15px; background: linear-gradient(145deg, rgba(17, 27, 49, .78), rgba(10, 16, 31, .7)); animation: specialty-card-in .42s ease forwards; }
+.specialties-modal__single-icon { width: 54px; height: 54px; display: grid; place-items: center; flex: 0 0 54px; border-radius: 15px; color: #8ed4ff; background: linear-gradient(145deg, rgba(42, 110, 230, .5), rgba(100, 52, 190, .55)); }
+.specialties-modal__single > div:last-child > span { color: #77c6ff; font-size: 9px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
+.specialties-modal__single p { margin: 6px 0 0; color: #9ba7bd; font-size: 13px; line-height: 1.65; }
+.specialty-example { display: block; margin-top: 10px; color: #c4cee1; font-size: 11px; font-weight: 500; line-height: 1.6; }
+.specialties-modal__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 27px; }
+.specialties-modal__grid article { padding: 20px; border: 1px solid rgba(132, 151, 202, .13); border-radius: 14px; background: rgba(11, 18, 35, .68); opacity: 0; animation: specialty-card-in .42s ease forwards; animation-delay: calc(var(--specialty-index) * 70ms); }
+.specialties-modal__grid article > div { display: flex; align-items: center; justify-content: space-between; color: #83ceff; }
+.specialties-modal__grid article > div span { color: #52617c; font: 700 10px 'Manrope'; }
+.specialties-modal__grid h3 { margin: 14px 0 8px; font-size: 16px; }
+.specialties-modal__grid p { margin: 0; color: #8f9bb2; font-size: 12px; line-height: 1.65; }

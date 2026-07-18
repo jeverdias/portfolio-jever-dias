@@ -1,6 +1,11 @@
 export function ProjectVisual({ project, large = false }) {
-  if (project.image) {
-    return <img className="project-visual__image" src={project.image} alt={`Prévia do projeto ${project.title}`} />
+  const isImage = (value) => /^https?:\/\//i.test(value || '') || /^data:image\//i.test(value || '')
+  const coverImage = isImage(project.image)
+    ? project.image
+    : (project.gallery || []).find(isImage)
+
+  if (coverImage) {
+    return <img className="project-visual__image" src={coverImage} alt={`Prévia do projeto ${project.title}`} loading="lazy" decoding="async" />
   }
 
   return (
@@ -29,6 +34,13 @@ export function ProjectVisual({ project, large = false }) {
           <div className="mock-content">
             <div className="mock-content__copy"><b /><strong /><span /><span /><i /></div>
             <div className="mock-content__art"><span /><b /><i /></div>
+          </div>
+        )}
+        {project.preview === 'ai' && (
+          <div className="mock-ai">
+            <div className="mock-ai__bot">AI</div>
+            <div className="mock-ai__flow"><span /><i /><span /><i /><span /></div>
+            <div className="mock-ai__chat"><b /><span /><span /><em /></div>
           </div>
         )}
       </div>

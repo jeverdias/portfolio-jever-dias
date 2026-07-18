@@ -1,22 +1,18 @@
 import { LogIn, Menu, X } from 'lucide-react'
 import { useState } from 'react'
+import { getInitials } from '../utils/getInitials'
+import { getClassificationPresentation } from '../data/classificationPresentation'
 
-const links = [
-  ['Início', '#inicio'],
-  ['Projetos', '#projetos'],
-  ['Serviços', '#servicos'],
-  ['Sobre', '#sobre'],
-  ['Contato', '#contato'],
-]
-
-export function Header({ onLogin }) {
+export function Header({ onLogin, visibility = {}, site, classificationId = site?.siteClassificationId }) {
   const [open, setOpen] = useState(false)
+  const copy = getClassificationPresentation(classificationId)
+  const links = [['Início', '#inicio', 'hero'], [copy.navProjects, '#projetos', 'projects'], [copy.navServices, '#servicos', 'specialties'], ['Sobre', '#sobre', 'about'], ['Currículo', '#curriculo', 'resume'], ['Contato', '#contato', 'contact']]
 
   return (
     <header className="site-header">
       <div className="container site-header__inner">
-        <a className="brand" href="#inicio" aria-label="Jever Dias — início" onClick={() => setOpen(false)}>
-          JD<span className="brand__dot" />
+        <a className="brand" href="#inicio" aria-label={`${site?.name || 'Início'} — início`} onClick={() => setOpen(false)}>
+          {getInitials(site?.name)}<span className="brand__dot" />
         </a>
 
         <button
@@ -31,7 +27,7 @@ export function Header({ onLogin }) {
         </button>
 
         <nav id="main-navigation" className={`main-nav ${open ? 'is-open' : ''}`} aria-label="Navegação principal">
-          {links.map(([label, href]) => (
+          {links.filter(([, , section]) => visibility[section] !== false).map(([label, href]) => (
             <a key={href} href={href} onClick={() => setOpen(false)}>
               {label}
             </a>

@@ -1,0 +1,13 @@
+.footer { border-top: 1px solid var(--line); background: rgba(2, 5, 12, .54); }
+.footer__top { display: flex; justify-content: space-between; gap: 80px; padding: 55px 0 42px; }
+.footer__brand { max-width: 360px; }
+.footer__brand p { margin: 18px 0 17px; color: #8793aa; font-size: 14px; line-height: 1.6; }
+.footer__brand > span { display: flex; align-items: center; gap: 7px; color: #66738c; font-size: 11px; }
+.footer__links { display: flex; gap: 90px; }
+.footer__links > div { min-width: 120px; display: flex; flex-direction: column; gap: 12px; }
+.footer__links strong { margin-bottom: 4px; font-size: 12px; }
+.footer__links a { display: flex; align-items: center; gap: 7px; color: #7f8ba2; font-size: 12px; transition: color .2s; }
+.footer__links a:hover { color: white; }
+.footer__bottom { display: flex; align-items: center; justify-content: space-between; padding: 18px 0; border-top: 1px solid rgba(134, 155, 205, .08); color: #59667d; font-size: 10px; }
+.footer__bottom button { display: flex; align-items: center; gap: 6px; padding: 5px; border: 0; color: #58647a; background: transparent; cursor: pointer; font-size: 10px; }
+.footer__bottom button:hover { color: #aeb9d0; }
